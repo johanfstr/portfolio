@@ -1,0 +1,314 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+html, body, #__next {
+  height: 100%;
+  background: linear-gradient(180deg,#060606 0%,#0a0a0a 100%);
+  background-attachment: fixed;
+  scroll-behavior: smooth; /* smooth scrolling for navbar links */
+}
+
+body {
+  color: var(--foreground);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+}
+
+
+/* hero background: keep transparent so site-bg blobs are visible */
+.hero-bg {
+  position: relative;
+  overflow: visible;
+  background: transparent; /* removed opaque black/gradients that hid blobs */
+}
+
+/* ===== Liquid Glass Navbar — iOS refined version ===== */
+
+.nav-glass {
+  position: relative;
+  border-radius: 9999px;
+
+  /* Clearer translucency */
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+
+  /* More realistic depth */
+  box-shadow:
+    0 20px 60px rgba(2,6,23,0.65),
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    inset 0 -8px 20px rgba(0,0,0,0.25);
+
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+
+  padding: 1px 1px;
+
+  overflow: hidden;
+  transition: transform .25s cubic-bezier(.2,.9,.2,1),
+              box-shadow .25s ease;
+}
+
+/* Top light reflection (subtle and sharp) */
+.nav-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.45) 0%,
+    rgba(255,255,255,0.12) 35%,
+    rgba(255,255,255,0.03) 60%,
+    transparent 100%
+  );
+
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+}
+
+/* Bottom depth gradient */
+.nav-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+
+  background: linear-gradient(
+    to bottom,
+    transparent 60%,
+    rgba(0,0,0,0.35)
+  );
+
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.nav-glass:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 28px 80px rgba(2,6,23,0.75),
+    inset 0 1px 0 rgba(255,255,255,0.28),
+    inset 0 -10px 25px rgba(0,0,0,0.3);
+}
+
+/* ===== Logo ===== */
+
+.nav-logo {
+  width: 50px;       
+  height: 50px;     
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  transition: transform .25s ease;
+}
+
+/* micro effet premium au hover */
+.nav-logo:hover .nav-logo-img {
+  transform: scale(1.05);
+}
+
+
+
+
+/* ===== Nav Links (improved vibrancy) ===== */
+
+.nav-link {
+  position: relative;
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 9999px;
+
+  color: rgba(255,255,255,0.95);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+
+  transition: color .2s ease,
+              transform .2s ease,
+              background .2s ease,
+              box-shadow .2s ease;
+
+  z-index: 1;
+}
+
+/* Vibrancy pill (cleaner and sharper) */
+.nav-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    0 4px 18px rgba(0,0,0,0.35);
+
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity .25s ease,
+              transform .25s ease;
+  z-index: -1;
+}
+
+.nav-link:hover::before,
+.nav-link:focus::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.nav-link:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(140,88,195,0.6);
+}
+
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  transition: transform .25s ease, opacity .25s ease;
+  opacity: 0.85;
+}
+
+.nav-link:hover .nav-icon {
+  transform: translateY(-1px) scale(1.05);
+  opacity: 1;
+}
+
+.nav-link-responsive {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Texte caché sur mobile */
+.nav-text {
+  display: none;
+}
+
+/* Desktop : on montre le texte */
+@media (min-width: 768px) {
+  .nav-text {
+    display: inline;
+  }
+}
+
+.nav-link:hover .nav-icon {
+  transform: translateY(-1px) scale(1.05);
+  opacity: 1;
+}
+
+
+/* ===== Fallback (no backdrop support) ===== */
+
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .nav-glass {
+    background: rgba(30, 41, 59, 0.85);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: none;
+  }
+
+  .nav-link::before {
+    backdrop-filter: none;
+    background: rgba(255,255,255,0.08);
+  }
+}
+
+/* Animations pour hero */
+@keyframes fadeInDown {
+  0% { opacity: 0; transform: translateY(-30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeInDown { animation: fadeInDown 1s ease-out forwards; }
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
+.animate-fadeIn.delay-200 { animation-delay: 0.2s; }
+.animate-fadeIn.delay-400 { animation-delay: 0.4s; }
+.animate-fadeIn.delay-600 { animation-delay: 0.6s; }
+
+
+/* ===== Intro typing overlay (initial load) ===== */
+.intro-screen {
+  /* changed to absolute so it is positioned relative to the hero's <main> container */
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* fully opaque so the site background never shows through during typing */
+  background: linear-gradient(180deg, #060606 0%, #0a0a0a 100%);
+  transition: opacity .6s ease, transform .7s cubic-bezier(.2,.9,.2,1);
+  transform-origin: center;
+  pointer-events: auto; /* block interactions while intro is visible */
+  will-change: transform, opacity;
+}
+
+.typing-container { display: inline-block; white-space: nowrap; overflow: hidden; }
+
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1em;
+  vertical-align: middle;
+  margin-left: 6px;
+  background: currentColor;
+  border-radius: 2px;
+  animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink { 50% { opacity: 0 } }
+
+/* zoom-out that reveals the hero underneath */
+.intro-zoom { animation: introZoom 700ms cubic-bezier(.2,.9,.2,1) forwards; }
+@keyframes introZoom {
+  0% { transform: scale(1.25); opacity: 1; filter: blur(0); }
+  60% { transform: scale(1.02); opacity: 0.95; }
+  100% { transform: scale(1); opacity: 0; filter: blur(2px); }
+}
+
+
+/* Police spéciale (Geist-Sans si tu as la licence ou import) */
+.font-geist-sans { font-family: 'Geist Sans', ui-sans-serif, system-ui, -apple-system, sans-serif; }
