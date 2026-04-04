@@ -47,13 +47,13 @@ export default function Home() {
             </h1>
 
             <p
-              className={`mt-4 text-xl md:text-2xl text-white/70 font-geist-sans ${
+              className={`mt-4 text-xl md:text-2xl text-white/70 font-fira-code ${
                 introDone ? "animate-fadeIn delay-200" : "opacity-0"
               }`}
             >
               Étudiant à{" "}
               <span className="text-purple-400 font-semibold">
-                l'Université de Poitiers
+                l'EFREI
               </span>
             </p>
 

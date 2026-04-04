@@ -3,13 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-fira-code);
+  --font-mono: var(--font-fira-code);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -28,28 +25,27 @@ html, body, #__next {
 
 body {
   color: var(--foreground);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-family: var(--font-fira-code), ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
 }
 
 
-/* hero background: keep transparent so site-bg blobs are visible */
 .hero-bg {
   position: relative;
   overflow: visible;
   background: transparent; /* removed opaque black/gradients that hid blobs */
 }
 
-/* ===== Liquid Glass Navbar — iOS refined version ===== */
+/* ===== Nav bar ===== */
 
 .nav-glass {
   position: relative;
   border-radius: 9999px;
 
   /* Clearer translucency */
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(45, 40, 40, 0.58);
   border: 1px solid rgba(255,255,255,0.18);
 
   /* More realistic depth */
@@ -140,7 +136,7 @@ body {
 
 
 
-/* ===== Nav Links (improved vibrancy) ===== */
+/* ===== Nav Links ===== */
 
 .nav-link {
   position: relative;
@@ -160,7 +156,7 @@ body {
   z-index: 1;
 }
 
-/* Vibrancy pill (cleaner and sharper) */
+/* Vibrancy */
 .nav-link::before {
   content: "";
   position: absolute;
@@ -225,6 +221,103 @@ body {
   display: none;
 }
 
+.nav-burger {
+  width: 46px;
+  height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08);
+  color: #f8fafc;
+  cursor: pointer;
+  transition: background .25s ease, transform .25s ease, border-color .25s ease;
+  position: relative;
+}
+
+.nav-burger:hover {
+  background: rgba(255,255,255,0.14);
+}
+
+.nav-burger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  border-radius: 9999px;
+  background: currentColor;
+  transition: transform .25s ease, opacity .25s ease;
+  position: absolute;
+}
+
+.nav-burger span:nth-child(1) {
+  top: 14px;
+}
+
+.nav-burger span:nth-child(2) {
+  top: 22px;
+}
+
+.nav-burger span:nth-child(3) {
+  top: 30px;
+}
+
+.nav-burger.open span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.nav-burger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-burger.open span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.nav-mobile-panel {
+  display: none;
+  margin-top: 0.9rem;
+  padding: 14px;
+  border-radius: 1.75rem;
+  background: rgba(45, 40, 40, 0.975);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  animation: none;
+}
+
+.nav-mobile-panel.open {
+  display: block;
+  animation: slideDown 180ms ease-out forwards;
+}
+
+.nav-mobile-panel .nav-link {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  padding: 14px 16px;
+}
+
+.nav-mobile-panel .nav-text {
+  display: inline;
+}
+
+.nav-mobile-panel .nav-link {
+  border-radius: 1.4rem;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Desktop : on montre le texte */
 @media (min-width: 768px) {
   .nav-text {
@@ -232,13 +325,24 @@ body {
   }
 }
 
-.nav-link:hover .nav-icon {
-  transform: translateY(-1px) scale(1.05);
-  opacity: 1;
+/* ===== Contact button ===== */
+.nav-link-contact {
+  color: #22c55e !important; /* green-500 */
 }
 
+.nav-link-contact .nav-icon {
+  stroke: #22c55e !important;
+}
 
-/* ===== Fallback (no backdrop support) ===== */
+.nav-link-contact:hover {
+  color: #16a34a !important; /* green-600 */
+}
+
+.nav-link-contact:hover .nav-icon {
+  stroke: #16a34a !important;
+}
+
+/* ===== Fallback ===== */
 
 @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   .nav-glass {
@@ -272,14 +376,12 @@ body {
 
 /* ===== Intro typing overlay (initial load) ===== */
 .intro-screen {
-  /* changed to absolute so it is positioned relative to the hero's <main> container */
   position: absolute;
   inset: 0;
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* fully opaque so the site background never shows through during typing */
   background: linear-gradient(180deg, #060606 0%, #0a0a0a 100%);
   transition: opacity .6s ease, transform .7s cubic-bezier(.2,.9,.2,1);
   transform-origin: center;
@@ -301,7 +403,6 @@ body {
 }
 @keyframes blink { 50% { opacity: 0 } }
 
-/* zoom-out that reveals the hero underneath */
 .intro-zoom { animation: introZoom 700ms cubic-bezier(.2,.9,.2,1) forwards; }
 @keyframes introZoom {
   0% { transform: scale(1.25); opacity: 1; filter: blur(0); }
@@ -310,5 +411,5 @@ body {
 }
 
 
-/* Police spéciale (Geist-Sans si tu as la licence ou import) */
+/* Police spéciale */
 .font-geist-sans { font-family: 'Geist Sans', ui-sans-serif, system-ui, -apple-system, sans-serif; }
