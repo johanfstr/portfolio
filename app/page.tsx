@@ -27,6 +27,8 @@ export default function Home() {
       <main
         id="hero"
         className="relative min-h-screen flex items-center bg-gradient-to-b from-gray-900 to-gray-950 overflow-hidden"
+        data-scroll
+        data-scroll-section
       >
         {/* Intro typing overlay */}
         <Intro onFinish={() => setIntroDone(true)} />
@@ -35,12 +37,14 @@ export default function Home() {
         <div className="w-full max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-12 min-h-screen py-28">
 
           {/* ── Left: Text content ── */}
-          <div className="flex-1 max-w-2xl">
+          <div className="flex-1 max-w-2xl" data-scroll data-scroll-speed="0.5">
 
             <h1
               className={`text-[40px] md:text-[64px] lg:text-[80px] font-extrabold tracking-tight leading-tight font-geist-sans text-white ${
                 introDone ? "animate-fadeInDown" : "opacity-0"
               }`}
+              data-scroll
+              data-scroll-speed="0.3"
             >
               Je suis{" "}
               <span className="text-purple-500">Johan Forestier</span>,
@@ -50,6 +54,8 @@ export default function Home() {
               className={`mt-4 text-xl md:text-2xl text-white/70 font-fira-code ${
                 introDone ? "animate-fadeIn delay-200" : "opacity-0"
               }`}
+              data-scroll
+              data-scroll-speed="0.2"
             >
               Étudiant à{" "}
               <span className="text-purple-400 font-semibold">
@@ -94,6 +100,8 @@ export default function Home() {
             className={`flex-1 w-full max-w-lg h-[500px] md:h-[650px] relative ${
               introDone ? "animate-fadeIn delay-400" : "opacity-0"
             }`}
+            data-scroll
+            data-scroll-speed="0.8"
           >
             {/* Glow behind the model */}
             <div className="absolute inset-0 rounded-3xl bg-purple-600/10 blur-3xl pointer-events-none" />
@@ -106,6 +114,40 @@ export default function Home() {
       </main>
 
       <Projects />
+
+      <section id="skills" className="py-20 px-6 bg-transparent min-h-screen flex items-center" data-scroll data-scroll-section>
+        <div className="max-w-7xl mx-auto w-full">
+          <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-12" data-scroll data-scroll-speed="0.2">
+            Compétences
+          </h2>
+          <p className="text-white/70 text-center text-lg" data-scroll data-scroll-speed="0.15">
+            Section compétences en cours de développement...
+          </p>
+        </div>
+      </section>
+
+      <section id="experiences" className="py-20 px-6 bg-transparent min-h-screen flex items-center" data-scroll data-scroll-section>
+        <div className="max-w-7xl mx-auto w-full">
+          <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-12" data-scroll data-scroll-speed="0.2">
+            Expériences
+          </h2>
+          <p className="text-white/70 text-center text-lg" data-scroll data-scroll-speed="0.15">
+            Section expériences en cours de développement...
+          </p>
+        </div>
+      </section>
+
+      <section id="contact" className="py-20 px-6 bg-transparent min-h-screen flex items-center" data-scroll data-scroll-section>
+        <div className="max-w-7xl mx-auto w-full">
+          <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-12" data-scroll data-scroll-speed="0.2">
+            Contact
+          </h2>
+          <p className="text-white/70 text-center text-lg" data-scroll data-scroll-speed="0.15">
+            Section contact en cours de développement...
+          </p>
+        </div>
+      </section>
+
       <Footer />
     </>
   );

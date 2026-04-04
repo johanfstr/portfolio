@@ -69,7 +69,7 @@ export default function ModelViewer({ modelPath }: { modelPath: string }) {
   return (
     <Canvas
       // Caméra reculée et en hauteur pour voir l'ensemble du modèle
-      camera={{ position: [0, 1, 10], fov: 50 }}
+      camera={{ position: [1, 1, 5], fov: 50 }}
       gl={{ antialias: true, alpha: true }}
       style={{ width: "100%", height: "100%", background: "transparent" }}
       onCreated={({ gl }) => {
@@ -90,7 +90,7 @@ export default function ModelViewer({ modelPath }: { modelPath: string }) {
         enablePan={false}
         enableZoom={true}
         minDistance={5}
-        maxDistance={16}
+        maxDistance={1000}
         minPolarAngle={Math.PI / 6}
         maxPolarAngle={Math.PI / 2}
         target={[0, 0, 0]}
