@@ -148,7 +148,7 @@ export default function Intro({ onFinish }: { onFinish?: () => void }) {
       {/* Skip hint (clickable + keyboard) */}
       <button
         onClick={skipIntro}
-        className="pointer-events-auto absolute bottom-6 right-6 bg-white/6 border border-white/10 text-white/70 text-sm px-3 py-2 rounded-full hover:bg-white/8 transition"
+        className="pointer-events-auto absolute bottom-7 right-6 bg-white/6 border border-white/10 text-white/70 text-sm px-3 py-2 rounded-full hover:bg-white/8 transition"
         aria-label="Passer l'intro (Espace, Échap)"
       >
         Appuyer sur <span className="font-semibold mx-2">Espace</span> ou <span className="font-semibold mx-2">Échap</span> pour passer
