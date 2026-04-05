@@ -26,7 +26,7 @@ export default function Home() {
 
       <main
         id="hero"
-        className="relative min-h-screen flex items-center bg-gradient-to-b from-gray-900 to-gray-950 overflow-hidden"
+        className="relative min-h-screen flex items-center bg-gradient-to-b from-gray-800 to-gray-850"
         data-scroll
         data-scroll-section
       >
@@ -44,10 +44,10 @@ export default function Home() {
                 introDone ? "animate-fadeInDown" : "opacity-0"
               }`}
               data-scroll
-              data-scroll-speed="0.3"
+              data-scroll-speed="0.5"
             >
               Je suis{" "}
-              <span className="text-purple-500">Johan Forestier</span>,
+              <span className="bg-gradient-to-r from-purple-400 to-purple-800 bg-clip-text text-transparent">Johan Forestier</span>,
             </h1>
 
             <p
@@ -70,9 +70,7 @@ export default function Home() {
             >
               Je cherche une{" "}
               <span className="text-purple-400 font-semibold">alternance</span>{" "}
-              en développement full-stack pour septembre 2026. Passionné par la
-              création de sites web modernes et performants, je suis prêt à
-              relever de nouveaux défis et à contribuer à des projets innovants.
+              en développement full-stack pour septembre 2026. Afin de mettre en pratique mes compétences au sein d'une équipe de développement et contribuer à des projets concrets.
             </p>
 
             <div

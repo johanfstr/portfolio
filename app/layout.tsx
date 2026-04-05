@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${firaCode.variable} antialiased`} data-scroll-container>
+      <body className={`${firaCode.variable} antialiased`}>
         {children}
         <ScrollEffects />
       </body>

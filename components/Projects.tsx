@@ -5,22 +5,28 @@ import { useEffect, useRef, useState } from "react"
 const projects = [
   {
     id: "1",
-    title: "Tower Defense Game",
+    title: "Portfolio V1",
+    image: "",
     description:
-      "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    accent: "from-white-500 to-purple-600",
+      "Développé en React et Tailwind CSS, ce portfolio présente mes projets et compétences de manière élégante et responsive. Il intègre des animations subtiles pour une expérience utilisateur fluide.",
+    accent: "",
+    ctaUrl: "https://github.com/johanfstr/portfolio",
   },
   {
     id: "2",
-    title: "Camlbrick",
-    description: "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    accent: "from-black-100 to-purple-600",
+    title: "Tower Defense Game",
+    image: "",
+    description: "Développé en C avec la bibliothèque SDL2, ce jeu de tower defense permet de génerer des tours autour de chemins aléatoires avec des mécaniques de jeu dynamiques.",
+    accent: "",
+    ctaUrl: "https://github.com/johanfstr/TowerDefend",
   },
   {
     id: "3",
-    title: "ProjetBus",
-    description: "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    accent: "from-black-500 to-purple-600",
+    title: "OCrackml",
+    image: "/images/ocrackml.png",
+    description: "Développé en OCaml, c'est un projet d'analyse et d'exploitation de fuites de données issues de différentes applications web, afin de travailler sur l'analyse de données et la sécurité informatique.",
+    accent: "",
+    ctaUrl: "https://github.com/johanfstr/OCrackml",
   },
 ]
 
@@ -89,7 +95,7 @@ export default function Projects() {
                 ref={(el) => {
                   cardsRef.current[idx] = el
                 }}
-                className={`rounded-2xl overflow-hidden border border-gray-700 bg-gradient-to-b from-gray-900 to-gray-800 shadow-xl transform transition-all duration-700 ease-out ${
+                className={`rounded-2xl overflow-hidden border border-gray-700 bg-gradient-to-b from-gray-800 to-gray-850 shadow-xl transform transition-all duration-700 ease-out ${
                   visible[idx]
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
@@ -101,15 +107,25 @@ export default function Projects() {
                   className={`h-44 bg-gradient-to-br ${p.accent} bg-opacity-30 flex items-center justify-center relative`}
                   style={{ boxShadow: "inset 0 -40px 40px rgba(0,0,0,0.6)" }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-blue-500/20"></div>
-                  <div className="text-white/90 text-xl font-semibold relative z-10">{p.title}</div>
+                  <div className="absolute inset-0"></div>
+                  {p.image ? (
+                    <img
+                      src={p.image}
+                      alt={p.title}
+                      className="relative z-10 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="text-white/90 text-xl font-semibold relative z-10">{p.title}</div>
+                  )}
                 </div>
 
                 <div className="p-6 text-center text-white/80">
                   <h3 className="text-xl font-semibold text-white mb-3">{p.title}</h3>
                   <p className="text-sm mb-6">{p.description}</p>
                   <a
-                    href="#"
+                    href={p.ctaUrl ?? "#"}
+                    target={p.ctaUrl?.startsWith("http") ? "_blank" : undefined}
+                    rel={p.ctaUrl?.startsWith("http") ? "noreferrer noopener" : undefined}
                     className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition-transform"
                   >
                     Voir plus

@@ -8,7 +8,7 @@ export default function Footer() {
           <h3 className="text-2xl font-extrabold mb-3 font-geist-sans">Portfolio</h3>
           <div className="w-12 h-1 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 mb-6" />
           <p className="text-white/60 max-w-xl leading-relaxed">
-            lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Passionné par le développement full-stack, j'aime créer des expériences numériques uniques. Ce portfolio présente mes projets et compétences. Merci de votre visite ! N'hésitez pas à me contacter pour toute question ou opportunité.
           </p>
 
           <div className="mt-6 flex gap-3 items-center">

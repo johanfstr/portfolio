@@ -24,47 +24,38 @@ export default function ScrollEffects() {
           maxTouchPoints: navigator.maxTouchPoints
         });
 
-        // Initialiser Locomotive Scroll sur tous les appareils avec des paramètres adaptés
-        const scrollConfig = isMobile ? {
-          // Paramètres pour mobile - moins de fluidité pour éviter les conflits tactiles
-          smooth: true,
-          touchMultiplier: 1.5, // Plus sensible au toucher
-          lerp: 0.15, // Moins fluide pour éviter les saccades
-          direction: 'vertical',
-          gestureDirection: 'vertical',
-          tablet: {
+        // Sur mobile, désactiver complètement Locomotive Scroll pour éviter le blocage
+        if (isMobile) {
+          console.log('Mobile detected - Locomotive Scroll désactivé');
+          // Ne pas initialiser Locomotive Scroll sur mobile
+          scroll = null;
+        } else {
+          // Desktop uniquement : ajouter l'attribut de conteneur pour Locomotive Scroll
+          document.body.setAttribute('data-scroll-container', '');
+          
+          // Desktop uniquement : initialiser Locomotive Scroll
+          scroll = new (LocomotiveScroll as any)({
             smooth: true,
-            breakpoint: 0
-          },
-          smartphone: {
-            smooth: true // Activer sur mobile
-          }
-        } : {
-          // Paramètres pour desktop - plus fluide
-          smooth: true,
-          touchMultiplier: 0.25,
-          lerp: 0.08,
-          direction: 'vertical',
-          gestureDirection: 'vertical',
-          tablet: {
-            smooth: true,
-            breakpoint: 0
-          },
-          smartphone: {
-            smooth: false
-          }
-        };
-
-        scroll = new (LocomotiveScroll as any)(scrollConfig);
-        console.log('Locomotive Scroll initialized for all devices with config:', scrollConfig);
-        console.log('Device type:', isMobile ? 'Mobile/Touch' : 'Desktop', '- Smooth scroll enabled');
+            touchMultiplier: 0.25,
+            lerp: 0.08,
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            tablet: {
+              smooth: true,
+              breakpoint: 0
+            },
+            smartphone: {
+              smooth: false
+            }
+          });
+          console.log('Locomotive Scroll initialized on desktop');
 
           // Attendre que Locomotive Scroll soit prêt
           scroll.on('scroll', (args: any) => {
             if (args.currentElements) {
               Object.keys(args.currentElements).forEach(key => {
                 const el = args.currentElements[key];
-                if (el.el.id && ['hero', 'skills', 'experiences', 'contact'].includes(el.el.id)) {
+                if (el.el.id && ['hero', 'skills', 'experiences', 'contact', 'projects'].includes(el.el.id)) {
                   console.log(`${el.el.id} section progress:`, el.progress.toFixed(2));
                 }
               });
@@ -110,6 +101,7 @@ export default function ScrollEffects() {
               });
             });
           }, 1000);
+        }
 
         // GSAP transitions - toujours actif (même sur mobile)
         const allElements = document.querySelectorAll('main *');
@@ -170,6 +162,7 @@ export default function ScrollEffects() {
     return () => {
       if (scroll) {
         scroll.destroy();
+        document.body.removeAttribute('data-scroll-container');
       }
     };
   }, []);

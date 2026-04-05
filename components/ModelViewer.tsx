@@ -69,7 +69,7 @@ export default function ModelViewer({ modelPath }: { modelPath: string }) {
   return (
     <Canvas
       // Caméra reculée et en hauteur pour voir l'ensemble du modèle
-      camera={{ position: [1, 1, 5], fov: 50 }}
+      camera={{ position: [1, 1, 150], fov: 50 }}
       gl={{ antialias: true, alpha: true }}
       style={{ width: "100%", height: "100%", background: "transparent" }}
       onCreated={({ gl }) => {
