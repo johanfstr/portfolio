@@ -2,36 +2,67 @@
 
 import { useEffect, useRef, useState } from "react"
 
-const projects = [
+interface Technology {
+  name: string
+  logo: string
+}
+
+interface Project {
+  id: string
+  title: string
+  image: string
+  description: string
+  accent: string
+  ctaUrl: string
+  fullDescription: string
+  technologies: Technology[]
+}
+
+const projects: Project[] = [
   {
     id: "1",
     title: "Portfolio V1",
     image: "",
     description:
-      "Développé en React et Tailwind CSS, ce portfolio présente mes projets et compétences de manière élégante et responsive. Il intègre des animations subtiles pour une expérience utilisateur fluide.",
+      "Portfolio personnel mettant en avant mes compétences en développement.",
     accent: "",
     ctaUrl: "https://github.com/johanfstr/portfolio",
+    fullDescription: "Ce portfolio V1 a été développé avec React et Tailwind CSS. Il présente mes compétences et projets de manière élégante et responsive. Les animations subtiles améliorent l'expérience utilisateur.",
+    technologies: [
+      { name: "React", logo: "/images/react.png" },
+      { name: "Tailwind CSS", logo: "/images/tailwind.png" },
+    ],
   },
   {
     id: "2",
     title: "Tower Defense Game",
     image: "",
-    description: "Développé en C avec la bibliothèque SDL2, ce jeu de tower defense permet de génerer des tours autour de chemins aléatoires avec des mécaniques de jeu dynamiques.",
+    description: "Jeu de tower defense permet de génerer des tours autour de chemins aléatoires.",
     accent: "",
     ctaUrl: "https://github.com/johanfstr/TowerDefend",
+    fullDescription: "Un jeu de tower defense complet développé en C utilisant SDL2. Le jeu génère des chemins aléatoires et permet de placer des tours avec différentes mécaniques de jeu.",
+    technologies: [
+      { name: "C", logo: "/images/c.png" },
+      { name: "SDL2", logo: "/images/sdl.svg" },
+    ],
   },
   {
     id: "3",
     title: "OCrackml",
     image: "/images/ocrackml.png",
-    description: "Développé en OCaml, c'est un projet d'analyse et d'exploitation de fuites de données issues de différentes applications web, afin de travailler sur l'analyse de données et la sécurité informatique.",
+    description: "Analyse et d'exploitation de fuites de données issues de différentes applications web.",
     accent: "",
     ctaUrl: "https://github.com/johanfstr/OCrackml",
+    fullDescription: "Projet OCaml pour analyser et exploiter des fuites de données web. Focus sur l'analyse de données et la sécurité informatique.",
+    technologies: [
+      { name: "OCaml", logo: "/images/ocaml.svg" },
+    ],
   },
 ]
 
 export default function Projects() {
   const [visible, setVisible] = useState<boolean[]>(() => projects.map(() => false))
+  const [selectedProject, setSelectedProject] = useState<number | null>(null)
   const cardsRef = useRef<Array<HTMLDivElement | null>>([])
 
   useEffect(() => {
@@ -95,7 +126,7 @@ export default function Projects() {
                 ref={(el) => {
                   cardsRef.current[idx] = el
                 }}
-                className={`rounded-2xl overflow-hidden border border-gray-700 bg-gradient-to-b from-gray-800 to-gray-850 shadow-xl transform transition-all duration-700 ease-out ${
+                className={`rounded-2xl overflow-hidden border border-gray-700 bg-gradient-to-b from-gray-800 to-gray-850 shadow-xl transform transition-all duration-700 ease-out hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-2 ${
                   visible[idx]
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
@@ -121,21 +152,99 @@ export default function Projects() {
 
                 <div className="p-6 text-center text-white/80">
                   <h3 className="text-xl font-semibold text-white mb-3">{p.title}</h3>
-                  <p className="text-sm mb-6">{p.description}</p>
-                  <a
-                    href={p.ctaUrl ?? "#"}
-                    target={p.ctaUrl?.startsWith("http") ? "_blank" : undefined}
-                    rel={p.ctaUrl?.startsWith("http") ? "noreferrer noopener" : undefined}
+                  <p className="text-sm mb-4">{p.description}</p>
+                  {p.technologies && p.technologies.length > 0 && (
+                    <div className="flex flex-wrap justify-center gap-2 mb-4">
+                      {p.technologies.map((tech, techIdx) => (
+                        <div
+                          key={techIdx}
+                          className="flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white"
+                        >
+                          {tech.logo && (
+                            <img src={tech.logo} alt={tech.name} className="w-4 h-4" />
+                          )}
+                          <span>{tech.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <button
+                    onClick={() => setSelectedProject(idx)}
                     className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition-transform"
                   >
                     Voir plus
-                  </a>
+                  </button>
                 </div>
               </div>
             );
           })}
         </div>
       </div>
+
+      {/* Modal */}
+      {selectedProject !== null && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-2xl font-bold text-white">{projects[selectedProject].title}</h2>
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="text-white/70 hover:text-white text-2xl"
+                >
+                  ×
+                </button>
+              </div>
+              
+              {projects[selectedProject].image && (
+                <img
+                  src={projects[selectedProject].image}
+                  alt={projects[selectedProject].title}
+                  className="w-full h-48 object-cover rounded-lg mb-4"
+                />
+              )}
+              
+              <p className="text-white/80 mb-4">{projects[selectedProject].fullDescription}</p>
+              
+              {projects[selectedProject].technologies && projects[selectedProject].technologies.length > 0 && (
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold text-white mb-2">Technologies utilisées :</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {projects[selectedProject].technologies.map((tech, techIdx) => (
+                      <div
+                        key={techIdx}
+                        className="flex items-center gap-2 px-3 py-2 bg-gray-700 rounded-full text-sm text-white"
+                      >
+                        {tech.logo && (
+                          <img src={tech.logo} alt={tech.name} className="w-5 h-5" />
+                        )}
+                        <span>{tech.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              <div className="flex gap-4">
+                <a
+                  href={projects[selectedProject].ctaUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-3 bg-purple-600 text-white rounded-full font-semibold hover:bg-purple-700 transition-colors"
+                >
+                  Voir sur GitHub
+                </a>
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="px-6 py-3 border border-gray-600 text-white rounded-full font-semibold hover:bg-gray-700 transition-colors"
+                >
+                  Fermer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

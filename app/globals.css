@@ -414,34 +414,368 @@ html.has-scroll-dragging {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg,#14101e 0%,#232323 100%);
+  background: radial-gradient(circle at top, rgba(118, 75, 255, 0.09), transparent 25%), linear-gradient(180deg, #09020f 0%, #12051f 100%);
   transition: opacity .6s ease, transform .7s cubic-bezier(.2,.9,.2,1);
   transform-origin: center;
-  pointer-events: auto; /* block interactions while intro is visible */
+  pointer-events: auto;
   will-change: transform, opacity;
 }
 
-.typing-container { display: inline-block; white-space: nowrap; overflow: hidden; }
+.boot-terminal {
+  position: relative;
+  width: 100%;
+}
 
-.cursor {
-  display: inline-block;
-  width: 10px;
-  height: 1em;
-  vertical-align: middle;
-  margin-left: 6px;
-  background: currentColor;
-  border-radius: 2px;
+.boot-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 36px;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  background: linear-gradient(180deg, rgba(9, 4, 22, 0.96) 0%, rgba(3, 1, 10, 0.98) 100%);
+}
+
+.boot-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 20% 15%, rgba(154, 85, 255, 0.12), transparent 18%), radial-gradient(circle at 80% 18%, rgba(147, 51, 234, 0.1), transparent 14%);
+  mix-blend-mode: screen;
+}
+
+.boot-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(180deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.02) 1px, transparent 2px, transparent 3px);
+  opacity: 0.55;
+}
+
+.boot-glow {
+  position: absolute;
+  inset: -10px;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 5%, rgba(129, 76, 255, 0.18), transparent 18%), radial-gradient(circle at 50% 95%, rgba(139, 92, 246, 0.12), transparent 30%);
+}
+
+.boot-screen {
+  position: relative;
+  z-index: 1;
+}
+
+.boot-lines {
+  min-height: 24vh;
+}
+
+.boot-line {
+  margin: 0;
+  opacity: 0.96;
+}
+
+.boot-line-selected {
+  color: #d8b4fe;
+  background: rgba(147, 51, 234, 0.18);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.boot-line-empty {
+  min-height: 0.8rem;
+}
+
+.boot-cursor {
+  color: #c4b5fd;
+  opacity: 0.85;
   animation: blink 1s steps(2, start) infinite;
 }
+
 @keyframes blink { 50% { opacity: 0 } }
 
-.intro-zoom { animation: introZoom 700ms cubic-bezier(.2,.9,.2,1) forwards; }
+.intro-zoom {
+  animation: introZoom 700ms cubic-bezier(.2,.9,.2,1) forwards;
+}
+
 @keyframes introZoom {
   0% { transform: scale(1.25); opacity: 1; filter: blur(0); }
   60% { transform: scale(1.02); opacity: 0.95; }
   100% { transform: scale(1); opacity: 0; filter: blur(2px); }
 }
 
-
 /* Police spéciale */
-.font-geist-sans { font-family: 'Geist Sans', ui-sans-serif, system-ui, -apple-system, sans-serif; }
+.font-geist-sans {
+  font-family: 'Geist Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+
+:root {
+  --crt-amber:        #8b5cf6;
+  --crt-amber-bright: #a78bfa;
+  --crt-amber-dim:    #6d28d9;
+  --crt-screen-bg:    rgba(22, 18, 32, 0.95);
+
+  /* Monitor bezel — grey/beige plastic like a Gateway CRT */
+  --bezel-face:       #b8b0a4;  
+  --bezel-top:        #ccc5bb;
+  --bezel-shadow:     #8a837a;
+  --bezel-inner:      #2a2218;
+}
+
+/* ── Full-screen overlay ── */
+.crt-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg,#14101e 0%,#232323 100%);
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+
+/* ── Monitor outer shell — boxy CRT plastic ── */
+.crt-monitor {
+  position: relative;
+  width: min(820px, 90vw);
+  background: var(--bezel-face);
+  border-radius: 18px 18px 12px 12px;
+  padding: 22px 22px 0 22px;
+  box-shadow:
+    inset 0 2px 0 var(--bezel-top),
+    inset 2px 0 0 rgba(255,255,255,0.25),
+    inset -3px -3px 0 var(--bezel-shadow),
+    0 20px 60px rgba(0,0,0,0.8),
+    0 6px 20px rgba(0,0,0,0.6),
+    0 0 40px rgba(139,92,246,0.08);
+}
+
+/* Screen recess — sunken inner lip */
+.crt-screen-recess {
+  background: var(--bezel-inner);
+  border-radius: 10px 10px 4px 4px;
+  padding: 8px;
+  box-shadow:
+    inset 0 3px 8px rgba(0,0,0,0.9),
+    inset 0 0 2px rgba(0,0,0,0.8);
+}
+
+/* ── CRT Glass — with subtle perspective tilt ── */
+.crt-screen {
+  position: relative;
+  background: var(--crt-screen-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 400px;
+  padding: 28px 32px 24px;
+  transform: perspective(1200px) rotateX(0.8deg);
+  box-shadow:
+    inset 0 0 120px rgba(0,0,0,0.95),
+    inset 0 0 40px rgba(139,92,246,0.05);
+  animation: crt-flicker 0.15s infinite;
+}
+
+/* Barrel distortion vignette + top glass reflection */
+.crt-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse 110% 110% at 50% 50%,
+      transparent 45%,
+      rgba(0,0,0,0.5) 78%,
+      rgba(0,0,0,0.85) 100%
+    ),
+    radial-gradient(ellipse 60% 30% at 25% 8%,
+      rgba(255,255,255,0.05) 0%,
+      transparent 70%
+    );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Diagonal glass glare */
+.crt-glass-glare {
+  position: absolute;
+  top: -10%;
+  left: -5%;
+  width: 60%;
+  height: 55%;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.045) 0%,
+    rgba(255,255,255,0.015) 40%,
+    transparent 70%
+  );
+  transform: skewX(-8deg);
+  pointer-events: none;
+  z-index: 11;
+  border-radius: 0 0 40% 0;
+}
+
+/* ── Scanlines ── */
+.crt-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 1px,
+    rgba(0,0,0,0.22) 1px,
+    rgba(0,0,0,0.22) 2px
+  );
+}
+
+/* Slow horizontal roll line */
+.crt-roll {
+  position: absolute;
+  left: 0; right: 0;
+  height: 3px;
+  background: rgba(139,92,246,0.04);
+  z-index: 9;
+  pointer-events: none;
+  animation: crt-roll-line 8s linear infinite;
+}
+@keyframes crt-roll-line {
+  0%   { top: -4px; }
+  100% { top: calc(100% + 4px); }
+}
+
+/* Phosphor warm spot top-right */
+.crt-phosphor-glow {
+  position: absolute;
+  top: 5%;
+  right: 8%;
+  width: 100px;
+  height: 140px;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(167,139,250,0.45) 0%,
+    rgba(139,92,246,0.12) 40%,
+    transparent 70%
+  );
+  filter: blur(18px);
+  border-radius: 50%;
+}
+
+@keyframes crt-flicker {
+  0%   { opacity: 1; }
+  92%  { opacity: 1; }
+  93%  { opacity: 0.97; }
+  94%  { opacity: 1; }
+  96%  { opacity: 0.98; }
+  100% { opacity: 1; }
+}
+
+/* ── Terminal text ── */
+.crt-content {
+  position: relative;
+  z-index: 5;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--crt-amber);
+  text-shadow: 0 0 5px rgba(139,92,246,0.6), 0 0 10px rgba(139,92,246,0.2);
+  white-space: pre;
+  overflow: hidden;
+}
+.crt-line      { margin: 0; color: var(--crt-amber); }
+.crt-cmd       { color: var(--crt-amber-bright); text-shadow: 0 0 8px rgba(167,139,250,0.75); }
+.crt-separator { margin: 0; color: var(--crt-amber-dim); }
+.crt-warning-title {
+  color: var(--crt-amber-bright);
+  text-shadow: 0 0 10px rgba(167,139,250,0.85);
+  font-weight: bold;
+  letter-spacing: 0.1em;
+}
+.crt-empty-line { height: 0.65em; }
+
+.crt-cursor {
+  display: inline-block;
+  color: var(--crt-amber-bright);
+  animation: crt-blink 1s steps(2, start) infinite;
+  text-shadow: 0 0 8px rgba(167,139,250,0.75);
+}
+@keyframes crt-blink { 50% { opacity: 0; } }
+
+/* ── Bottom chin — thick like real CRT ── */
+.crt-chin {
+  background: var(--bezel-face);
+  border-radius: 0 0 14px 14px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.15),
+    inset -2px -2px 0 var(--bezel-shadow);
+  position: relative;
+}
+/* Brand label recess */
+.crt-chin::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 22px;
+  border-radius: 3px;
+  background: rgba(0,0,0,0.12);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+}
+/* Yellow power LED */
+.crt-power-led {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f5c518;
+  box-shadow: 0 0 4px #f5c518, 0 0 8px rgba(245,197,24,0.5);
+  position: absolute;
+  right: 28px;
+  bottom: 16px;
+  animation: crt-led-pulse 4s ease-in-out infinite;
+}
+@keyframes crt-led-pulse {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+/* ── Skip button ── */
+.crt-skip-btn {
+  margin-top: 14px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--crt-amber-dim);
+  background: transparent;
+  border: 1px solid var(--crt-amber-dim);
+  padding: 5px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.crt-skip-btn:hover {
+  color: var(--crt-amber);
+  border-color: var(--crt-amber);
+}
+
+/* ── Exit animation ── */
+.crt-zoom-out { animation: crtZoomOut 700ms cubic-bezier(0.2,0.9,0.2,1) forwards; }
+@keyframes crtZoomOut {
+  0%   { transform: scale(1);    opacity: 1; filter: blur(0); }
+  40%  { transform: scale(1.03); opacity: 0.9; }
+  100% { transform: scale(0.93); opacity: 0;  filter: blur(4px); }
+}
+
+@media (max-width: 600px) {
+  .crt-content { font-size: 11px; }
+  .crt-screen  { padding: 18px 16px; min-height: 300px; }
+  .crt-monitor { padding: 14px 14px 0; }
+}
