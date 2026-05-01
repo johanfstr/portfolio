@@ -8,164 +8,58 @@ export default function ScrollEffects() {
 
     const initScrollEffects = async () => {
       try {
-        console.log('Initializing scroll effects...');
-
-        // Importer dynamiquement les modules
+        // Importer dynamiquement Locomotive Scroll
         const LocomotiveScroll = (await import('locomotive-scroll')).default;
-        const { gsap } = await import('gsap');
 
-        console.log('Modules loaded:', { LocomotiveScroll, gsap });
+        // Détection mobile
+        const isMobile = window.innerWidth <= 768;
 
-        // Détection si on est sur mobile pour adapter les paramètres
-        const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        console.log('Device detection:', isMobile, {
-          width: window.innerWidth,
-          hasTouch: 'ontouchstart' in window,
-          maxTouchPoints: navigator.maxTouchPoints
-        });
-
-        // Sur mobile, désactiver complètement Locomotive Scroll pour éviter le blocage
-        if (isMobile) {
-          console.log('Mobile detected - Locomotive Scroll désactivé');
-          // Ne pas initialiser Locomotive Scroll sur mobile
-          scroll = null;
-        } else {
-          // Desktop uniquement : ajouter l'attribut de conteneur pour Locomotive Scroll
-          document.body.setAttribute('data-scroll-container', '');
-          
-          // Desktop uniquement : initialiser Locomotive Scroll
-          scroll = new (LocomotiveScroll as any)({
-            smooth: true,
-            touchMultiplier: 0.25,
-            lerp: 0.08,
-            direction: 'vertical',
-            gestureDirection: 'vertical',
-            tablet: {
+        // Sur desktop, activer Locomotive Scroll
+        if (!isMobile) {
+          try {
+            scroll = new (LocomotiveScroll as any)({
               smooth: true,
-              breakpoint: 0
-            },
-            smartphone: {
-              smooth: false
-            }
-          });
-          console.log('Locomotive Scroll initialized on desktop');
-
-          // Attendre que Locomotive Scroll soit prêt
-          scroll.on('scroll', (args: any) => {
-            if (args.currentElements) {
-              Object.keys(args.currentElements).forEach(key => {
-                const el = args.currentElements[key];
-                if (el.el.id && ['hero', 'skills', 'experiences', 'contact', 'projects'].includes(el.el.id)) {
-                  console.log(`${el.el.id} section progress:`, el.progress.toFixed(2));
-                }
-              });
-            }
-          });
-
-          // Vérifier les éléments avec data-scroll
-          setTimeout(() => {
-            const scrollElements = document.querySelectorAll('[data-scroll]');
-            console.log('Found scroll elements:', scrollElements.length);
-            scrollElements.forEach((el, i) => {
-              const element = el as HTMLElement;
-              console.log(`Element ${i}: ${element.tagName}#${element.id || 'no-id'} - speed: ${element.getAttribute('data-scroll-speed')}`);
-            });
-          }, 500);
-
-          // Gérer les clics sur les liens d'ancrage
-          const handleAnchorClick = (e: Event, href: string) => {
-            e.preventDefault();
-
-            const targetId = href.replace('#', '');
-            const targetElement = document.getElementById(targetId);
-
-            if (targetElement && scroll) {
-              const centerOffset = -Math.round(window.innerHeight * 0.45);
-              scroll.scrollTo(targetElement, {
-                offset: centerOffset,
-                duration: 800,
-                easing: [0.25, 0.1, 0.25, 1]
-              });
-            }
-          };
-
-          // Attacher les gestionnaires aux liens d'ancrage
-          setTimeout(() => {
-            const anchorLinks = document.querySelectorAll('a[href^="#"]');
-            anchorLinks.forEach(link => {
-              link.addEventListener('click', (e) => {
-                const href = link.getAttribute('href');
-                if (href && href.startsWith('#')) {
-                  handleAnchorClick(e, href);
-                }
-              });
-            });
-          }, 1000);
-        }
-
-        // GSAP transitions - toujours actif (même sur mobile)
-        const allElements = document.querySelectorAll('main *');
-        const header = document.querySelector('nav');
-        const links = document.querySelectorAll('a');
-
-        console.log('Found elements:', {
-          allElements: allElements.length,
-          header: !!header,
-          links: links.length
-        });
-
-        links.forEach(link => {
-          link.addEventListener('click', (e) => {
-            const href = link.getAttribute('href');
-
-            // Ne pas traiter les ancres (déjà gérées par Locomotive Scroll sur desktop)
-            if (href?.startsWith('#')) {
-              return;
-            }
-
-            if (link.getAttribute('target') === '_blank' ||
-                href?.startsWith('mailto:') ||
-                href?.startsWith('tel:') ||
-                href?.startsWith('javascript:') ||
-                href?.includes('wa.me')) {
-              return;
-            }
-
-            e.preventDefault();
-            console.log('Page transition triggered for:', href);
-
-            gsap.to([header, ...allElements], {
-              opacity: 0,
-              duration: 0.25,
-              onComplete: () => {
-                window.location.href = href!;
+              smartphone: {
+                smooth: false
+              },
+              tablet: {
+                smooth: false
               }
             });
-          });
-        });
 
-        console.log('GSAP transitions initialized');
+            console.log('✓ Locomotive Scroll initialized');
+
+          } catch (err) {
+            console.warn('Locomotive Scroll init failed, using native scroll:', err);
+          }
+        }
 
       } catch (error) {
-        console.error('Error initializing scroll effects:', error);
+        console.warn('Could not load Locomotive Scroll:', error);
       }
     };
 
-    // Attendre que le DOM soit prêt
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initScrollEffects);
-    } else {
-      initScrollEffects();
-    }
+    // Initialiser après un court délai pour laisser le DOM se stabiliser
+    const timer = setTimeout(() => {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initScrollEffects, { once: true });
+      } else {
+        initScrollEffects();
+      }
+    }, 500);
 
     // Cleanup
     return () => {
+      clearTimeout(timer);
       if (scroll) {
-        scroll.destroy();
-        document.body.removeAttribute('data-scroll-container');
+        try {
+          scroll.destroy();
+        } catch (e) {
+          // Silent fail
+        }
       }
     };
   }, []);
 
-  return null; // Ce composant ne rend rien
+  return null;
 }

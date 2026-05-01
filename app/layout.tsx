@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fira_Code } from "next/font/google";
 import "./globals.css";
 import ScrollEffects from "../components/ScrollEffects";
+import SpaceGrid from "../components/SpaceGrid";
 
 const firaCode = Fira_Code({
   variable: "--font-fira-code",
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${firaCode.variable} antialiased`}>
+        <SpaceGrid />
         {children}
         <ScrollEffects />
       </body>

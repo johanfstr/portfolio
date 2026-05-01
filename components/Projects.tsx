@@ -58,6 +58,42 @@ const projects: Project[] = [
       { name: "OCaml", logo: "/images/ocaml.svg" },
     ],
   },
+  {
+    id: "4",
+    title: "OCrackml",
+    image: "/images/ocrackml.png",
+    description: "Analyse et d'exploitation de fuites de données issues de différentes applications web.",
+    accent: "",
+    ctaUrl: "https://github.com/johanfstr/OCrackml",
+    fullDescription: "Projet OCaml pour analyser et exploiter des fuites de données web. Focus sur l'analyse de données et la sécurité informatique.",
+    technologies: [
+      { name: "OCaml", logo: "/images/ocaml.svg" },
+    ],
+  },
+  {
+    id: "5",
+    title: "OCrackml",
+    image: "/images/ocrackml.png",
+    description: "Analyse et d'exploitation de fuites de données issues de différentes applications web.",
+    accent: "",
+    ctaUrl: "https://github.com/johanfstr/OCrackml",
+    fullDescription: "Projet OCaml pour analyser et exploiter des fuites de données web. Focus sur l'analyse de données et la sécurité informatique.",
+    technologies: [
+      { name: "OCaml", logo: "/images/ocaml.svg" },
+    ],
+  },
+  {
+    id: "6",
+    title: "OCrackml",
+    image: "/images/ocrackml.png",
+    description: "Analyse et d'exploitation de fuites de données issues de différentes applications web.",
+    accent: "",
+    ctaUrl: "https://github.com/johanfstr/OCrackml",
+    fullDescription: "Projet OCaml pour analyser et exploiter des fuites de données web. Focus sur l'analyse de données et la sécurité informatique.",
+    technologies: [
+      { name: "OCaml", logo: "/images/ocaml.svg" },
+    ],
+  },
 ]
 
 export default function Projects() {
@@ -134,7 +170,7 @@ export default function Projects() {
                 data-scroll
                 data-scroll-speed={cardSpeed}
               >
-                <div
+                {/*<div
                   className={`h-44 bg-gradient-to-br ${p.accent} bg-opacity-30 flex items-center justify-center relative`}
                   style={{ boxShadow: "inset 0 -40px 40px rgba(0,0,0,0.6)" }}
                 >
@@ -149,6 +185,7 @@ export default function Projects() {
                     <div className="text-white/90 text-xl font-semibold relative z-10">{p.title}</div>
                   )}
                 </div>
+                */}
 
                 <div className="p-6 text-center text-white/80">
                   <h3 className="text-xl font-semibold text-white mb-3">{p.title}</h3>

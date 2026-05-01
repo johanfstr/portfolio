@@ -4,6 +4,7 @@ import { useState, useRef, Suspense } from "react";
 import Navbar from "../components/Navbar";
 import Intro from "../components/Intro";
 import Projects from "../components/Projects";
+import Skills from "../components/Skills";
 import Footer from "../components/Footer";
 import dynamic from "next/dynamic";
 
@@ -26,7 +27,7 @@ export default function Home() {
 
       <main
         id="hero"
-        className="relative min-h-screen flex items-center bg-gradient-to-b from-gray-800 to-gray-850"
+        className="relative min-h-screen flex items-center bg-transparent"
         data-scroll
         data-scroll-section
       >
@@ -113,16 +114,7 @@ export default function Home() {
 
       <Projects />
 
-      <section id="skills" className="py-20 px-6 bg-transparent min-h-screen flex items-center" data-scroll data-scroll-section>
-        <div className="max-w-7xl mx-auto w-full">
-          <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-12" data-scroll data-scroll-speed="0.2">
-            Compétences
-          </h2>
-          <p className="text-white/70 text-center text-lg" data-scroll data-scroll-speed="0.15">
-            Section compétences en cours de développement...
-          </p>
-        </div>
-      </section>
+      <Skills />
 
       <section id="experiences" className="py-20 px-6 bg-transparent min-h-screen flex items-center" data-scroll data-scroll-section>
         <div className="max-w-7xl mx-auto w-full">
