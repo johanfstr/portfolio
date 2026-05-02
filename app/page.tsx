@@ -6,6 +6,7 @@ import Intro from "../components/Intro";
 import Projects from "../components/Projects";
 import Skills from "../components/Skills";
 import Experience from "../components/Experience";
+import Contact from "../components/Contact";
 import Footer from "../components/Footer";
 import dynamic from "next/dynamic";
 
@@ -119,16 +120,7 @@ export default function Home() {
 
       <Experience />
 
-      <section id="contact" className="py-20 px-6 bg-transparent min-h-screen flex items-center" data-scroll data-scroll-section>
-        <div className="max-w-7xl mx-auto w-full">
-          <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-12" data-scroll data-scroll-speed="0.2">
-            Contact
-          </h2>
-          <p className="text-white/70 text-center text-lg" data-scroll data-scroll-speed="0.15">
-            Section contact en cours de développement...
-          </p>
-        </div>
-      </section>
+      <Contact />
 
       <Footer />
     </>
