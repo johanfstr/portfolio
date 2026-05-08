@@ -26,9 +26,9 @@ export default function Contact() {
     setSubmitMessage('')
 
     try {
-      const serviceID = ''
-      const templateID = ''
-      const publicKey = ''
+      const serviceID = 'service_2fivl1c'
+      const templateID = 'template_nkc4blp'
+      const publicKey = 'qyQcXmyfvb9_DanG7'
 
       await emailjs.send(
         serviceID,
@@ -43,7 +43,7 @@ export default function Contact() {
         publicKey
       )
 
-      setSubmitMessage('Message envoyé avec succès !')
+      setSubmitMessage('Message envoyé avec succès ! Je vous répondrai bientôt.')
       setFormData({ name: '', email: '', subject: '', message: '' })
     } catch (error) {
       console.error('Erreur lors de l\'envoi:', error)

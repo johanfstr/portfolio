@@ -1,130 +1,147 @@
 ﻿"use client"
-import { useEffect, useState, useCallback } from "react"
 
-const WARNING_LINES = [
-  { type: "text", text: "     __        /!                   ___________ " },
-  { type: "text", text: "    |__| ____ |  |__ _____    ____  !_   _____/ " },
-  { type: "text", text: "    |  |/ __ !|  |  !!__  !  /    !   |  ___)   " },
-  { type: "text", text: "    |  |  !_! )      !/ __ !_   |  !  |  !__    " },
-  { type: "text", text: "/!__|  |!____/|___|  /____  /___|  / /___  / /! " },
-  { type: "text", text: "!_____/            !/     !/     !/      !/  !/ " },
-  { type: "warning", text: "W E L C O M E" },
-  { type: "text", text: "# Boot sequence complete. Access granted: johan #" },
-  { type: "separator" },
+import { useEffect, useRef, useState } from "react"
+
+type BootPart = string | { cls?: string; text: string; cursor?: boolean }
+type Line =
+  | { kind: 'text'; text: string }
+  | { kind: 'parts'; parts: BootPart[] }
+
+const STORAGE_KEY = 'nr_boot_seen'
+
+const LINES: Line[] = [
+  { kind: 'text', text: 'BIOS v6.2 — JF Systems Inc.' },
+  { kind: 'parts', parts: ['checking memory.......... ', { cls: 'ok', text: 'ok' }] },
+  { kind: 'parts', parts: ['loading kernel ', { cls: 'info', text: 'johanfstr' }, '.', { cls: 'val', text: 'portfolio' }] },
+  { kind: 'parts', parts: ['detecting projects........ ', { cls: 'ok', text: '[6 found]' }] },
+  { kind: 'parts', parts: ['stack: ', { cls: 'info', text: 'C' }, ', ', { cls: 'info', text: 'C#' }, ', ', { cls: 'info', text: 'React' }, ', ', { cls: 'info', text: 'JavaScript' }, ', ', { cls: 'info', text: 'OCaml' }, ', ', { cls: 'info', text: 'Java' }] },
+  { kind: 'parts', parts: ['coffee.service: ', { cls: 'warn', text: 'low' }] },
+  { kind: 'parts', parts: ['all systems ', { cls: 'ok', text: 'ready', cursor: true }] },
 ]
 
-const BOOT_LINES = [
-  { type: "empty" },
-  { type: "cmd", text: "[johan@portfolio ~]$ ls -la" },
-  { type: "out", text: "drwxr-xr-x  projects/" },
-  { type: "out", text: "-rw-r--r--  about.txt" },
-  { type: "out", text: "-rw-r--r--  contact.txt" },
-  { type: "empty" },
-  { type: "cmd", text: "[johan@portfolio ~]$ cat about.txt" },
-  { type: "out", text: "Welcome. Loading portfolio..." },
-  { type: "empty" },
-]
-
-const ALL_LINES = [...WARNING_LINES, ...BOOT_LINES]
-
-export default function Intro({ onFinish }: { onFinish?: () => void }) {
+export default function Intro({ onFinish, onStart, force }: { onFinish?: () => void; onStart?: () => void; force?: boolean }) {
   const [visible, setVisible] = useState(true)
-  const [phase, setPhase] = useState<"booting" | "zooming" | "done">("booting")
-  const [lineIndex, setLineIndex] = useState(0)
+  const [idx, setIdx] = useState(0)
+  const [barOn, setBarOn] = useState(false)
+  const [fillGo, setFillGo] = useState(false)
+  const [crtOff, setCrtOff] = useState(false)
+  const [replayVisible, setReplayVisible] = useState(false)
+  const timers = useRef<number[]>([])
 
-  const skipIntro = useCallback(() => {
-    if (phase !== "zooming" && phase !== "done") {
-      setPhase("zooming")
+  useEffect(() => {
+    // If user already saw the boot and `force` is not set, skip it and show site immediately
+    const seen = typeof window !== 'undefined' && window.localStorage.getItem(STORAGE_KEY)
+    if (!force && seen) {
+      setVisible(false)
+      setReplayVisible(true)
       onFinish?.()
+      return
     }
-  }, [phase, onFinish])
 
-  useEffect(() => {
-    if (!visible) return
-    if (phase === "booting") {
-      if (lineIndex < ALL_LINES.length) {
-        const delay = ALL_LINES[lineIndex]?.type === "cmd" ? 350 : 120
-        const timer = window.setTimeout(() => setLineIndex((c) => c + 1), delay)
-        return () => window.clearTimeout(timer)
+    runBootSequence()
+
+    return () => {
+      // clear timeouts
+      timers.current.forEach(t => clearTimeout(t))
+      timers.current = []
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [force])
+
+  function clearTimers() {
+    timers.current.forEach(t => clearTimeout(t))
+    timers.current = []
+  }
+
+  function runBootSequence() {
+    clearTimers()
+    setVisible(true)
+    setIdx(0)
+    setBarOn(false)
+    setFillGo(false)
+    setCrtOff(false)
+    setReplayVisible(false)
+
+    let i = 0
+
+    function nextLine() {
+      if (i < LINES.length) {
+        setIdx((c) => c + 1)
+        i++
+        const delay = 120 + Math.random() * 80
+        const t = window.setTimeout(nextLine, delay)
+        timers.current.push(t)
+      } else {
+        // show bar
+        setBarOn(true)
+        const t1 = window.setTimeout(() => setFillGo(true), 80)
+        timers.current.push(t1)
+        const t2 = window.setTimeout(() => {
+          setCrtOff(true)
+          const t3 = window.setTimeout(() => {
+            setVisible(false)
+            onFinish?.()
+            try { window.localStorage.setItem(STORAGE_KEY, '1') } catch (e) {}
+            setReplayVisible(true)
+          }, 500)
+          timers.current.push(t3)
+        }, 900)
+        timers.current.push(t2)
       }
-      const doneTimer = window.setTimeout(() => {
-        setPhase("zooming")
-        onFinish?.()
-      }, 1800)
-      return () => window.clearTimeout(doneTimer)
     }
-    if (phase === "zooming") {
-      const t = window.setTimeout(() => {
-        setPhase("done")
-        setVisible(false)
-      }, 700)
-      return () => window.clearTimeout(t)
-    }
-  }, [phase, visible, lineIndex, onFinish])
 
-  useEffect(() => {
-    if (!visible) return
-    const handler = (e: KeyboardEvent) => {
-      if (["Space", " ", "Spacebar", "Escape", "Esc"].includes(e.key || e.code)) {
-        e.preventDefault()
-        skipIntro()
-      }
-    }
-    window.addEventListener("keydown", handler)
-    return () => window.removeEventListener("keydown", handler)
-  }, [visible, skipIntro])
+    const t0 = window.setTimeout(nextLine, 300)
+    timers.current.push(t0)
+  }
 
-  if (!visible) return null
+  function handleReplay() {
+    // notify parent that intro is starting so it can remove `site.on` class
+    onStart?.()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setTimeout(() => runBootSequence(), 400)
+  }
+
+  if (!visible) {
+    // still render replay button when available
+    return (
+      replayVisible ? (
+        <button className={`replay-boot-btn visible`} id="replayBootBtn" title="Rejouer l'animation de démarrage" onClick={handleReplay}>
+          <span className="replay-icon">▶</span>
+          <span>replay boot</span>
+        </button>
+      ) : null
+    )
+  }
 
   return (
-    <div className={`crt-overlay${phase === "zooming" ? " crt-zoom-out" : ""}`}>
-      {/* Outer monitor bezel — grey/beige CRT plastic */}
-      <div className="crt-monitor">
-        {/* Inner sunken recess around screen */}
-        <div className="crt-screen-recess">
-          {/* The CRT glass surface */}
-          <div className="crt-screen">
-            <div className="crt-scanlines" />
-            <div className="crt-roll" />
-            <div className="crt-glass-glare" />
-            <div className="crt-phosphor-glow" />
-
-            {/* Terminal content */}
-            <div className="crt-content">
-              {ALL_LINES.slice(0, lineIndex).map((line, i) => {
-                if (line.type === "separator") {
-                  return <div key={i} className="crt-separator">{"#".repeat(49)}</div>
-                }
-                if (line.type === "warning") {
-                  return (
-                    <div key={i} className="crt-separator crt-warning-title">
-                      {"#".repeat(14)} {line.text} {"#".repeat(13)}
-                    </div>
-                  )
-                }
-                if (line.type === "empty") {
-                  return <div key={i} className="crt-empty-line" />
-                }
-                if (line.type === "cmd") {
-                  return <div key={i} className="crt-line crt-cmd">{line.text}</div>
-                }
-                return <div key={i} className="crt-line">{line.text}</div>
-              })}
-              {phase === "booting" && lineIndex <= ALL_LINES.length && (
-                <span className="crt-cursor">█</span>
-              )}
-            </div>
+    <div className={`boot${crtOff ? ' crt-off' : ''}`} id="boot">
+      <div id="bootLines">
+        {LINES.map((line, i) => (
+          <div key={i} className={`boot-line ${i < idx ? 'on' : ''}`}>
+            {line.kind === 'text' ? (
+              line.text
+            ) : (
+              // explicit ternary so TypeScript narrows `line` to the 'parts' branch
+              line.parts.map((p: BootPart, j: number) => (
+                typeof p === 'string' ? (
+                  <span key={j}>{p}</span>
+                ) : (
+                  <span key={j} className={p.cls}>{p.text}{p.cursor ? <span className="boot-cursor" /> : null}</span>
+                )
+              ))
+            )}
+            {i === idx && <span className="boot-cursor" />}
           </div>
-        </div>
-
-        {/* Monitor bottom chin with LED */}
-        <div className="crt-chin">
-          <div className="crt-power-led" />
-        </div>
+        ))}
       </div>
 
-      <button onClick={skipIntro} className="crt-skip-btn" aria-label="Skip intro">
-        Skip Intro (Press Space or Esc)
+      <div className={`boot-bar ${barOn ? 'on' : ''}`} id="bootBar">
+        <div className={`boot-fill ${fillGo ? 'go' : ''}`} id="bootFill"></div>
+      </div>
+
+      <button className={`replay-boot-btn ${replayVisible ? 'visible' : ''}`} id="replayBootBtn" title="Rejouer l'animation de démarrage" onClick={handleReplay}>
+        <span className="replay-icon">▶</span>
+        <span>replay boot</span>
       </button>
     </div>
   )

@@ -36,6 +36,10 @@ function Model({ path }: { path: string }) {
     const center2 = new THREE.Vector3();
     box2.getCenter(center2);
     scene.position.sub(center2);
+    // Nudge model down a bit so it visually sits in the middle-right of the hero
+    const size2 = new THREE.Vector3();
+    box2.getSize(size2);
+    scene.position.y -= size2.y * 0.12;
 
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {

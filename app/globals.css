@@ -795,3 +795,96 @@ html.has-scroll-dragging {
   .crt-screen  { padding: 18px 16px; min-height: 300px; }
   .crt-monitor { padding: 14px 14px 0; }
 }
+
+/* ===== Boot overlay + Hero entry animations (from provided design) ===== */
+:root { --amber: #8200db; --teal: #5eead4; }
+
+.boot {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #050710;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(60px, 15vh, 140px) clamp(32px, 10vw, 160px);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  overflow: hidden;
+}
+
+.boot.crt-off {
+  animation: crtOff 0.5s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+}
+
+@keyframes crtOff {
+  0% { transform: scaleY(1) scaleX(1); filter: brightness(1); opacity: 1; }
+  40% { transform: scaleY(0.005) scaleX(1); filter: brightness(4); opacity: 1; }
+  70% { transform: scaleY(0.005) scaleX(0.3); filter: brightness(6); opacity: 0.8; }
+  100% { transform: scaleY(0.005) scaleX(0); filter: brightness(0); opacity: 0; }
+}
+
+.boot-line {
+  font-size: clamp(11px, 1.3vw, 13px);
+  line-height: 2.1;
+  color: #7a7d8b;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.15s, transform 0.15s;
+  white-space: nowrap;
+}
+.boot-line.on { opacity: 1; transform: translateX(0); }
+.boot-line .ok { color: #4ade80; }
+.boot-line .warn { color: var(--amber); }
+.boot-line .val { color: var(--amber); }
+.boot-line .info { color: var(--teal); }
+
+.boot-cursor { display: inline-block; width: 7px; height: 14px; background: #7a7d8b; margin-left: 2px; animation: cursorBlink 0.7s step-end infinite; vertical-align: text-bottom; }
+@keyframes cursorBlink { 50% { opacity: 0; } }
+
+.boot-bar {
+  width: clamp(180px, 35vw, 340px);
+  height: 2px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 1px;
+  margin-top: 28px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.boot-bar.on { opacity: 1; }
+.boot-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--crt-amber), #ea17ea); border-radius: 1px; transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.boot-fill.go { width: 100%; }
+
+.site { opacity: 0; pointer-events: none; transition: opacity 0.35s ease; }
+.site.on { opacity: 1; pointer-events: auto; }
+
+@keyframes dropFromTop { 0% { transform: translateY(-100%); opacity: 0; } 60% { transform: translateY(6px); opacity: 1; } 100% { transform: translateY(0); opacity: 1; } }
+@keyframes slideFromLeft { 0% { transform: translateX(-80px) rotate(-2deg); opacity: 0; } 70% { transform: translateX(4px) rotate(0.3deg); opacity: 1; } 100% { transform: translateX(0) rotate(0); opacity: 1; } }
+@keyframes springScale { 0% { transform: scale(0.5) rotate(3deg) translateY(20px); opacity: 0; } 60% { transform: scale(1.05) rotate(-0.5deg) translateY(-2px); opacity: 1; } 100% { transform: scale(1) rotate(0) translateY(0); opacity: 1; } }
+@keyframes riseUp { 0% { transform: translateY(40px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+@keyframes slideFromRight { 0% { transform: translateX(60px) scale(0.92); opacity: 0; } 70% { transform: translateX(-3px) scale(1.01); opacity: 1; } 100% { transform: translateX(0) scale(1); opacity: 1; } }
+
+.hero-anim { opacity: 0; animation-fill-mode: both; }
+.site.on .anim-h1-1 { animation: slideFromLeft 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s both; }
+.site.on .anim-h1-2 { animation: slideFromLeft 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.24s both; }
+.site.on .anim-h1-3 { animation: springScale 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.38s both; }
+.site.on .anim-sub { animation: riseUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.52s both; }
+.site.on .anim-btns { animation: riseUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both; }
+.site.on .anim-card { animation: springScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s both; }
+
+.scramble-word { color: rgb(130, 0, 219); position: relative; display: inline-block; text-shadow: 0 0 20px rgba(130, 0, 219, 0.5); font-weight: 800; }
+
+.btn-term { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 6px; font-size: 20px; font-weight: 500; font-family: ui-monospace, monospace; color: rgb(186, 26, 186); border: 1px solid rgba(240, 0, 216, 0.25); background: transparent; cursor: pointer; transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1); position: relative; overflow: hidden; }
+.btn-term:hover { border-color: rgba(210, 35, 181, 0.522); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(210, 35, 181, 0.522); }
+.btn-link { color: #8615c4; text-decoration: underline; text-underline-offset: 4px; }
+
+.replay-boot-btn { position: fixed; bottom: 22px; right: 22px; z-index: 50; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; font-family: ui-monospace, monospace; font-size: 11px; color: #9ca3af; background: rgba(10,10,10,0.8); border: 1px solid rgba(255,255,255,0.04); border-radius: 6px; cursor: pointer; transition: all 0.3s; opacity: 0; transform: translateY(10px); pointer-events: none; }
+.replay-boot-btn.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.replay-boot-btn:hover { color: rgb(130, 0, 219); border-color: rgba(130, 0, 219, 0.25); background: rgba(130, 0, 219, 0.006); box-shadow: 0 4px 16px rgba(130, 0, 219, 0.06); transform: translateY(-2px); }
+.replay-boot-btn .replay-icon { font-size: 10px; transition: transform 0.2s; }
+.replay-boot-btn:hover .replay-icon { transform: scale(1.3); }
+
+@media (prefers-reduced-motion: reduce) {
+  .boot { display: none !important; }
+  .site { opacity: 1 !important; pointer-events: auto !important; }
+  .hero-anim { opacity: 1 !important; animation: none !important; }
+}
