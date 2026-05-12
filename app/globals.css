@@ -1,4 +1,32 @@
 @import "tailwindcss";
+/* Fonts - Array loaded from public/fonts for reliable serving */
+@font-face {
+  font-family: 'Array-BoldWide';
+  src: url('/fonts/Array-BoldWide.woff2') format('woff2'),
+       url('/fonts/Array-BoldWide.woff') format('woff'),
+       url('/fonts/Array-BoldWide.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Array-Bold';
+  src: url('/fonts/Array-Bold.woff2') format('woff2'),
+       url('/fonts/Array-Bold.woff') format('woff'),
+       url('/fonts/Array-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Array-Regular';
+  src: url('/fonts/Array-Regular.woff2') format('woff2'),
+       url('/fonts/Array-Regular.woff') format('woff'),
+       url('/fonts/Array-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --background: #ffffff;
@@ -521,6 +549,16 @@ html.has-scroll-dragging {
 /* Police spéciale */
 .font-geist-sans {
   font-family: 'Geist Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* Array Bold Wide - utility class for impactful headings */
+.font-array-boldwide {
+  font-family: 'Array-BoldWide', 'Array-Bold', 'Array-SemiboldWide', 'Array-Semibold', 'Array-Regular', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-shadow: 0 8px 30px rgba(139,92,246,0.06), 0 2px 8px rgba(0,0,0,0.6);
 }
 
 

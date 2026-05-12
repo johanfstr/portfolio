@@ -59,7 +59,7 @@ export default function Contact() {
         <div className="space-y-8">
           <div className="sticky top-32">
             <span className="text-sm uppercase tracking-[0.3em] text-purple-300">Contact</span>
-            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-geist-sans">Entrons en contact</h2>
+            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-array-boldwide">Entrons en contact</h2>
             <p className="mt-6 text-white/70 text-lg leading-8">
               Vous avez un projet en tête ou souhaitez discuter de collaboration ? N'hésitez pas à me contacter via ce formulaire.
             </p>
@@ -67,7 +67,7 @@ export default function Contact() {
             <br />
             <a
               href="mailto:contact@johanf.fr"
-              className="px-6 py-3 border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white rounded-full font-semibold shadow-lg transition-all transform hover:scale-105"
+              className="px-6 py-3 border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white rounded-full font-array-boldwide shadow-lg transition-all transform hover:scale-105"
             >
               Envoyer un email direct
             </a>
@@ -143,7 +143,7 @@ export default function Contact() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-array-boldwide rounded-full shadow-lg hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
             </button>

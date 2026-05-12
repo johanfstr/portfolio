@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="mt-20 border-t border-gray-800 pt-12 pb-6 bg-transparent">
       <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8 text-white">
         <div>
-          <h3 className="text-2xl font-extrabold mb-3 font-geist-sans">Portfolio</h3>
+          <h3 className="text-2xl font-extrabold mb-3 font-array-boldwide">Portfolio</h3>
           <div className="w-12 h-1 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 mb-6" />
           <p className="text-white/60 max-w-xl leading-relaxed">
             Passionné par le développement full-stack, j'aime créer des expériences numériques uniques. Ce portfolio présente mes projets et compétences. Merci de votre visite ! N'hésitez pas à me contacter pour toute question ou opportunité.
@@ -19,7 +19,7 @@ export default function Footer() {
         </div>
 
         <div className="md:text-right">
-          <h4 className="text-2xl font-extrabold mb-3 font-geist-sans">Suivez‑moi</h4>
+          <h4 className="text-2xl font-extrabold mb-3 font-array-boldwide">Suivez‑moi</h4>
           <div className="w-12 h-1 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 mb-6 md:ml-auto" />
 
           <div className="flex gap-3 justify-start md:justify-end">

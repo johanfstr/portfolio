@@ -137,7 +137,7 @@ export default function Projects() {
         <div className="space-y-8">
           <div className="sticky top-32">
             <span className="text-sm uppercase tracking-[0.3em] text-purple-300">Projets</span>
-            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-geist-sans">Mes réalisations</h2>
+            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-array-boldwide">Mes réalisations</h2>
             <p className="mt-6 text-white/70 text-lg leading-8">
               Découvrez une sélection de projets sur lesquels j'ai travaillé, mettant en avant mes compétences en développement.
             </p>
@@ -145,7 +145,7 @@ export default function Projects() {
             <br />
             <a
             href="https://github.com/johanfstr" target="_blank" aria-label="GitHub"
-            className="px-6 py-3 border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white rounded-full font-semibold shadow-lg transition-all transform hover:scale-105"
+            className="px-6 py-3 border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white rounded-full font-array-boldwide shadow-lg transition-all transform hover:scale-105"
             >
               Voir plus sur mon github
             </a>
