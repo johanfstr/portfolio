@@ -119,7 +119,7 @@ export default function Experience() {
         <div className="space-y-8">
           <div className="sticky top-32">
             <span className="text-sm uppercase tracking-[0.3em] text-purple-300">Expériences</span>
-            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-array-boldwide">Mes expériences</h2>
+            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Mes expériences</h2>
             <p className="mt-6 text-white/70 text-lg leading-8">
               Découvrez mon parcours professionnel et les expériences qui ont façonné mon approche du développement.
             </p>
@@ -151,7 +151,7 @@ export default function Experience() {
 
                 {/* Card */}
                 <div
-                  className={`ml-20 md:ml-32 rounded-2xl overflow-hidden border border-gray-700 bg-gradient-to-b from-gray-800 to-gray-850 shadow-xl transform transition-all duration-700 ease-out hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-2 ${
+                  className={`ml-20 md:ml-32 rounded-2xl overflow-hidden border border-gray-700 bg-gradient-to-b from-gray-900 to-gray-850 shadow-xl transform transition-all duration-700 ease-out hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-2 ${
                     visible[idx]
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-8"

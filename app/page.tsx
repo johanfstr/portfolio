@@ -85,7 +85,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-12 min-h-screen py-28">
 
             <div className="flex-1 max-w-2xl" data-scroll data-scroll-speed="0.5">
-              <h1 className="text-[40px] md:text-[64px] lg:text-[80px] font-extrabold tracking-tight leading-tight font-array-boldwide text-white">
+              <h1 className="text-[40px] md:text-[64px] lg:text-[80px] font-extrabold tracking-tight leading-tight hero-title font-playfair text-white">
                 <span className="hero-anim anim-h1-1 block">Je construis</span>
                 <span className="hero-anim anim-h1-2 block">des trucs</span>
                 <span className="hero-anim anim-h1-3 block"><span ref={scrRef} className="scramble-word">{scrWord}</span>.</span>
@@ -100,13 +100,13 @@ export default function Home() {
               <div className="hero-btns hero-anim anim-btns mt-8 flex gap-4">
               <a
                 href="#projects"
-                className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-array-boldwide rounded-full shadow-lg transition-all transform hover:scale-105"
+                className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-playfair rounded-full shadow-lg transition-all transform hover:scale-105"
               >
                 Voir mes projets
               </a>
               <a
                 href="#contact"
-                className="px-6 py-3 border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white rounded-full font-array-boldwide shadow-lg transition-all transform hover:scale-105"
+                className="px-6 py-3 border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white rounded-full font-playfair shadow-lg transition-all transform hover:scale-105"
               >
                 Me contacter
               </a>
@@ -121,10 +121,10 @@ export default function Home() {
               data-scroll
               data-scroll-speed="0.8"
             >
-              {/* Glow behind the model */}
+              {/* Glow behind the model 
               <div className="absolute inset-0 rounded-3xl bg-purple-600/10 blur-3xl pointer-events-none" />
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-purple-500/20 blur-2xl rounded-full pointer-events-none" />
-
+              */}
               <ModelViewer modelPath="/models/model.glb" />
             </div>
 

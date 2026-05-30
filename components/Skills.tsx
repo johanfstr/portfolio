@@ -86,7 +86,7 @@ export default function Skills() {
         <div className="space-y-8">
           <div className="sticky top-32">
             <span className="text-sm uppercase tracking-[0.3em] text-purple-300">Compétences</span>
-            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-array-boldwide">Mes skills</h2>
+            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Mes skills</h2>
             <p className="mt-6 text-white/70 text-lg leading-8">
               Découvrez les technologies et langages que je maîtrise, avec mon niveau de compétence pour chacun.
             </p>
@@ -102,7 +102,7 @@ export default function Skills() {
                 ref={(el) => {
                   cardsRef.current[idx] = el
                 }}
-                className={`rounded-2xl overflow-hidden border border-gray-700 bg-gradient-to-b from-gray-800 to-gray-850 shadow-xl transform transition-all duration-700 ease-out hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-2 ${
+                className={`rounded-2xl overflow-hidden border border-gray-700 bg-gradient-to-b from-gray-900 to-gray-850 shadow-xl transform transition-all duration-700 ease-out hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-2 ${
                   visible[idx]
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"

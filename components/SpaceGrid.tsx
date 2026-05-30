@@ -17,11 +17,11 @@ export default function SpaceGrid() {
       canvas.height = window.innerHeight;
 
       // Black background
-      ctx.fillStyle = '#000';
+      ctx.fillStyle = '#0B0E16';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Grid lines
-      ctx.strokeStyle = 'rgba(100, 150, 255, 0.15)';
+      ctx.strokeStyle = 'rgba(255, 100, 232, 0.1)';
       ctx.lineWidth = 1;
 
       // Horizontal lines

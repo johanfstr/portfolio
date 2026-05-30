@@ -22,7 +22,7 @@ const projects: Project[] = [
   {
     id: "1",
     title: "Portfolio V1",
-    image: "",
+    image: "/images/captureportfolio.png",
     description:
       "Portfolio personnel mettant en avant mes compétences en développement.",
     accent: "",
@@ -36,7 +36,7 @@ const projects: Project[] = [
   {
     id: "2",
     title: "Tower Defense Game",
-    image: "",
+    image: "/images/towerdefend.png",
     description: "Jeu de tower defense permet de génerer des tours autour de chemins aléatoires.",
     accent: "",
     ctaUrl: "https://github.com/johanfstr/TowerDefend",
@@ -49,7 +49,7 @@ const projects: Project[] = [
   {
     id: "3",
     title: "OCrackml",
-    image: "/images/ocrackml.png",
+    image: "/images/ocrackml.jpg",
     description: "Analyse et d'exploitation de fuites de données issues de différentes applications web.",
     accent: "",
     ctaUrl: "https://github.com/johanfstr/OCrackml",
@@ -137,7 +137,7 @@ export default function Projects() {
         <div className="space-y-8">
           <div className="sticky top-32">
             <span className="text-sm uppercase tracking-[0.3em] text-purple-300">Projets</span>
-            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-array-boldwide">Mes réalisations</h2>
+            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Mes réalisations</h2>
             <p className="mt-6 text-white/70 text-lg leading-8">
               Découvrez une sélection de projets sur lesquels j'ai travaillé, mettant en avant mes compétences en développement.
             </p>
@@ -145,7 +145,7 @@ export default function Projects() {
             <br />
             <a
             href="https://github.com/johanfstr" target="_blank" aria-label="GitHub"
-            className="px-6 py-3 border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white rounded-full font-array-boldwide shadow-lg transition-all transform hover:scale-105"
+            className="px-6 py-3 border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white rounded-full font-playfair shadow-lg transition-all transform hover:scale-105"
             >
               Voir plus sur mon github
             </a>
@@ -163,7 +163,7 @@ export default function Projects() {
                 ref={(el) => {
                   cardsRef.current[idx] = el
                 }}
-                className={`rounded-2xl overflow-hidden border border-gray-700 bg-gradient-to-b from-gray-800 to-gray-850 shadow-xl transform transition-all duration-700 ease-out hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-2 ${
+                className={`rounded-2xl overflow-hidden border border-gray-700 bg-gradient-to-b from-gray-900 to-gray-850 shadow-xl transform transition-all duration-700 ease-out hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-2 ${
                   visible[idx]
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
@@ -171,7 +171,7 @@ export default function Projects() {
                 data-scroll
                 data-scroll-speed={cardSpeed}
               >
-                {/*<div
+                <div
                   className={`h-44 bg-gradient-to-br ${p.accent} bg-opacity-30 flex items-center justify-center relative`}
                   style={{ boxShadow: "inset 0 -40px 40px rgba(0,0,0,0.6)" }}
                 >
@@ -183,14 +183,13 @@ export default function Projects() {
                       className="relative z-10 w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="text-white/90 text-xl font-semibold relative z-10">{p.title}</div>
+                    <div className="text-white/10 text-xl font-playfair relative z-10">{p.title}</div>
                   )}
                 </div>
-                */}
 
                 <div className="p-6 text-center text-white/80">
-                  <h3 className="text-xl font-semibold text-white mb-3">{p.title}</h3>
-                  <p className="text-sm mb-4">{p.description}</p>
+                  <h3 className="text-xl font-playfair text-white mb-3">{p.title}</h3>
+                  {/* <p className="text-sm mb-4">{p.description}</p> */}
                   {p.technologies && p.technologies.length > 0 && (
                     <div className="flex flex-wrap justify-center gap-2 mb-4">
                       {p.technologies.map((tech, techIdx) => (
@@ -208,7 +207,7 @@ export default function Projects() {
                   )}
                   <button
                     onClick={() => setSelectedProject(idx)}
-                    className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition-transform"
+                    className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 text-white font-playfair shadow-lg hover:scale-105 transition-transform"
                   >
                     Voir plus
                   </button>
@@ -225,7 +224,7 @@ export default function Projects() {
           <div className="bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-start mb-4">
-                <h2 className="text-2xl font-bold text-white">{projects[selectedProject].title}</h2>
+                <h2 className="text-2xl font-playfair text-white">{projects[selectedProject].title}</h2>
                 <button
                   onClick={() => setSelectedProject(null)}
                   className="text-white/70 hover:text-white text-2xl"
@@ -246,7 +245,7 @@ export default function Projects() {
               
               {projects[selectedProject].technologies && projects[selectedProject].technologies.length > 0 && (
                 <div className="mb-4">
-                  <h3 className="text-lg font-semibold text-white mb-2">Technologies utilisées :</h3>
+                  <h3 className="text-lg font-playfair text-white mb-2">Technologies utilisées :</h3>
                   <div className="flex flex-wrap gap-2">
                     {projects[selectedProject].technologies.map((tech, techIdx) => (
                       <div
@@ -268,13 +267,13 @@ export default function Projects() {
                   href={projects[selectedProject].ctaUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-6 py-3 bg-purple-600 text-white rounded-full font-semibold hover:bg-purple-700 transition-colors"
+                  className="px-6 py-3 bg-purple-600 text-white rounded-full font-playfair hover:bg-purple-700 transition-colors"
                 >
                   Voir sur GitHub
                 </a>
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="px-6 py-3 border border-gray-600 text-white rounded-full font-semibold hover:bg-gray-700 transition-colors"
+                  className="px-6 py-3 border border-gray-600 text-white rounded-full font-playfair hover:bg-gray-700 transition-colors"
                 >
                   Fermer
                 </button>

@@ -64,7 +64,7 @@ function LoadingSpinner() {
   return (
     <mesh ref={ref}>
       <torusGeometry args={[0.4, 0.05, 8, 32, Math.PI * 1.5]} />
-      <meshStandardMaterial color="#a855f7" />
+      <meshStandardMaterial color="#000000" />
     </mesh>
   );
 }
@@ -73,7 +73,7 @@ export default function ModelViewer({ modelPath }: { modelPath: string }) {
   return (
     <Canvas
       // Caméra reculée et en hauteur pour voir l'ensemble du modèle
-      camera={{ position: [1, 1, 0], fov: 50 }}
+      camera={{ position: [1, 1, 150], fov: 50 }}
       gl={{ antialias: true, alpha: true }}
       style={{ width: "100%", height: "100%", background: "transparent" }}
       onCreated={({ gl }) => {
@@ -82,8 +82,8 @@ export default function ModelViewer({ modelPath }: { modelPath: string }) {
     >
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 8, 5]} intensity={1.2} color="#ffffff" />
-      <pointLight position={[-3, 3, -3]} intensity={1.5} color="#a855f7" />
-      <pointLight position={[3, -2, 3]} intensity={0.6} color="#7c3aed" />
+      <pointLight position={[-3, 3, -3]} intensity={1.5} color="#000000" />
+      <pointLight position={[3, -2, 3]} intensity={0.6} color="#000000" />
 
       <Suspense fallback={<LoadingSpinner />}>
         <Environment preset="city" />
