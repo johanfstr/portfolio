@@ -71,34 +71,37 @@ function LoadingSpinner() {
 
 export default function ModelViewer({ modelPath }: { modelPath: string }) {
   return (
-    <Canvas
-      // Caméra reculée et en hauteur pour voir l'ensemble du modèle
-      camera={{ position: [1, 1, 150], fov: 50 }}
-      gl={{ antialias: true, alpha: true }}
-      style={{ width: "100%", height: "100%", background: "transparent" }}
-      onCreated={({ gl }) => {
-        gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      }}
-    >
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[5, 8, 5]} intensity={1.2} color="#ffffff" />
-      <pointLight position={[-3, 3, -3]} intensity={1.5} color="#000000" />
-      <pointLight position={[3, -2, 3]} intensity={0.6} color="#000000" />
-
-      <Suspense fallback={<LoadingSpinner />}>
-        <Environment preset="city" />
-        <Model path={modelPath} />
-      </Suspense>
-
-      <OrbitControls
-        enablePan={false}
-        enableZoom={true}
-        minDistance={5}
-        maxDistance={1000}
-        minPolarAngle={Math.PI / 6}
-        maxPolarAngle={Math.PI / 2}
-        target={[0, 0, 0]}
-      />
-    </Canvas>
+    <div style={{
+      position: "absolute",
+      inset: "-20%",          // déborde de 20% de chaque côté
+      pointerEvents: "auto",
+    }}>
+      <Canvas
+        camera={{ position: [1, 1, 200], fov: 50 }}
+        gl={{ antialias: true, alpha: true }}
+        style={{ width: "100%", height: "100%", background: "transparent" }}
+        onCreated={({ gl }) => {
+          gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        }}
+      >
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[5, 8, 5]} intensity={1.2} color="#ffffff" />
+        <pointLight position={[-3, 3, -3]} intensity={1.5} color="#000000" />
+        <pointLight position={[3, -2, 3]} intensity={0.6} color="#000000" />
+        <Suspense fallback={<LoadingSpinner />}>
+          <Environment preset="city" />
+          <Model path={modelPath} />
+        </Suspense>
+        <OrbitControls
+          enablePan={false}
+          enableZoom={false}
+          minDistance={5}
+          maxDistance={1000}
+          minPolarAngle={Math.PI / 6}
+          maxPolarAngle={Math.PI / 2}
+          target={[0, 0, 0]}
+        />
+      </Canvas>
+    </div>
   );
 }

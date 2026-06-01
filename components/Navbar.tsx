@@ -10,19 +10,19 @@ export default function Navbar() {
       <div className="nav-glass px-4 md:px-6 py-1 flex items-center justify-between gap-3">
 
         {/* ===== Left: Logo ===== */}
-        <div className="nav-logo">
+        <a href="#hero" className="nav-logo">
           <img
             src="/logo.png"
             alt="Logo"
             className="nav-logo-img"
           />
-        </div>
+        </a>
 
         {/* ===== Center: Desktop Navigation ===== */}
         <div className="hidden md:absolute md:inset-0 md:flex md:items-center md:justify-center pointer-events-none">
           <div className="flex gap-4 md:gap-8 text-sm font-semibold pointer-events-auto">
 
-            <a href="#hero" className="nav-link nav-link-responsive">
+            <a href="#about" className="nav-link nav-link-responsive">
               <svg className="nav-icon" viewBox="0 0 24 24" fill="none">
                 <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="1.6"/>
                 <path d="M4 21c1.5-4 6-6 8-6s6.5 2 8 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
@@ -78,7 +78,7 @@ export default function Navbar() {
 
       <div className={`nav-mobile-panel md:hidden ${menuOpen ? "open" : ""}`}>
         <div className="flex flex-col gap-3 text-sm font-semibold">
-          <a href="#hero" className="nav-link nav-link-responsive" onClick={() => setMenuOpen(false)}>
+          <a href="#about" className="nav-link nav-link-responsive" onClick={() => setMenuOpen(false)}>
             <svg className="nav-icon" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="1.6"/>
               <path d="M4 21c1.5-4 6-6 8-6s6.5 2 8 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>

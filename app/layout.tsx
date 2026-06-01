@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Fira_Code, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import CustomCursor from "../components/CustomCursor";
 import ScrollEffects from "../components/ScrollEffects";
-import SpaceGrid from "../components/SpaceGrid";
+// SpaceGrid temporarily removed for clarity
 
 const firaCode = Fira_Code({
   variable: "--font-fira-code",
@@ -30,7 +31,7 @@ export default function RootLayout({
   return (
       <html lang="en">
         <body className={`${firaCode.variable} ${playfair.variable} antialiased`}>
-        <SpaceGrid />
+        <CustomCursor />
         {children}
         <ScrollEffects />
       </body>

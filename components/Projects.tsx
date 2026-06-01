@@ -101,6 +101,8 @@ export default function Projects() {
   const [visible, setVisible] = useState<boolean[]>(() => projects.map(() => false))
   const [selectedProject, setSelectedProject] = useState<number | null>(null)
   const cardsRef = useRef<Array<HTMLDivElement | null>>([])
+  const sectionRef = useRef<HTMLElement | null>(null)
+  const [noiseOpacity, setNoiseOpacity] = useState<number>(0)
 
   useEffect(() => {
     if (typeof IntersectionObserver === "undefined") {
@@ -129,6 +131,39 @@ export default function Projects() {
     cardsRef.current.forEach((el) => el && obs.observe(el))
 
     return () => obs.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el || typeof window === "undefined") return
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setNoiseOpacity(0)
+      return
+    }
+
+    let ticking = false
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const rect = el.getBoundingClientRect()
+          const vh = window.innerHeight || document.documentElement.clientHeight
+          const start = vh * 0.9
+          const end = vh * 0.2
+          const progress = Math.max(0, Math.min(1, (start - rect.top) / (start - end)))
+          setNoiseOpacity(progress)
+          ticking = false
+        })
+        ticking = true
+      }
+    }
+
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
   }, [])
 
   return (

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import InteractiveNeuralVortex from "@/components/ui/NeuralVortex";
 
 interface Skill {
   id: string
@@ -81,8 +82,9 @@ export default function Skills() {
   }, [])
 
   return (
-    <section id="skills" className="py-20 px-6 bg-transparent min-h-screen flex items-center" data-scroll data-scroll-section>
-      <div className="w-full max-w-7xl mx-auto grid gap-12 lg:grid-cols-[minmax(280px,360px)_1fr] items-start">
+    <section id="skills" className="relative overflow-hidden py-20 px-6 bg-transparent min-h-screen flex items-center" data-scroll data-scroll-section>
+      {/*<InteractiveNeuralVortex /> */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto grid gap-12 lg:grid-cols-[minmax(280px,360px)_1fr] items-start">
         <div className="space-y-8">
           <div className="sticky top-32">
             <span className="text-sm uppercase tracking-[0.3em] text-purple-300">Compétences</span>

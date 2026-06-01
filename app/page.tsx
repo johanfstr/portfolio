@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Intro from "../components/Intro";
 import Projects from "../components/Projects";
+import About from "../components/About";
 import Skills from "../components/Skills";
 import Experience from "../components/Experience";
 import Contact from "../components/Contact";
@@ -18,6 +19,16 @@ const ModelViewer = dynamic(() => import("../components/ModelViewer"), {
     </div>
   ),
 });
+
+
+import AnoAI from "../components/ui/AnimatedShader";
+const ParallaxComponent = dynamic(
+  () => import("../components/ui/ParallaxScrolling").then((mod) => mod.ParallaxComponent),
+  {
+    ssr: false,
+    loading: () => <div />,
+  }
+);
 
 export default function Home() {
   const [introDone, setIntroDone] = useState(false);
@@ -74,30 +85,56 @@ export default function Home() {
     }
   }, []);
 
+  {/*useEffect(() => {
+  const applyHeroParallax = () => {
+    const value = window.scrollY;
+
+    const text = document.getElementById("text");
+    if (text) text.style.transform = `translate(${-value * 0.25}px, ${value * 0.25}px)`;
+
+    const text2 = document.getElementById("text2");
+    if (text2) text2.style.transform = `translate(${-value * 0.25}px, ${value * 0.25}px)`;
+
+    const btn = document.getElementById("btn");
+    if (btn) btn.style.transform = `translateY(${value * 0.75}px)`;
+  };
+
+  window.addEventListener("scroll", applyHeroParallax, { passive: true });
+  applyHeroParallax();
+
+  return () => window.removeEventListener("scroll", applyHeroParallax);
+  }, []);
+  */}
+
   return (
     <>
       <Navbar />
 
-      <main id="hero" className="relative min-h-screen flex items-center bg-transparent" data-scroll data-scroll-section>
+      <main id="hero" className="relative min-h-screen flex items-center bg-transparent">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <ParallaxComponent />
+          {/* <AnoAI /> */}
+        </div>
+
         <Intro force={forceBoot} onStart={() => setIntroDone(false)} onFinish={() => setIntroDone(true)} />
 
-        <div className={`site ${introDone ? "on" : ""} w-full max-w-7xl mx-auto px-6`}>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-12 min-h-screen py-28">
+        <div className={`site ${introDone ? "on" : ""} w-full max-w-7xl mx-auto px-6 relative z-10 overflow-visible`}>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12 min-h-screen py-28 overflow-visible">
 
-            <div className="flex-1 max-w-2xl" data-scroll data-scroll-speed="0.5">
-              <h1 className="text-[40px] md:text-[64px] lg:text-[80px] font-extrabold tracking-tight leading-tight hero-title font-playfair text-white">
-                <span className="hero-anim anim-h1-1 block">Je construis</span>
-                <span className="hero-anim anim-h1-2 block">des trucs</span>
-                <span className="hero-anim anim-h1-3 block"><span ref={scrRef} className="scramble-word">{scrWord}</span>.</span>
+            <div className="flex-1 max-w-2xl">
+              <h1 id="text" className="text-[40px] md:text-[64px] lg:text-[80px] font-extrabold tracking-tight leading-tight font-playfair drop-shadow-[0_8px_24px_rgba(99,58,237,0.25)]">
+                <span className="hero-anim anim-h1-1 block bg-gradient-to-b from-white via-[#efe4ff] to-[#ffffff] bg-clip-text text-transparent">Je construis</span>
+                <span className="hero-anim anim-h1-2 block bg-gradient-to-b from-white via-[#efe4ff] to-[#d6bbff] bg-clip-text text-transparent">des trucs</span>
+                <span className="hero-anim anim-h1-3 block text-white"><span ref={scrRef} className="scramble-word">{scrWord}</span>.</span>
               </h1>
 
-              <p className="hero-sub hero-anim anim-sub mt-6 text-white/70 max-w-md">
-                Étudiant à l'<code className="px-2 py-1 rounded bg-purple-100/6 border border-purple-400 text-purple-400">EFREI Bordeaux</code>,  Je cherche une{" "}
-              <span className="text-purple-400 font-semibold">alternance</span>{" "}
-              en développement full-stack pour septembre 2026. 
+              <p id="text2" className="hero-sub hero-anim anim-sub mt-6 text-white/90 max-w-md">
+                Étudiant à l'<code className="px-2 py-1 rounded bg-purple-900/50 border border-purple-400 text-purple-400">EFREI Bordeaux</code>,  Je cherche une{" "}
+              <span className="text-white-900 font-semibold">alternance</span>{" "}
+              en développement <span className="text-purple-100 font-semibold">full-stack</span>{" "} pour septembre 2026. 
               </p>
 
-              <div className="hero-btns hero-anim anim-btns mt-8 flex gap-4">
+              <div id="btn" className="hero-btns hero-anim anim-btns mt-8 flex gap-4">
               <a
                 href="#projects"
                 className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-playfair rounded-full shadow-lg transition-all transform hover:scale-105"
@@ -115,23 +152,18 @@ export default function Home() {
 
             {/* ── Right: 3D Model ── */}
             <div
-              className={`flex-1 w-full max-w-lg h-[500px] md:h-[650px] relative ${
-                introDone ? "animate-fadeIn delay-400" : "opacity-0"
+            className={`flex-1 w-full max-w-lg h-[500px] md:h-[650px] relative overflow-visible ${
+              introDone ? "animate-fadeIn delay-400" : "opacity-0"
               }`}
-              data-scroll
-              data-scroll-speed="0.8"
             >
-              {/* Glow behind the model 
-              <div className="absolute inset-0 rounded-3xl bg-purple-600/10 blur-3xl pointer-events-none" />
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-64 h-32 bg-purple-500/20 blur-2xl rounded-full pointer-events-none" />
-              */}
-              <ModelViewer modelPath="/models/model.glb" />
+              <ModelViewer modelPath="/models/model.glb" /> 
             </div>
 
           </div>
         </div>
       </main>
 
+      <About />
       <Projects />
       <Skills />
       <Experience />
