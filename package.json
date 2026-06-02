@@ -15,6 +15,7 @@
     "@remotion/player": "^4.0.469",
     "@splinetool/react-spline": "^4.1.0",
     "@studio-freight/lenis": "^1.0.42",
+    "clsx": "^2.1.1",
     "cobe": "^2.0.1",
     "gsap": "^3.14.2",
     "locomotive-scroll": "^5.0.1",
@@ -23,6 +24,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "remotion": "^4.0.469",
+    "tailwind-merge": "^3.6.0",
     "three": "^0.184.0"
   },
   "devDependencies": {

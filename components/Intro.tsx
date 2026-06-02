@@ -102,15 +102,8 @@ export default function Intro({ onFinish, onStart, force }: { onFinish?: () => v
   }
 
   if (!visible) {
-    // still render replay button when available
-    return (
-      replayVisible ? (
-        <button className={`replay-boot-btn visible`} id="replayBootBtn" title="Rejouer l'animation de démarrage" onClick={handleReplay}>
-          <span className="replay-icon">▶</span>
-          <span>replay boot</span>
-        </button>
-      ) : null
-    )
+    // Replay button moved to Footer - scroll-to-top arrow replaces this
+    return null
   }
 
   return (
@@ -138,11 +131,6 @@ export default function Intro({ onFinish, onStart, force }: { onFinish?: () => v
       <div className={`boot-bar ${barOn ? 'on' : ''}`} id="bootBar">
         <div className={`boot-fill ${fillGo ? 'go' : ''}`} id="bootFill"></div>
       </div>
-
-      <button className={`replay-boot-btn ${replayVisible ? 'visible' : ''}`} id="replayBootBtn" title="Rejouer l'animation de démarrage" onClick={handleReplay}>
-        <span className="replay-icon">▶</span>
-        <span>replay boot</span>
-      </button>
     </div>
   )
 }

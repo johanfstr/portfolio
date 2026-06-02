@@ -20,7 +20,7 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "Johan Forestier - Portfolio",
-  description: "Johan Forestier, étudiant en informatique à l'Université de Poitiers, cherche une alternance en développement full-stack pour septembre 2026. Découvrez mes projets, compétences et expériences dans le développement web.",
+  description: "Johan Forestier, étudiant en informatique à l'EFREI campus de Bordeaux, cherche une alternance en développement full-stack pour septembre 2026. Découvrez mes projets, compétences et expériences dans le développement web.",
 };
 
 export default function RootLayout({
@@ -29,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body className={`${firaCode.variable} ${playfair.variable} antialiased`}>
         <CustomCursor />
         {children}

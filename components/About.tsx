@@ -47,13 +47,41 @@ export default function About() {
           {/* Text Content */}
           <div className="flex-1 max-w-2xl text-lg text-slate-300 leading-relaxed space-y-6">
             <p>
-              Je m'appelle Johan, j'habite à <strong className="text-white">Bordeaux</strong>. Je suis actuellement étudiant à l'<strong className="text-purple-400 font-semibold px-1 py-0.5 rounded bg-purple-900/30 border border-purple-500/30">EFREI Bordeaux</strong> où j'entre en 1ère année de cycle ingénieur en majeure <strong className="text-white">LSI</strong> (Logiciels et Systèmes d'Information).
+              Je m'appelle <strong className="text-purple-400 font-playfair">Johan Forestier</strong>, 
+              j'habite à <strong className="text-white">Bordeaux</strong>. Je suis actuellement étudiant 
+              à l'<strong className="text-purple-400 font-semibold px-1 py-0.5 rounded bg-purple-900/30 border border-purple-500/30">EFREI Bordeaux</strong> 
+              &nbsp;où j'entre en 1ère année de cycle ingénieur en majeure <strong className="text-white">LSI</strong> 
+              &nbsp;(<strong className="text-white">L</strong>ogiciels et <strong className="text-white">S</strong>ystèmes d'<strong className="text-white">I</strong>nformation).
             </p>
             <p>
-              Passionné par le développement, je construis des solutions web modernes et des applications performantes. Mon parcours académique et mes projets m'ont permis d'explorer un large éventail de technologies, du bas niveau (C, OCaml) au développement full-stack moderne (React, Next.js, TypeScript).
+              Passionné par le développement, je construis des solutions web modernes et des applications performantes. 
+              Mon parcours académique et mes projets m'ont permis d'explorer un large éventail de technologies, 
+              du bas niveau&nbsp;
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
+                  <img src="/images/c.png" alt="C" className="w-4 h-4" />
+                  <span>C</span>
+                  </span>,
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
+                  <img src="/images/ocaml.svg" alt="OCaml" className="w-4 h-4" />
+                  <span>OCaml</span>
+                </span>
+                &nbsp;au développement full-stack moderne&nbsp;
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
+                  <img src="/images/react.png" alt="React" className="w-4 h-4" />
+                  <span>React</span>
+                </span>,
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
+                  <img src="/images/nextjs.png" alt="Next.js" className="w-4 h-4" />
+                  <span>Next.js</span>
+                </span>,
+                <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
+                  <img src="/images/typescript.png" alt="TypeScript" className="w-4 h-4" />
+                  <span>TypeScript</span>
+                </span>.
             </p>
             <p>
-              Je suis activement à la recherche d'une <strong className="text-purple-400 font-semibold">alternance en développement full-stack</strong> à partir de septembre 2026. Curieux et autonome, j'aime relever de nouveaux défis techniques et apporter de la valeur aux projets sur lesquels je travaille.
+              Je suis activement à la recherche d'une <strong className="text-purple-400 font-semibold">alternance en développement full-stack</strong> à partir de septembre 2026. Curieux et autonome, j'aime relever de nouveaux défis techniques et apporter 
+              de la valeur aux projets sur lesquels je travaille.
             </p>
           </div>
 

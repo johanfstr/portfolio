@@ -1,4 +1,3 @@
-// components/CustomCursor.tsx
 "use client";
 import { useEffect, useRef, useState } from "react";
 
@@ -86,7 +85,8 @@ export default function CustomCursor() {
           border-radius: 50%;
           border: 1.5px solid #8b5cf6;
           pointer-events: none;
-          z-index: 9998;
+          /* CORRECTION 1 : L'onde passe au-dessus de la navbar */
+          z-index: 100010;
           transform: translate(-50%, -50%) scale(1);
           animation: ripple-out 0.5s ease-out forwards;
         }
@@ -97,14 +97,15 @@ export default function CustomCursor() {
         ref={dotRef}
         style={{
           position: "fixed",
-          width: 10,
-          height: 10,
+          width: 20,
+          height: 20,
           borderRadius: "50%",
           background: clicking ? "#8b5cf6" : "white",
-          transform: `translate(-50%, -50%) scale(${clicking ? 0.6 : 1})`,
+          transform: `translate(-50%, -50%) scale(${clicking ? 1.2 : 1})`,
           transition: "transform 0.1s ease, background 0.1s",
           pointerEvents: "none",
-          zIndex: 9999,
+          /* CORRECTION 2 : Le point principal survole absolument tout */
+          zIndex: 100020,
           left: -100,
           top: -100,
         }}
@@ -112,7 +113,7 @@ export default function CustomCursor() {
 
       {/* Trail */}
       {Array.from({ length: TRAIL_LENGTH }).map((_, i) => {
-        const size = Math.max(2, 8 - i * 0.55);
+        const size = Math.max(8, 25 - i * 0.55);
         return (
           <div
             key={i}
@@ -126,7 +127,9 @@ export default function CustomCursor() {
               opacity: (1 - i / TRAIL_LENGTH) * 0.4,
               transform: "translate(-50%, -50%)",
               pointerEvents: "none",
-              zIndex: 9998 - i,
+              /* CORRECTION 3 : La traînée commence à 100 000 et descend, 
+                 restant largement supérieure au z-[9999] de la Navbar */
+              zIndex: 100000 - i,
               left: -100,
               top: -100,
             }}
