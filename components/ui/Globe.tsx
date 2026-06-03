@@ -141,33 +141,68 @@ export function GlobePulse({
           style={{
             position: "absolute",
             positionAnchor: `--cobe-${m.id}`,
-            bottom: "anchor(center)",
+            top: "anchor(center)",
             left: "anchor(center)",
-            translate: "-50% 50%",
-            width: 40, height: 40,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            // On centre le point d'ancrage exactement à (0,0) avec une taille nulle
+            translate: "-50% -50%",
+            width: 0, 
+            height: 0,
             pointerEvents: "none" as const,
             opacity: `var(--cobe-visible-${m.id}, 0)`,
             filter: `blur(calc((1 - var(--cobe-visible-${m.id}, 0)) * 8px))`,
             transition: "opacity 0.4s, filter 0.4s",
           }}
         >
-          <span style={{
-            position: "absolute", inset: 0,
-            border: "2px solid #33ccdd", borderRadius: "50%", opacity: 0,
-            animation: `pulse-expand 2s ease-out infinite ${m.delay}s`,
-          }} />
-          <span style={{
-            position: "absolute", inset: 0,
-            border: "2px solid #33ccdd", borderRadius: "50%", opacity: 0,
-            animation: `pulse-expand 2s ease-out infinite ${m.delay + 0.5}s`,
-          }} />
-          <span style={{
-            width: 10, height: 10, background: "#33ccdd", borderRadius: "50%",
-            boxShadow: "0 0 0 3px #111, 0 0 0 5px #33ccdd",
-          }} />
+          {/* Le label LIVE décalé vers le haut */}
+          <div style={{
+            position: "absolute",
+            bottom: "16px", // Distance au-dessus du point bleu
+            left: "50%",
+            translate: "-50% 0", // Pour bien le centrer horizontalement
+            display: "flex",
+            alignItems: "center",
+            gap: "0.4rem",
+            padding: "0.35rem 0.6rem",
+            background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
+            borderRadius: 4,
+            boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
+            whiteSpace: "nowrap" as const,
+          }}>
+            <span style={{
+              width: 8, height: 8, background: "#ff3b30", borderRadius: "50%",
+              boxShadow: "0 0 8px #ff3b30",
+              animation: "live-pulse 1.5s ease-in-out infinite",
+            }} />
+            <span style={{
+              fontFamily: "font-semibold", fontWeight: 600,
+              color: "#ffffff", 
+            }}>Bordeaux</span>
+          </div>
+
+          {/* Le point bleu et ses pulsations parfaitement centrés sur l'origine */}
+          <div style={{ 
+            position: "absolute",
+            top: 0,
+            left: 0,
+            translate: "-50% -50%", // Le centre du point bleu est exactement sur l'ancrage
+            width: 10, height: 10, 
+            display: "flex", justifyContent: "center", alignItems: "center" 
+          }}>
+            <span style={{
+              position: "absolute", width: 30, height: 30,
+              border: "2px solid #33ccdd", borderRadius: "50%", opacity: 0,
+              animation: `pulse-expand 2s ease-out infinite ${m.delay}s`,
+            }} />
+            <span style={{
+              position: "absolute", width: 30, height: 30,
+              border: "2px solid #33ccdd", borderRadius: "50%", opacity: 0,
+              animation: `pulse-expand 2s ease-out infinite ${m.delay + 0.5}s`,
+            }} />
+            <span style={{
+              width: 10, height: 10, background: "#33ccdd", borderRadius: "50%",
+              boxShadow: "0 0 0 3px #111, 0 0 0 5px #33ccdd", zIndex: 1,
+            }} />
+          </div>
         </div>
       ))}
     </div>

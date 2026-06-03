@@ -1,156 +1,254 @@
+/**
+ * Disclaimer: This component is not entirely my own
+ */
+
 "use client";
-import { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { gsap } from "gsap";
+import { cn } from "@/lib/utils";
+import { useMouse } from "@/hooks/use-mouse";
+import { usePreloader } from "../preloader";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { usePathname } from "next/navigation";
 
-const TRAIL_LENGTH = 12;
-
-export default function CustomCursor() {
-  const dotRef = useRef<HTMLDivElement>(null);
-  const trailRefs = useRef<HTMLDivElement[]>([]);
-  const positions = useRef(Array(TRAIL_LENGTH).fill({ x: -100, y: -100 }));
-  const mouse = useRef({ x: -100, y: -100 });
-  const [clicking, setClicking] = useState(false);
-  const [ripples, setRipples] = useState<{ id: number; x: number; y: number; size: number; delay: number }[]>([]);
-  const rippleId = useRef(0);
-
+// Gsap Ticker Function
+function useTicker(callback: any, paused: boolean) {
   useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      mouse.current = { x: e.clientX, y: e.clientY };
-      if (dotRef.current) {
-        dotRef.current.style.left = e.clientX + "px";
-        dotRef.current.style.top = e.clientY + "px";
-      }
-    };
-
-    const onDown = (e: MouseEvent) => {
-      setClicking(true);
-      const newRipples = [0, 1, 2].map((i) => ({
-        id: rippleId.current++,
-        x: e.clientX,
-        y: e.clientY,
-        size: 12 + i * 10,
-        delay: i * 80,
-      }));
-      setRipples((prev) => [...prev, ...newRipples]);
-      setTimeout(() => {
-        setRipples((prev) =>
-          prev.filter((r) => !newRipples.find((n) => n.id === r.id))
-        );
-      }, 700);
-    };
-
-    const onUp = () => setClicking(false);
-
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mousedown", onDown);
-    window.addEventListener("mouseup", onUp);
-
-    let lastTime = 0;
-    let raf: number;
-
-    const animate = (ts: number) => {
-      if (ts - lastTime > 16) {
-        lastTime = ts;
-        positions.current = [
-          { ...mouse.current },
-          ...positions.current.slice(0, TRAIL_LENGTH - 1),
-        ];
-        trailRefs.current.forEach((el, i) => {
-          if (!el) return;
-          const p = positions.current[i];
-          el.style.left = p.x + "px";
-          el.style.top = p.y + "px";
-        });
-      }
-      raf = requestAnimationFrame(animate);
-    };
-    raf = requestAnimationFrame(animate);
-
+    if (!paused && callback) {
+      gsap.ticker.add(callback);
+    }
     return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mousedown", onDown);
-      window.removeEventListener("mouseup", onUp);
-      cancelAnimationFrame(raf);
+      gsap.ticker.remove(callback);
     };
+  }, [callback, paused]);
+}
+
+const EMPTY = {} as {
+  x: Function;
+  y: Function;
+  r?: Function;
+  width?: Function;
+  rt?: Function;
+  sx?: Function;
+  sy?: Function;
+  opacity?: Function;
+  height?: Function;
+};
+function useInstance(value = {}) {
+  const ref = useRef(EMPTY);
+  if (ref.current === EMPTY) {
+    ref.current = typeof value === "function" ? value() : value;
+  }
+  return ref.current;
+}
+
+// Function for Mouse Move Scale Change
+function getScale(diffX: number, diffY: number) {
+  const distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+  return Math.min(distance / 735, 0.35);
+}
+
+// Function For Mouse Movement Angle in Degrees
+function getAngle(diffX: number, diffY: number) {
+  return (Math.atan2(diffY, diffX) * 180) / Math.PI;
+}
+
+function getRekt(el: HTMLElement) {
+  if (el.classList.contains("cursor-can-hover"))
+    return el.getBoundingClientRect();
+  else if (el.parentElement?.classList.contains("cursor-can-hover"))
+    return el.parentElement.getBoundingClientRect();
+  else if (
+    el.parentElement?.parentElement?.classList.contains("cursor-can-hover")
+  )
+    return el.parentElement.parentElement.getBoundingClientRect();
+  return null;
+}
+
+const CURSOR_DIAMETER = 40;
+
+function ElasticCursor() {
+  const pathname = usePathname();
+  const isBlogPost = pathname.startsWith("/blogs/") && pathname !== "/blogs";
+
+  const { loadingPercent, isLoading } = usePreloader();
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  // React Refs for Jelly Blob and Text
+  const jellyRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+  const { x, y } = useMouse();
+
+  // Save pos and velocity Objects
+  const pos = useInstance(() => ({ x: 0, y: 0 }));
+  const vel = useInstance(() => ({ x: 0, y: 0 }));
+  const set = useInstance();
+
+  // Set GSAP quick setter Values on useLayoutEffect Update
+  useLayoutEffect(() => {
+    set.x = gsap.quickSetter(jellyRef.current, "x", "px");
+    set.y = gsap.quickSetter(jellyRef.current, "y", "px");
+    set.r = gsap.quickSetter(jellyRef.current, "rotate", "deg");
+    set.sx = gsap.quickSetter(jellyRef.current, "scaleX");
+    set.sy = gsap.quickSetter(jellyRef.current, "scaleY");
+    set.width = gsap.quickSetter(jellyRef.current, "width", "px");
+    set.height = gsap.quickSetter(jellyRef.current, "height", "px");
+    set.opacity = gsap.quickSetter([jellyRef.current, dotRef.current], "opacity");
   }, []);
 
+  // Start Animation loop
+  const loop = useCallback(() => {
+    if (!set.width || !set.sx || !set.sy || !set.r) return;
+    // Calculate angle and scale based on velocity
+    var rotation = getAngle(+vel.x, +vel.y); // Mouse Move Angle
+    var scale = getScale(+vel.x, +vel.y); // Blob Squeeze Amount
+
+    // Set GSAP quick setter Values on Loop Function
+    if (!isHovering && !isLoading) {
+      set.x(pos.x);
+      set.y(pos.y);
+      set.width(40 + scale * 300);
+      set.r(rotation);
+      set.sx(1 + scale);
+      set.sy(1 - scale * 2);
+    } else {
+      set.r(0);
+    }
+
+    if (isHidden) {
+      set.opacity?.(0);
+    } else {
+      set.opacity?.(1);
+    }
+  }, [isHovering, isLoading, isHidden]);
+
+  const [cursorMoved, setCursorMoved] = useState(false);
+  // Run on Mouse Move
+  useLayoutEffect(() => {
+    if (isMobile) return;
+    // Caluclate Everything Function
+    const setFromEvent = (e: MouseEvent) => {
+      if (!jellyRef.current) return;
+      if (!cursorMoved) {
+        setCursorMoved(true);
+      }
+      const el = e.target as HTMLElement;
+      const hoverElemRect = getRekt(el);
+      if (hoverElemRect) {
+        const rect = el.getBoundingClientRect();
+        setIsHovering(true);
+        gsap.to(jellyRef.current, {
+          rotate: 0,
+          duration: 0,
+        });
+        gsap.to(jellyRef.current, {
+          width: el.offsetWidth + 20,
+          height: el.offsetHeight + 20,
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2,
+          borderRadius: 10,
+          duration: 1.5,
+          ease: "elastic.out(1, 0.3)",
+        });
+
+        // return;
+      } else {
+        gsap.to(jellyRef.current, {
+          borderRadius: 40,
+          width: CURSOR_DIAMETER,
+          height: CURSOR_DIAMETER,
+        });
+        setIsHovering(false);
+      }
+
+      // Check for hide flag
+      const shouldHide = !!el.closest('[data-no-custom-cursor="true"]');
+      setIsHidden(shouldHide);
+
+      // Update body cursor style to ensure default cursor shows up when custom is hidden
+      if (shouldHide) {
+        document.body.style.cursor = 'auto';
+      }
+
+      // Mouse X and Y
+      const x = e.clientX;
+      const y = e.clientY;
+
+      // Animate Position and calculate Velocity with GSAP
+      gsap.to(pos, {
+        x: x,
+        y: y,
+        duration: 1.5,
+        ease: "elastic.out(1, 0.5)",
+        onUpdate: () => {
+          // @ts-ignore
+          vel.x = (x - pos.x) * 1.2;
+          // @ts-ignore
+          vel.y = (y - pos.y) * 1.2;
+        },
+      });
+
+      loop();
+    };
+
+    if (!isLoading) window.addEventListener("mousemove", setFromEvent);
+    return () => {
+      if (!isLoading) window.removeEventListener("mousemove", setFromEvent);
+    };
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (!jellyRef.current) return;
+    jellyRef.current.style.height = "2rem"; // "8rem";
+    jellyRef.current.style.borderRadius = "1rem";
+    jellyRef.current.style.width = loadingPercent * 2 + "vw";
+  }, [loadingPercent]);
+  // Ensure original cursor is always visible
+  useEffect(() => {
+    document.body.style.cursor = 'auto';
+    return () => {
+      document.body.style.cursor = 'auto';
+    };
+  }, []);
+  useTicker(loop, isLoading || !cursorMoved || isMobile);
+  if (isMobile || isBlogPost) return null;
+
+  // Return UI
   return (
     <>
-      <style>{`
-        @keyframes ripple-out {
-          0%   { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
-          100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
-        }
-        .cursor-ripple {
-          position: fixed;
-          border-radius: 50%;
-          border: 1.5px solid #8b5cf6;
-          pointer-events: none;
-          /* CORRECTION 1 : L'onde passe au-dessus de la navbar */
-          z-index: 100010;
-          transform: translate(-50%, -50%) scale(1);
-          animation: ripple-out 0.5s ease-out forwards;
-        }
-      `}</style>
-
-      {/* Main dot */}
+      <div
+        ref={jellyRef}
+        id={"jelly-id"}
+        className={cn(
+          `w-[${CURSOR_DIAMETER}px] h-[${CURSOR_DIAMETER}px] border-2 border-black dark:border-white`,
+          "jelly-blob fixed left-0 top-0 rounded-lg z-[999] pointer-events-none will-change-transform",
+          "translate-x-[-50%] translate-y-[-50%]"
+        )}
+        style={{
+          zIndex: 100020,
+          backdropFilter: "invert(100%)",
+        }}
+      ></div>
       <div
         ref={dotRef}
+        className="w-3 h-3 rounded-full fixed translate-x-[-50%] translate-y-[-50%] pointer-events-none transition-none duration-300"
         style={{
-          position: "fixed",
-          width: 20,
-          height: 20,
-          borderRadius: "50%",
-          background: clicking ? "#8b5cf6" : "white",
-          transform: `translate(-50%, -50%) scale(${clicking ? 1.2 : 1})`,
-          transition: "transform 0.1s ease, background 0.1s",
-          pointerEvents: "none",
-          /* CORRECTION 2 : Le point principal survole absolument tout */
+          top: y,
+          left: x,
+          backdropFilter: "invert(100%)",
           zIndex: 100020,
-          left: -100,
-          top: -100,
         }}
-      />
-
-      {/* Trail */}
-      {Array.from({ length: TRAIL_LENGTH }).map((_, i) => {
-        const size = Math.max(8, 25 - i * 0.55);
-        return (
-          <div
-            key={i}
-            ref={(el) => { if (el) trailRefs.current[i] = el; }}
-            style={{
-              position: "fixed",
-              width: size,
-              height: size,
-              borderRadius: "50%",
-              background: "white",
-              opacity: (1 - i / TRAIL_LENGTH) * 0.4,
-              transform: "translate(-50%, -50%)",
-              pointerEvents: "none",
-              /* CORRECTION 3 : La traînée commence à 100 000 et descend, 
-                 restant largement supérieure au z-[9999] de la Navbar */
-              zIndex: 100000 - i,
-              left: -100,
-              top: -100,
-            }}
-          />
-        );
-      })}
-
-      {/* Ripples */}
-      {ripples.map((r) => (
-        <div
-          key={r.id}
-          className="cursor-ripple"
-          style={{
-            left: r.x,
-            top: r.y,
-            width: r.size,
-            height: r.size,
-            animationDelay: `${r.delay}ms`,
-          }}
-        />
-      ))}
+      ></div>
     </>
   );
 }
+
+export default ElasticCursor;

@@ -1,6 +1,8 @@
 @import "tailwindcss";
-/* Hide native cursor globally when using custom cursor */
-* { cursor: none !important; }
+
+/* Force cursor visibility globally */
+* { cursor: auto !important; }
+html, body { cursor: auto !important; }
 
 /* Fallback ripple keyframes + utility in case Tailwind doesn't inject them yet */
 @keyframes ripple {

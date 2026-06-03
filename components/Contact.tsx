@@ -54,7 +54,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-20 px-6 bg-transparent min-h-screen flex items-center" data-scroll data-scroll-section>
+    <section id="contact" className="py-20 px-6 bg-[#1c0522] min-h-screen flex items-center" data-scroll data-scroll-section>
       <div className="w-full max-w-7xl mx-auto grid gap-12 lg:grid-cols-[minmax(280px,360px)_1fr] items-start">
         <div className="space-y-8">
           <div className="sticky top-32">

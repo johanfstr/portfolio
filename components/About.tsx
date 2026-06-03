@@ -94,7 +94,7 @@ export default function About() {
         </div>
       </div>
 
-      {/* Marquee moved to the bottom of the section */}
+      {/* Marquee */}
       <div className="w-full h-[250px] md:h-[350px] mt-16 relative overflow-hidden pointer-events-none opacity-80">
         <PerspectiveMarqueeScene />
       </div>

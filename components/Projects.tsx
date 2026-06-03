@@ -1,5 +1,7 @@
 "use client"
 
+import { cn } from "@/lib/utils"
+import { gsap } from "gsap";
 import { useEffect, useRef, useState } from "react"
 
 interface Technology {
@@ -97,6 +99,109 @@ const projects: Project[] = [
   },
 ]
 
+// ────────────────────────────────────────────────────────────────
+// GLASS PILL STYLES
+// ────────────────────────────────────────────────────────────────
+const HERO_STYLES = `
+.hero-wrapper {
+  --pill-bg-1: color-mix(in oklch, var(--foreground) 3%, transparent);
+  --pill-bg-2: color-mix(in oklch, var(--foreground) 1%, transparent);
+  --pill-shadow: color-mix(in oklch, var(--background) 50%, transparent);
+  --pill-highlight: color-mix(in oklch, var(--foreground) 10%, transparent);
+  --pill-inset-shadow: color-mix(in oklch, var(--background) 80%, transparent);
+  --pill-border: color-mix(in oklch, var(--foreground) 8%, transparent);
+  
+  --pill-bg-1-hover: color-mix(in oklch, var(--foreground) 8%, transparent);
+  --pill-bg-2-hover: color-mix(in oklch, var(--foreground) 2%, transparent);
+  --pill-border-hover: color-mix(in oklch, var(--foreground) 20%, transparent);
+  --pill-shadow-hover: color-mix(in oklch, var(--background) 70%, transparent);
+  --pill-highlight-hover: color-mix(in oklch, var(--foreground) 20%, transparent);
+}
+
+.hero-glass-pill {
+  background: linear-gradient(145deg, var(--pill-bg-1) 0%, var(--pill-bg-2) 100%);
+  box-shadow: 
+      0 10px 30px -10px var(--pill-shadow), 
+      inset 0 1px 1px var(--pill-highlight), 
+      inset 0 -1px 2px var(--pill-inset-shadow);
+  border: 1px solid var(--pill-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-glass-pill:hover {
+  background: linear-gradient(145deg, var(--pill-bg-1-hover) 0%, var(--pill-bg-2-hover) 100%);
+  border-color: var(--pill-border-hover);
+  box-shadow: 
+      0 20px 40px -10px var(--pill-shadow-hover), 
+      inset 0 1px 1px var(--pill-highlight-hover);
+  color: var(--foreground);
+}
+`;
+
+// ────────────────────────────────────────────────────────────────
+// MAGNETIC BUTTON COMPONENT
+// ────────────────────────────────────────────────────────────────
+type MagneticButtonProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+  children: React.ReactNode;
+};
+
+const MagneticButton = ({ className, children, ...props }: MagneticButtonProps) => {
+  const ref = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const element = ref.current;
+    if (!element) return;
+
+    const ctx = gsap.context(() => {
+      const handleMouseMove = (e: MouseEvent) => {
+        const rect = element.getBoundingClientRect();
+        const h = rect.width / 2;
+        const w = rect.height / 2;
+        const x = e.clientX - rect.left - h;
+        const y = e.clientY - rect.top - w;
+
+        gsap.to(element, {
+          x: x * 0.4,
+          y: y * 0.4,
+          scale: 1.05,
+          ease: "power2.out",
+          duration: 0.4,
+        });
+      };
+
+      const handleMouseLeave = () => {
+        gsap.to(element, {
+          x: 0,
+          y: 0,
+          scale: 1,
+          ease: "elastic.out(1, 0.3)",
+          duration: 1.2,
+        });
+      };
+
+      element.addEventListener("mousemove", handleMouseMove as any);
+      element.addEventListener("mouseleave", handleMouseLeave);
+
+      return () => {
+        element.removeEventListener("mousemove", handleMouseMove as any);
+        element.removeEventListener("mouseleave", handleMouseLeave);
+      };
+    }, element);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <a ref={ref} className={cn("cursor-pointer", className)} {...props}>
+      {children}
+    </a>
+  );
+};
+
+
 export default function Projects() {
   const [visible, setVisible] = useState<boolean[]>(() => projects.map(() => false))
   const [selectedProject, setSelectedProject] = useState<number | null>(null)
@@ -167,11 +272,11 @@ export default function Projects() {
   }, [])
 
   return (
-    <section id="projects" className="py-20 px-6 bg-transparent min-h-screen flex items-center" data-scroll data-scroll-section>
+    <section id="projects" className="py-20 px-6 bg-[#1c0522] min-h-screen flex items-center" data-scroll data-scroll-section>
       <div className="w-full max-w-7xl mx-auto grid gap-12 lg:grid-cols-[minmax(280px,360px)_1fr] items-start">
         <div className="space-y-8">
           <div className="sticky top-32">
-            <span className="text-sm uppercase tracking-[0.3em] text-purple-300">Projets</span>
+            <span className="text-sm uppercase tracking-[0.3em] text-purple-300">— Projets</span>
             <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Mes réalisations</h2>
             <p className="mt-6 text-white/70 text-lg leading-8">
               Découvrez une sélection de projets sur lesquels j'ai travaillé, mettant en avant mes compétences en développement.
@@ -187,7 +292,7 @@ export default function Projects() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start" data-scroll data-scroll-speed="0.08">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start" data-scroll data-scroll-speed="0.08">
           {projects.map((p, idx) => {
             const cardSpeed = "0.08";
 
@@ -240,12 +345,19 @@ export default function Projects() {
                       ))}
                     </div>
                   )}
-                  <button
+                  <MagneticButton 
                     onClick={() => setSelectedProject(idx)}
-                    className="inline-block px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 text-white font-playfair shadow-lg hover:scale-105 transition-transform"
+                    className="inline-flex px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 text-white font-playfair items-center gap-2"
                   >
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"> 
+                    <path d="M6 12H18M18 12L13 7M18 12L13 17"
+                    stroke="#ffffff" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"/>
+                    </svg>
                     Voir plus
-                  </button>
+                  </MagneticButton>
                 </div>
               </div>
             );

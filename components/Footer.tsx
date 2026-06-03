@@ -194,9 +194,9 @@ const MagneticButton = ({ className, children, ...props }: MagneticButtonProps) 
 // -------------------------------------------------------------------------
 const MarqueeItem = () => (
   <div className="flex items-center space-x-12 px-6">
-    <span>Building ideas into code</span> <span className="text-primary/60">✦</span>
-    <span>Full Stack Developer</span> <span className="text-secondary/60">✦</span>
-    <span>Computer Science Student</span> <span className="text-primary/60">✦</span>
+    <span>Construis les idées en code</span> <span className="text-primary/60">✦</span>
+    <span>Développeur Full Stack</span> <span className="text-secondary/60">✦</span>
+    <span>Étudiant en Informatique</span> <span className="text-primary/60">✦</span>
     <span>Code. Learn. Build. Repeat</span> <span className="text-secondary/60">✦</span>
     <span>Contactez-moi pour collaborer</span> <span className="text-primary/60">✦</span>
   </div> 
@@ -272,7 +272,7 @@ export default function CinematicFooter() {
         style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
       >
         {/* Fixed Footer */}
-        <footer className="fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-background text-foreground cinematic-footer-wrapper">
+        <footer className="fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-[#1c0522] text-foreground cinematic-footer-wrapper">
           
           {/* Ambient Light & Grid Background */}
           <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[80px] pointer-events-none z-0" />
@@ -381,9 +381,9 @@ export default function CinematicFooter() {
             </div>
 
             {/* Made with Love Badge */}
-            <div className="footer-glass-pill px-6 py-3 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default border-border/50">
+            <div className="footer-glass-pill px-2 py-1 md:px-6 md:py-3 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default border-border/50">
                  <span className="text-white/80 text-xs font-bold uppercase tracking-widest">Construit avec</span>
-                 <span className="animate-footer-heartbeat text-lg text-red-500">❤</span>
+                 <span className="animate-footer-heartbeat text-lg text-red-500">❤️</span>
                  <span className="text-white/80 text-xs font-bold uppercase tracking-widest">avec</span>
                  <a href="https://nextjs.org/" target="_blank" rel="noopener noreferrer" className="text-white font-black text-xs tracking-normal ml-0.5 hover:text-white/60 transition-colors">Next.js</a>
             </div>

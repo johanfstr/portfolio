@@ -240,7 +240,7 @@ return (
               <p id="text2" className="hero-sub hero-anim anim-sub mt-1 text-white/90 max-w-md ">
                 Étudiant à l'<span className="items-center font-semibold inline-flex rounded bg-purple-900/50 border border-purple-400 relative top-2">
                 <img src="/images/efrei.png" alt="EFREI Bordeaux" className="h-10 w-auto" />
-                &nbsp;BORDEAUX&nbsp;</span>,<br />Je cherche une{" "}
+                &nbsp;Bordeaux&nbsp;</span><br />Je cherche une{" "}
               <span className="text-white-900 font-semibold">alternance</span>{" "}
               en développement <span className="text-purple-100 font-semibold">full-stack</span> pour septembre 2026. 
               </p>
