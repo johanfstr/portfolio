@@ -34,8 +34,8 @@ export default function Intro({ onFinish, onStart, force }: { onFinish?: () => v
     if (!force && seen) {
       setVisible(false)
       setReplayVisible(true)
-      onFinish?.()
-      return
+      const t = window.setTimeout(() => onFinish?.(), 900)
+      return () => clearTimeout(t)
     }
 
     runBootSequence()

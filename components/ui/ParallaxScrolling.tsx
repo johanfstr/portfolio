@@ -50,28 +50,28 @@ export function ParallaxComponent() {
           {/* Above-the-fold: eager loading, no lazy */}
           <img
             data-layer="stars"
-            src="https://i.imgur.com/VZkn61W.png"
+            src="/images/parallax-stars.webp"
             alt="stars"
             decoding="async"
             className="absolute top-0 left-0 w-full h-full object-cover z-0"
           />
           <img
             data-layer="moon"
-            src="https://i.imgur.com/pDizBZY.png"
+            src="/images/parallax-moon.webp"
             alt="moon"
             decoding="async"
             className="absolute top-0 left-0 w-full h-full object-cover mix-blend-screen z-10"
           />
           <img
             data-layer="behind"
-            src="https://i.imgur.com/jYxvwbK.png"
+            src="/images/parallax-mountains-behind.webp"
             alt="mountains behind"
             decoding="async"
             className="absolute top-0 left-0 w-full h-full object-cover z-20"
           />
           <img
             data-layer="front"
-            src="https://i.imgur.com/9QGztW5.png"
+            src="/images/parallax-mountains-front.webp"
             alt="mountains front"
             decoding="async"
             className="absolute top-0 left-0 w-full h-full object-cover z-30"

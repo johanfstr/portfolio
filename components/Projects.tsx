@@ -1,8 +1,10 @@
-"use client"
+﻿"use client"
 
 import { cn } from "@/lib/utils"
 import { gsap } from "gsap";
 import { useEffect, useRef, useState } from "react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 
 interface Technology {
   name: string
@@ -16,8 +18,11 @@ interface Project {
   description: string
   accent: string
   ctaUrl: string
-  fullDescription: string
   technologies: Technology[]
+  tags: string[]
+  demoType: 'web' | 'video' | 'none'
+  demoPath?: string
+  videoUrl?: string
 }
 
 const projects: Project[] = [
@@ -25,52 +30,56 @@ const projects: Project[] = [
     id: "1",
     title: "Portfolio V1",
     image: "/images/captureportfolio.webp",
-    description:
-      "Portfolio personnel mettant en avant mes compétences en développement.",
+    description: "Portfolio personnel mettant en avant mes compétences en développement.",
     accent: "",
     ctaUrl: "https://github.com/johanfstr/portfolio",
-    fullDescription: "Ce portfolio V1 a été développé avec React et Tailwind CSS. Il présente mes compétences et projets de manière élégante et responsive. Les animations subtiles améliorent l'expérience utilisateur.",
     technologies: [
-      { name: "React", logo: "/images/react.png" },
-      { name: "Tailwind CSS", logo: "/images/tailwind.png" },
+      { name: "React", logo: "/images/react-icon.webp" },
+      { name: "Tailwind CSS", logo: "/images/tailwind-icon.webp" },
     ],
+    tags: ["Web"],
+    demoType: "none",
   },
   {
     id: "2",
     title: "Tower Defense Game",
     image: "/images/towerdefend.webp",
-    description: "Jeu de tower defense permet de génerer des tours autour de chemins aléatoires.",
-    accent: "",
+    description: "Jeu de tower defense permet de générer des tours autour de chemins aléatoires.",
+    accent: "Le jeu a été simplifié sur la démo pour garantir une expérience fluide en ligne. Il manque certains éléments comme le système de sauvegarde.",
     ctaUrl: "https://github.com/johanfstr/TowerDefend",
-    fullDescription: "Un jeu de tower defense complet développé en C utilisant SDL2. Le jeu génère des chemins aléatoires et permet de placer des tours avec différentes mécaniques de jeu.",
     technologies: [
-      { name: "C", logo: "/images/c.png" },
+      { name: "C", logo: "/images/c-icon.webp" },
       { name: "SDL2", logo: "/images/sdl.svg" },
     ],
+    tags: ["C"],
+    demoType: "web",
+    demoPath: "/emul/towerdefend/index.html",
   },
   {
     id: "3",
     title: "OCrackml",
     image: "/images/ocrackml.jpg",
-    description: "Analyse et d'exploitation de fuites de données issues de différentes applications web.",
+    description: "Analyse et exploitation de fuites de données issues de différentes applications web.",
     accent: "",
     ctaUrl: "https://github.com/johanfstr/OCrackml",
-    fullDescription: "Projet OCaml pour analyser et exploiter des fuites de données web. Focus sur l'analyse de données et la sécurité informatique.",
     technologies: [
       { name: "OCaml", logo: "/images/ocaml.svg" },
     ],
+    tags: ["OCaml"],
+    demoType: "none",
   },
   {
     id: "4",
     title: "Sim. Père Noël",
     image: "",
-    description: "Simulation de production avec gestion de ressources, événements, suivi des coûts et interface en menus. ",
+    description: "Simulation de production avec gestion de ressources, événements, suivi des coûts et interface en menus.",
     accent: "",
     ctaUrl: "https://github.com/Printemilio/Jeff_project",
-    fullDescription: "Simulation de production avec gestion de ressources via files et piles, événements en temps réel, suivi des coûts et interface en menus. ",
     technologies: [
       { name: "C#", logo: "/images/csharp.png" },
     ],
+    tags: ["C#"],
+    demoType: "none",
   },
   {
     id: "5",
@@ -79,25 +88,29 @@ const projects: Project[] = [
     description: "Simulation de différentes lignes de bus sur une carte en C avec SDL2.",
     accent: "",
     ctaUrl: "https://github.com/johanfstr/projetBus",
-    fullDescription: "Simulation de différentes lignes de bus sur une carte en C avec SDL2.",
     technologies: [
-      { name: "C", logo: "/images/c.png" },
+      { name: "C", logo: "/images/c-icon.webp" },
       { name: "SDL2", logo: "/images/sdl.svg" },
     ],
+    tags: ["C"],
+    demoType: "none",
   },
   {
     id: "6",
     title: "Camlbrick",
     image: "",
-    description: "Camlbrick est un jeu de casse-briques développé en OCaml, avec interface graphique basée sur Labltk.",
+    description: "Jeu de casse-briques développé en OCaml, avec interface graphique basée sur Labltk.",
     accent: "",
     ctaUrl: "https://github.com/johanfstr/Camlbrick",
-    fullDescription: "Camlbrick est un jeu de casse-briques développé en OCaml, avec une interface graphique basée sur Labltk.  Le principe du jeu est classique :      Faire disparaître toutes les briques d’un niveau avec une balle.     Contrôler une raquette pour renvoyer la balle.     Gérer plusieurs types de briques : simple, double, bloc, bonus. Les collisions sont gérées avec la raquette, les murs et les coins de briques ",
     technologies: [
       { name: "OCaml", logo: "/images/ocaml.svg" },
     ],
+    tags: ["OCaml"],
+    demoType: "none",
   },
 ]
+
+const FILTERS = ["Tous", "C", "C#", "OCaml", "Web"]
 
 // ────────────────────────────────────────────────────────────────
 // GLASS PILL STYLES
@@ -110,44 +123,34 @@ const HERO_STYLES = `
   --pill-highlight: color-mix(in oklch, var(--foreground) 10%, transparent);
   --pill-inset-shadow: color-mix(in oklch, var(--background) 80%, transparent);
   --pill-border: color-mix(in oklch, var(--foreground) 8%, transparent);
-  
   --pill-bg-1-hover: color-mix(in oklch, var(--foreground) 8%, transparent);
   --pill-bg-2-hover: color-mix(in oklch, var(--foreground) 2%, transparent);
   --pill-border-hover: color-mix(in oklch, var(--foreground) 20%, transparent);
   --pill-shadow-hover: color-mix(in oklch, var(--background) 70%, transparent);
   --pill-highlight-hover: color-mix(in oklch, var(--foreground) 20%, transparent);
 }
-
 .hero-glass-pill {
   background: linear-gradient(145deg, var(--pill-bg-1) 0%, var(--pill-bg-2) 100%);
-  box-shadow: 
-      0 10px 30px -10px var(--pill-shadow), 
-      inset 0 1px 1px var(--pill-highlight), 
-      inset 0 -1px 2px var(--pill-inset-shadow);
+  box-shadow: 0 10px 30px -10px var(--pill-shadow), inset 0 1px 1px var(--pill-highlight), inset 0 -1px 2px var(--pill-inset-shadow);
   border: 1px solid var(--pill-border);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 .hero-glass-pill:hover {
   background: linear-gradient(145deg, var(--pill-bg-1-hover) 0%, var(--pill-bg-2-hover) 100%);
   border-color: var(--pill-border-hover);
-  box-shadow: 
-      0 20px 40px -10px var(--pill-shadow-hover), 
-      inset 0 1px 1px var(--pill-highlight-hover);
+  box-shadow: 0 20px 40px -10px var(--pill-shadow-hover), inset 0 1px 1px var(--pill-highlight-hover);
   color: var(--foreground);
 }
 `;
 
-// ────────────────────────────────────────────────────────────────
-// MAGNETIC BUTTON COMPONENT
-// ────────────────────────────────────────────────────────────────
 type MagneticButtonProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   children: React.ReactNode;
+  onClick?: () => void;
 };
 
-const MagneticButton = ({ className, children, ...props }: MagneticButtonProps) => {
+const MagneticButton = ({ className, children, onClick, ...props }: MagneticButtonProps) => {
   const ref = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
@@ -158,33 +161,15 @@ const MagneticButton = ({ className, children, ...props }: MagneticButtonProps) 
     const ctx = gsap.context(() => {
       const handleMouseMove = (e: MouseEvent) => {
         const rect = element.getBoundingClientRect();
-        const h = rect.width / 2;
-        const w = rect.height / 2;
-        const x = e.clientX - rect.left - h;
-        const y = e.clientY - rect.top - w;
-
-        gsap.to(element, {
-          x: x * 0.4,
-          y: y * 0.4,
-          scale: 1.05,
-          ease: "power2.out",
-          duration: 0.4,
-        });
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        gsap.to(element, { x: x * 0.4, y: y * 0.4, scale: 1.05, ease: "power2.out", duration: 0.4 });
       };
-
       const handleMouseLeave = () => {
-        gsap.to(element, {
-          x: 0,
-          y: 0,
-          scale: 1,
-          ease: "elastic.out(1, 0.3)",
-          duration: 1.2,
-        });
+        gsap.to(element, { x: 0, y: 0, scale: 1, ease: "elastic.out(1, 0.3)", duration: 1.2 });
       };
-
       element.addEventListener("mousemove", handleMouseMove as any);
       element.addEventListener("mouseleave", handleMouseLeave);
-
       return () => {
         element.removeEventListener("mousemove", handleMouseMove as any);
         element.removeEventListener("mouseleave", handleMouseLeave);
@@ -195,240 +180,259 @@ const MagneticButton = ({ className, children, ...props }: MagneticButtonProps) 
   }, []);
 
   return (
-    <a ref={ref} className={cn("cursor-pointer", className)} {...props}>
+    <a ref={ref} className={cn("cursor-pointer", className)} onClick={onClick} {...props}>
       {children}
     </a>
   );
 };
 
-
 export default function Projects() {
-  const [visible, setVisible] = useState<boolean[]>(() => projects.map(() => false))
+  const [activeFilter, setActiveFilter] = useState("Tous")
   const [selectedProject, setSelectedProject] = useState<number | null>(null)
+  const [visible, setVisible] = useState<boolean[]>(() => projects.map(() => false))
   const cardsRef = useRef<Array<HTMLDivElement | null>>([])
-  const sectionRef = useRef<HTMLElement | null>(null)
-  const [noiseOpacity, setNoiseOpacity] = useState<number>(0)
+
+  const modalBoxRef = useRef<HTMLDivElement>(null)
+  const [modalContent, setModalContent] = useState<string>("")
+
+  useEffect(() => {
+    if (selectedProject === null) { setModalContent(""); return }
+    fetch(`/projects/${projects[selectedProject].id}.md`)
+      .then(r => r.text())
+      .then(setModalContent)
+  }, [selectedProject])
+
+  const filtered = activeFilter === "Tous"
+    ? projects
+    : projects.filter((p) => p.tags.includes(activeFilter))
 
   useEffect(() => {
     if (typeof IntersectionObserver === "undefined") {
-      // fallback: show all
       setVisible(projects.map(() => true))
       return
     }
-
     const obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const idx = Number(entry.target.getAttribute("data-idx"))
           if (entry.isIntersecting) {
-            setVisible((v) => {
-              const next = [...v]
-              next[idx] = true
-              return next
-            })
+            setVisible((v) => { const next = [...v]; next[idx] = true; return next })
             obs.unobserve(entry.target)
           }
         })
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     )
-
     cardsRef.current.forEach((el) => el && obs.observe(el))
-
     return () => obs.disconnect()
-  }, [])
-
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el || typeof window === "undefined") return
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setNoiseOpacity(0)
-      return
-    }
-
-    let ticking = false
-    const onScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const rect = el.getBoundingClientRect()
-          const vh = window.innerHeight || document.documentElement.clientHeight
-          const start = vh * 0.9
-          const end = vh * 0.2
-          const progress = Math.max(0, Math.min(1, (start - rect.top) / (start - end)))
-          setNoiseOpacity(progress)
-          ticking = false
-        })
-        ticking = true
-      }
-    }
-
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-    }
-  }, [])
+  }, [filtered])
 
   return (
     <section id="projects" className="py-20 px-6 bg-[#1c0522] min-h-screen flex items-center" data-scroll data-scroll-section>
+      <style dangerouslySetInnerHTML={{ __html: HERO_STYLES }} />
       <div className="w-full max-w-7xl mx-auto grid gap-12 lg:grid-cols-[minmax(280px,360px)_1fr] items-start">
+
+        {/* Left sticky column */}
         <div className="space-y-8">
-          <div className="sticky top-32">
+          <div className="sticky top-32 " >
             <span className="text-sm uppercase tracking-[0.3em] text-purple-300">— Projets</span>
             <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Mes réalisations</h2>
             <p className="mt-6 text-white/70 text-lg leading-8">
               Découvrez une sélection de projets sur lesquels j'ai travaillé, mettant en avant mes compétences en développement.
             </p>
-            <br />
-            <br />
-            <a
-            href="https://github.com/johanfstr" target="_blank" aria-label="GitHub"
-            className="px-6 py-3 border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white rounded-full font-playfair shadow-lg transition-all transform hover:scale-105"
-            >
-              Voir plus sur mon github
-            </a>
+
+            {/* Filters */}
+            <div className="flex flex-wrap gap-2 mt-8">
+              {FILTERS.map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setActiveFilter(f)}
+                  className={cn(
+                    "px-4 py-1.5 rounded-full text-sm font-mono border transition-all duration-200",
+                    activeFilter === f
+                      ? "bg-purple-600 border-purple-600 text-white"
+                      : "border-purple-500/40 text-purple-300 hover:border-purple-400 hover:text-white"
+                  )}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-8">
+              <a
+                href="https://github.com/johanfstr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white rounded-full font-playfair shadow-lg transition-all transform hover:scale-105 inline-block"
+              >
+                Voir plus sur mon github
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start" data-scroll data-scroll-speed="0.08">
-          {projects.map((p, idx) => {
-            const cardSpeed = "0.08";
-
-            return (
-              <div
-                key={p.id}
-                data-idx={idx}
-                ref={(el) => {
-                  cardsRef.current[idx] = el
-                }}
-                className={`rounded-2xl overflow-hidden border border-gray-700 bg-gradient-to-b from-gray-900 to-gray-850 shadow-xl transform transition-all duration-700 ease-out hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-2 ${
-                  visible[idx]
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                }`}
-                data-scroll
-                data-scroll-speed={cardSpeed}
-              >
-                <div
-                  className={`h-44 bg-gradient-to-br ${p.accent} bg-opacity-30 flex items-center justify-center relative`}
-                  style={{ boxShadow: "inset 0 -40px 40px rgba(0,0,0,0.6)" }}
-                >
-                  <div className="absolute inset-0"></div>
-                  {p.image ? (
-                    <img
-                      src={p.image}
-                      alt={p.title}
-                      loading="lazy"
-                      decoding="async"
-                      className="relative z-10 w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="text-white/10 text-xl font-playfair relative z-10">{p.title}</div>
-                  )}
+        {/* Cards grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start">
+          {filtered.map((p, idx) => (
+            <div
+              key={p.id}
+              data-idx={idx}
+              ref={(el) => { cardsRef.current[idx] = el }}
+              onClick={() => setSelectedProject(projects.findIndex(pr => pr.id === p.id))}
+              className={cn(
+                "rounded-xl border border-white/10 p-6 cursor-pointer text-left backdrop-blur-sm transition-all duration-300",
+                "bg-white/5 hover:bg-white/10 hover:border-indigo-500/30 hover:-translate-y-1",
+                "hover:shadow-[0_8px_32px_rgba(99,102,241,0.15)]",
+                visible[idx] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
+                "duration-700 ease-out"
+              )}
+            >
+              {/* Image */}
+              {p.image && (
+                <div className="h-36 rounded-lg overflow-hidden mb-4 -mx-1">
+                  <img src={p.image} alt={p.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 </div>
+              )}
 
-                <div className="p-6 text-center text-white/80">
-                  <h3 className="text-xl font-playfair text-white mb-3">{p.title}</h3>
-                  {/* <p className="text-sm mb-4">{p.description}</p> */}
-                  {p.technologies && p.technologies.length > 0 && (
-                    <div className="flex flex-wrap justify-center gap-2 mb-4">
-                      {p.technologies.map((tech, techIdx) => (
-                        <div
-                          key={techIdx}
-                          className="flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white"
-                        >
-                          {tech.logo && (
-                            <img src={tech.logo} alt={tech.name} loading="lazy" decoding="async" className="w-4 h-4" />
-                          )}
-                          <span>{tech.name}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  <MagneticButton 
-                    onClick={() => setSelectedProject(idx)}
-                    className="inline-flex px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 text-white font-playfair items-center gap-2"
-                  >
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"> 
-                    <path d="M6 12H18M18 12L13 7M18 12L13 17"
-                    stroke="#ffffff" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"/>
-                    </svg>
-                    Voir plus
-                  </MagneticButton>
-                </div>
+              {/* Tags badges 
+              <div className="flex gap-1 flex-wrap mb-3">
+                {p.tags.map((tag) => (
+                  <span key={tag} className="inline-block px-2 py-0.5 text-xs font-semibold uppercase tracking-wide rounded bg-purple-500/20 text-purple-300">{tag}</span>
+                ))}
               </div>
-            );
-          })}
+              */}
+
+              <h3 className="text-base font-semibold text-white mb-2">{p.title}</h3>
+              <p className="text-sm text-white/50 leading-relaxed mb-4">{p.description}</p>
+
+              {/* Tech chips */}
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {p.technologies.map((tech, i) => (
+                  <span key={i} className="flex items-center gap-1 font-mono text-xs px-2 py-0.5 rounded bg-white/[0.06] text-white/50">
+                    {tech.logo && <img src={tech.logo} alt={tech.name} loading="lazy" decoding="async" width={12} height={12} className="w-3 h-3" />}
+                    {tech.name}
+                  </span>
+                ))}
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-2 flex-wrap">
+                <button className="px-3 py-1.5 text-sm rounded-lg font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 hover:scale-[1.02] transition-all">
+                  Détails & démo
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Modal */}
       {selectedProject !== null && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-2xl font-playfair text-white">{projects[selectedProject].title}</h2>
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className="text-white/70 hover:text-white text-2xl"
-                >
-                  ×
-                </button>
+        <div className="fixed inset-0 z-50 flex items-start justify-center p-4" style={{ paddingTop: '90px' }}>
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/75 backdrop-blur-sm" onClick={() => setSelectedProject(null)} />
+
+          {/* Box — scroll interne, hauteur max limitée */}
+          <div ref={modalBoxRef} data-lenis-prevent className="relative w-full max-w-2xl max-h-[calc(100vh-180px)] overflow-y-auto rounded-xl border border-white/10 bg-[#0f0a1a] p-8 shadow-2xl">
+            {/* Close */}
+            <button
+              onClick={() => setSelectedProject(null)}
+              className="absolute top-4 right-4 w-10 h-10 rounded-[10px] bg-white/[0.08] text-white/70 hover:bg-white/[0.15] text-2xl flex items-center justify-center transition-colors"
+            >
+              ×
+            </button>
+
+            {/* Image */}
+            {projects[selectedProject].image && (
+              <img src={projects[selectedProject].image} alt={projects[selectedProject].title} loading="lazy" decoding="async" className="w-full h-48 object-cover rounded-lg mb-4" />
+            )}
+
+            {/* Header */}
+            <div className="mb-4">
+              <div className="flex gap-2 mb-2">
+                {projects[selectedProject].tags.map((tag) => (
+                  <span key={tag} className="inline-block px-2 py-0.5 text-xs font-semibold uppercase tracking-wide rounded bg-purple-500/20 text-purple-300">{tag}</span>
+                ))}
               </div>
-              
-              {projects[selectedProject].image && (
-                <img
-                  src={projects[selectedProject].image}
-                  alt={projects[selectedProject].title}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-48 object-cover rounded-lg mb-4"
-                />
-              )}
-              
-              <p className="text-white/80 mb-4">{projects[selectedProject].fullDescription}</p>
-              
-              {projects[selectedProject].technologies && projects[selectedProject].technologies.length > 0 && (
-                <div className="mb-4">
-                  <h3 className="text-lg font-playfair text-white mb-2">Technologies utilisées :</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {projects[selectedProject].technologies.map((tech, techIdx) => (
-                      <div
-                        key={techIdx}
-                        className="flex items-center gap-2 px-3 py-2 bg-gray-700 rounded-full text-sm text-white"
-                      >
-                        {tech.logo && (
-                          <img src={tech.logo} alt={tech.name} loading="lazy" decoding="async" className="w-5 h-5" />
-                        )}
-                        <span>{tech.name}</span>
-                      </div>
-                    ))}
-                  </div>
+              <h2 className="text-2xl font-semibold text-white">{projects[selectedProject].title}</h2>
+              {/* Tech chips */}
+              <div className="flex flex-wrap gap-1.5 mt-2">
+                {projects[selectedProject].technologies.map((tech, i) => (
+                  <span key={i} className="flex items-center gap-1 font-mono text-xs px-2 py-0.5 rounded bg-white/[0.06] text-white/50">
+                    {tech.logo && <img src={tech.logo} alt={tech.name} loading="lazy" decoding="async" width={12} height={12} className="w-3 h-3" />}
+                    {tech.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+                        {/* Demo zone */}
+            <div className="mb-6 rounded-lg overflow-hidden bg-black/30 min-h-[120px] flex items-center justify-center">
+              {projects[selectedProject].demoType === 'web' && projects[selectedProject].demoPath ? (
+                <div className="w-full">
+                <p className="text-white/30 text-sm p-8 text-center">
+                  {projects[selectedProject].accent}
+                </p>
+                  {/* <iframe src={projects[selectedProject].demoPath} title={`Démo ${projects[selectedProject].title}`} className="w-full border-0" style={{ height: 560 }} /> */}
+                  <a href={projects[selectedProject].demoPath} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block px-4 py-1.5 text-sm rounded-lg text-white/80 bg-white/[0.08] border border-white/10 hover:bg-white/[0.12] transition-all">
+                    Tester la démo en ligne
+                  </a>
                 </div>
+              ) : projects[selectedProject].demoType === 'video' && projects[selectedProject].videoUrl ? (
+                <iframe src={projects[selectedProject].videoUrl} title={`Vidéo ${projects[selectedProject].title}`} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen className="w-full border-0" style={{ height: 400 }} />
+              ) : projects[selectedProject].demoType === 'video' ? (
+                <div className="flex flex-col items-center gap-3 p-8 text-white/30 text-sm text-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width={48} height={48} className="opacity-50">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p>Vidéo démo non disponible</p>
+                </div>
+              ) : (
+                <p className="text-white/30 text-sm p-8 text-center">
+                  Projet hors-ligne ({projects[selectedProject].tags.join(', ')}). Lancez-le en local pour le tester.
+                </p>
               )}
-              
-              <div className="flex gap-4">
-                <a
-                  href={projects[selectedProject].ctaUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 bg-purple-600 text-white rounded-full font-playfair hover:bg-purple-700 transition-colors"
-                >
-                  Voir sur GitHub
-                </a>
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className="px-6 py-3 border border-gray-600 text-white rounded-full font-playfair hover:bg-gray-700 transition-colors"
-                >
-                  Fermer
-                </button>
-              </div>
+            </div>
+
+            <div className="mb-6 text-sm text-white/70 leading-relaxed">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  h1: ({children}) => <h1 className="text-xl font-bold text-white mt-4 mb-2">{children}</h1>,
+                  h2: ({children}) => <h2 className="text-lg font-semibold text-white mt-4 mb-2">{children}</h2>,
+                  h3: ({children}) => <h3 className="text-base font-semibold text-purple-300 mt-3 mb-1">{children}</h3>,
+                  p: ({children}) => <p className="mb-3 text-white/70">{children}</p>,
+                  ul: ({children}) => <ul className="list-disc list-inside mb-3 space-y-1 text-white/70">{children}</ul>,
+                  ol: ({children}) => <ol className="list-decimal list-inside mb-3 space-y-1 text-white/70">{children}</ol>,
+                  li: ({children}) => <li className="ml-2">{children}</li>,
+                  strong: ({children}) => <strong className="text-white font-semibold">{children}</strong>,
+                  em: ({children}) => <em className="text-purple-300 italic">{children}</em>,
+                  code: ({children, className}) => className
+                    ? <code className="block bg-black/40 border border-white/10 rounded p-3 my-2 text-xs font-mono text-green-300 overflow-x-auto whitespace-pre">{children}</code>
+                    : <code className="bg-white/10 rounded px-1.5 py-0.5 text-xs font-mono text-purple-200">{children}</code>,
+                  pre: ({children}) => <>{children}</>,
+                  blockquote: ({children}) => <blockquote className="border-l-2 border-purple-500 pl-3 my-2 text-white/50 italic">{children}</blockquote>,
+                  table: ({children}) => <div className="overflow-x-auto my-3"><table className="w-full text-xs border-collapse">{children}</table></div>,
+                  th: ({children}) => <th className="border border-white/10 px-3 py-1.5 text-left text-white font-semibold bg-white/5">{children}</th>,
+                  td: ({children}) => <td className="border border-white/10 px-3 py-1.5 text-white/60">{children}</td>,
+                  a: ({children, href}) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-purple-400 underline hover:text-purple-300">{children}</a>,
+                  hr: () => <hr className="border-white/10 my-4" />,
+                }}
+              >
+                {modalContent}
+              </ReactMarkdown>
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-3 flex-wrap">
+              <a href={projects[selectedProject].ctaUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 text-sm rounded-lg font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 transition-all">
+                Voir le code (GitHub)
+              </a>
+              <button onClick={() => setSelectedProject(null)} className="px-4 py-2 text-sm rounded-lg text-white/70 bg-white/[0.08] border border-white/10 hover:bg-white/[0.12] transition-all">
+                Fermer
+              </button>
             </div>
           </div>
         </div>

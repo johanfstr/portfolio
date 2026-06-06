@@ -3,6 +3,7 @@
 import React from "react";
 import { GlobePulse } from "./ui/Globe";
 import { PerspectiveMarquee } from "./ui/PerspectiveMarquee";
+import TopoBackground from "./ui/TopoBackground";
 
 function PerspectiveMarqueeScene() {
   return (
@@ -32,9 +33,12 @@ function PerspectiveMarqueeScene() {
   );
 }
 
-export default function About() {
+export default function About({ ready = false }: { ready?: boolean }) {
   return (
     <section id="about" className="relative min-h-screen py-24 z-20 bg-[#1c0522] flex flex-col justify-center" data-scroll-section>
+      <TopoBackground ready={ready} />
+      <div className="absolute top-0 left-0 right-0 h-80 pointer-events-none z-10" style={{ 
+       background: "linear-gradient(180deg,rgb(28, 5, 34) 0%,rgb(28, 5, 34) 30%, rgba(28, 5, 34, 0.6) 60%, rgba(28, 5, 34, 0.2) 85%, rgba(28, 5, 34, 0) 100%)" }} />
       <div className="w-full max-w-7xl mx-auto px-6 relative z-10 flex-1 flex flex-col justify-center">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-extrabold font-playfair text-white tracking-tight mb-4 drop-shadow-md">
@@ -47,7 +51,7 @@ export default function About() {
           {/* Text Content */}
           <div className="flex-1 max-w-2xl text-lg text-slate-300 leading-relaxed space-y-6">
             <p>
-              Je m'appelle <strong className="text-purple-400 font-playfair">Johan Forestier</strong>, 
+              Je m'appelle <strong className="text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>Johan Forestier</strong>, 
               j'habite à <strong className="text-white">Bordeaux</strong>. Je suis actuellement étudiant 
               à l'<strong className="text-purple-400 font-semibold px-1 py-0.5 rounded bg-purple-900/30 border border-purple-500/30">EFREI Bordeaux</strong> 
               &nbsp;où j'entre en 1ère année de cycle ingénieur en majeure <strong className="text-white">LSI</strong> 
@@ -58,24 +62,24 @@ export default function About() {
               Mon parcours académique et mes projets m'ont permis d'explorer un large éventail de technologies, 
               du bas niveau&nbsp;
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
-                  <img src="/images/c.png" alt="C" loading="lazy" decoding="async" className="w-4 h-4" />
+                  <img src="/images/c-icon.webp" alt="C" loading="lazy" decoding="async" width={16} height={16} className="w-4 h-4" />
                   <span>C</span>
                   </span>,
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
-                  <img src="/images/ocaml.svg" alt="OCaml" loading="lazy" decoding="async" className="w-4 h-4" />
+                  <img src="/images/ocaml.svg" alt="OCaml" loading="lazy" decoding="async" width={16} height={16} className="w-4 h-4" />
                   <span>OCaml</span>
                 </span>
                 &nbsp;au développement full-stack moderne&nbsp;
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
-                  <img src="/images/react.png" alt="React" loading="lazy" decoding="async" className="w-4 h-4" />
+                  <img src="/images/react-icon.webp" alt="React" loading="lazy" decoding="async" width={16} height={16} className="w-4 h-4" />
                   <span>React</span>
                 </span>,
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
-                  <img src="/images/nextjs.png" alt="Next.js" loading="lazy" decoding="async" className="w-4 h-4" />
+                  <img src="/images/nextjs-icon.webp" alt="Next.js" loading="lazy" decoding="async" width={16} height={16} className="w-4 h-4" />
                   <span>Next.js</span>
                 </span>,
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
-                  <img src="/images/typescript.png" alt="TypeScript" loading="lazy" decoding="async" className="w-4 h-4" />
+                  <img src="/images/typescript-icon.webp" alt="TypeScript" loading="lazy" decoding="async" width={16} height={16} className="w-4 h-4" />
                   <span>TypeScript</span>
                 </span>.
             </p>

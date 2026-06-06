@@ -138,6 +138,13 @@ const MagneticButton = ({ className, children, ...props }: MagneticButtonProps) 
 export default function Home() {
   const [introDone, setIntroDone] = useState(false);
   const [forceBoot, setForceBoot] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => { if (window.scrollY > 80) setScrolled(true); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const scrRef = useRef<HTMLSpanElement | null>(null);
   const [scrWord, setScrWord] = useState<string>("cool");
@@ -232,18 +239,18 @@ return (
           <div className="flex flex-col md:flex-row items-center justify-between gap-12 min-h-screen py-28 overflow-visible">
 
             <div className="flex-1 max-w-2xl pt-32 md:pt-0">
-              <h1 id="text" className="text-[40px] md:text-[64px] lg:text-[80px] font-extrabold tracking-tight leading-tight font-playfair drop-shadow-[0_8px_24px_rgba(99,58,237,0.25)]">
+              <h1 id="text" className="text-[40px] md:text-[64px] lg:text-[80px] font-extrabold tracking-tight leading-[1.05] drop-shadow-[0_8px_24px_rgba(99,58,237,0.25)]" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
                 <span className="hero-anim anim-h1-1 block bg-gradient-to-b from-white via-[#ffffff] to-[#ffffff] bg-clip-text">Je construis</span>
                 <span className="hero-anim anim-h1-2 block bg-gradient-to-b from-white via-[#ffffff] to-[#ffffff] bg-clip-text">des trucs</span>
                 <span className="hero-anim anim-h1-3 block text-white"><span ref={scrRef} className="scramble-word">{scrWord}</span>.</span>
               </h1>
 
-              <p id="text2" className="hero-sub hero-anim anim-sub mt-1 text-white/90 max-w-md ">
-                Étudiant à l'<span className="items-center font-semibold inline-flex rounded bg-purple-900/50 border border-purple-400 relative top-2">
-                <img src="/images/efrei.png" alt="EFREI Bordeaux" className="h-10 w-auto" />
+              <p id="text2" className="hero-sub hero-anim anim-sub mt-1 font-medium text-white/90 max-w-md ">
+                Étudiant à l'<span className="items-center font-bold inline-flex rounded bg-purple-900/50 border border-purple-400 relative top-2">
+                <img src="/images/efrei.webp" alt="EFREI Bordeaux" width={230} height={70} className="h-10 w-auto" />
                 &nbsp;Bordeaux&nbsp;</span><br />Je cherche une{" "}
-              <span className="text-white-900 font-semibold">alternance</span>{" "}
-              en développement <span className="text-purple-100 font-semibold">full-stack</span> pour septembre 2026. 
+              <span className="text-white-900 font-bold">alternance</span>{" "}
+              en développement <span className="text-purple-100 font-bold">full-stack</span> pour septembre 2026. 
               </p>
 
               <div id="btn" className="hero-btns hero-anim anim-btns mt-8 flex gap-4 flex-wrap">
@@ -288,7 +295,19 @@ return (
         </main>
       </div>
 
-      <About />
+      {/* Scroll indicator */}
+      <div className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1 transition-opacity duration-500 ${introDone && !scrolled ? "opacity-100" : "opacity-0"}`}>
+        <span className="text-white/30 text-xs font-mono tracking-widest uppercase">scroll</span>
+        <svg
+          width="20" height="28" viewBox="0 0 20 28" fill="none"
+          className="animate-bounce"
+          style={{ filter: "drop-shadow(0 0 6px rgba(168,85,247,0.5))" }}
+        >
+          <path d="M10 2 L10 22 M3 15 L10 22 L17 15" stroke="rgba(168,85,247,0.8)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
+
+      <About ready={introDone} />
       <Projects />
       <Skills />
       <Experience />

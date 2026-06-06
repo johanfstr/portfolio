@@ -311,7 +311,7 @@ export default function CinematicFooter() {
  
               {/* Right Section - Social Links */}
               <div className="md:text-right">
-                <h4 className="text-2xl font-playfair mb-4">Suivez‑moi</h4>
+                <h2 className="text-2xl font-playfair mb-4">Suivez-moi</h2>
  
                 {/* Social Media Links */}
                 <div className="flex flex-wrap justify-start md:justify-end gap-3 w-full">

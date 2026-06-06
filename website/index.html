@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio — prrojetBOOK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header class="hero">
+    <nav class="nav">
+      <a href="#accueil" class="logo">Portfolio</a>
+      <div class="nav-links">
+        <a href="#accueil">Accueil</a>
+        <a href="#projets">Projets</a>
+        <a href="#parcours">Vue d’ensemble</a>
+      </div>
+    </nav>
+    <section id="accueil" class="hero-content">
+      <h1>Portfolio <span class="gradient">prrojetBOOK</span></h1>
+      <p class="hero-subtitle">C · C++ · OCaml · Flex/Bison · Web</p>
+      <a href="#projets" class="cta">Voir les projets</a>
+    </section>
+    <div class="scroll-hint">
+      <span>Défiler</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </header>
+
+  <main>
+    <section id="projets" class="section projects-section">
+      <h2 class="section-title">Projets</h2>
+      <p class="section-desc">Cliquez sur un projet pour lire le résumé, voir les techniques, ouvrir le code, et (quand possible) lancer une démo web.</p>
+
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">Tous</button>
+        <button class="filter-btn" data-filter="C">C</button>
+        <button class="filter-btn" data-filter="C++">C++</button>
+        <button class="filter-btn" data-filter="OCaml">OCaml</button>
+        <button class="filter-btn" data-filter="Flex/Bison">Flex/Bison</button>
+        <button class="filter-btn" data-filter="Web">Web</button>
+      </div>
+
+      <div class="projects-grid" id="projects-grid">
+        <!-- Projets injectés par JS -->
+      </div>
+    </section>
+
+    <section id="parcours" class="section parcours-section">
+      <h2 class="section-title">Vue d’ensemble</h2>
+      <div class="parcours-timeline">
+        <div class="parcours-item">
+          <span class="parcours-badge">C / SDL2</span>
+          <h3>Modélisation + rendu</h3>
+          <p>Structures, listes doublement chaînées, tri fusion, animation et rendu 2D avec SDL2 (simulation de lignes de bus).</p>
+        </div>
+        <div class="parcours-item">
+          <span class="parcours-badge">OCaml</span>
+          <h3>Outils + raisonnement</h3>
+          <p>Fonctions utilitaires sur listes, hashing (SHA-256 + Base64), détection de doublons et corrélation clear↔hash, plus un moteur de casse-briques avec GUI Tk.</p>
+        </div>
+        <div class="parcours-item">
+          <span class="parcours-badge">Web / XML</span>
+          <h3>Contenu + interactions</h3>
+          <p>Site XHTML/CSS/JS avec interactions DOM et formulaires, et modélisation de collection via XML + DTD.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal détail + démo -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-box">
+      <button class="modal-close" aria-label="Fermer">&times;</button>
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="modal-badge" id="modal-badge">C</span>
+          <h2 id="modal-title">Titre</h2>
+          <div class="modal-tech" id="modal-tech"></div>
+        </div>
+        <p class="modal-desc" id="modal-desc"></p>
+        <div class="modal-demo" id="modal-demo">
+          <!-- Zone démo : vidéo ou iframe -->
+        </div>
+        <div class="modal-actions">
+          <a id="modal-link-code" href="#" target="_blank" rel="noopener" class="btn btn-secondary">Voir le code</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>Portfolio — prrojetBOOK</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
