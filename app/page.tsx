@@ -5,13 +5,14 @@ import { gsap } from "gsap";
 import { cn } from "@/lib/utils";
 import Navbar from "../components/Navbar";
 import Intro from "../components/Intro";
-import Projects from "../components/Projects";
-import About from "../components/About";
-import Skills from "../components/Skills";
-import Experience from "../components/Experience";
-import Contact from "../components/Contact";
-import Footer from "../components/Footer";
 import dynamic from "next/dynamic";
+
+const Projects = dynamic(() => import("../components/Projects"), { ssr: false });
+const About = dynamic(() => import("../components/About"), { ssr: false });
+const Skills = dynamic(() => import("../components/Skills"), { ssr: false });
+const Experience = dynamic(() => import("../components/Experience"), { ssr: false });
+const Contact = dynamic(() => import("../components/Contact"), { ssr: false });
+const Footer = dynamic(() => import("../components/Footer"), { ssr: false });
 
 const ModelViewer = dynamic(() => import("../components/ModelViewer"), {
   ssr: false,
@@ -23,7 +24,7 @@ const ModelViewer = dynamic(() => import("../components/ModelViewer"), {
 });
 
 
-import AnoAI from "../components/ui/AnimatedShader";
+const AnoAI = dynamic(() => import("../components/ui/AnimatedShader"), { ssr: false });
 const ParallaxComponent = dynamic(
   () => import("../components/ui/ParallaxScrolling").then((mod) => mod.ParallaxComponent),
   {

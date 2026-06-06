@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fira_Code, Playfair_Display } from "next/font/google";
+import { Fira_Code, Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "../components/CustomCursor";
 import ScrollEffects from "../components/ScrollEffects";
@@ -18,6 +18,13 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Johan Forestier - Portfolio",
   description: "Johan Forestier, étudiant en informatique à l'EFREI campus de Bordeaux, cherche une alternance en développement full-stack pour septembre 2026. Découvrez mes projets, compétences et expériences dans le développement web.",
@@ -30,7 +37,7 @@ export default function RootLayout({
 }>) {
   return (
       <html lang="en" suppressHydrationWarning>
-        <body className={`${firaCode.variable} ${playfair.variable} antialiased`}>
+        <body className={`${firaCode.variable} ${playfair.variable} ${plusJakarta.variable} antialiased`}>
         <CustomCursor />
         {children}
         <ScrollEffects />

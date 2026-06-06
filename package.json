@@ -12,8 +12,6 @@
     "@emailjs/browser": "^4.4.1",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
-    "@remotion/player": "^4.0.469",
-    "@splinetool/react-spline": "^4.1.0",
     "@studio-freight/lenis": "^1.0.42",
     "clsx": "^2.1.1",
     "cobe": "^2.0.1",
@@ -23,7 +21,6 @@
     "next": "^16.2.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "remotion": "^4.0.469",
     "tailwind-merge": "^3.6.0",
     "three": "^0.184.0"
   },

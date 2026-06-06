@@ -24,7 +24,7 @@ const projects: Project[] = [
   {
     id: "1",
     title: "Portfolio V1",
-    image: "/images/captureportfolio.png",
+    image: "/images/captureportfolio.webp",
     description:
       "Portfolio personnel mettant en avant mes compétences en développement.",
     accent: "",
@@ -38,7 +38,7 @@ const projects: Project[] = [
   {
     id: "2",
     title: "Tower Defense Game",
-    image: "/images/towerdefend.png",
+    image: "/images/towerdefend.webp",
     description: "Jeu de tower defense permet de génerer des tours autour de chemins aléatoires.",
     accent: "",
     ctaUrl: "https://github.com/johanfstr/TowerDefend",
@@ -320,6 +320,8 @@ export default function Projects() {
                     <img
                       src={p.image}
                       alt={p.title}
+                      loading="lazy"
+                      decoding="async"
                       className="relative z-10 w-full h-full object-cover"
                     />
                   ) : (
@@ -338,7 +340,7 @@ export default function Projects() {
                           className="flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white"
                         >
                           {tech.logo && (
-                            <img src={tech.logo} alt={tech.name} className="w-4 h-4" />
+                            <img src={tech.logo} alt={tech.name} loading="lazy" decoding="async" className="w-4 h-4" />
                           )}
                           <span>{tech.name}</span>
                         </div>
@@ -384,6 +386,8 @@ export default function Projects() {
                 <img
                   src={projects[selectedProject].image}
                   alt={projects[selectedProject].title}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-48 object-cover rounded-lg mb-4"
                 />
               )}
@@ -400,7 +404,7 @@ export default function Projects() {
                         className="flex items-center gap-2 px-3 py-2 bg-gray-700 rounded-full text-sm text-white"
                       >
                         {tech.logo && (
-                          <img src={tech.logo} alt={tech.name} className="w-5 h-5" />
+                          <img src={tech.logo} alt={tech.name} loading="lazy" decoding="async" className="w-5 h-5" />
                         )}
                         <span>{tech.name}</span>
                       </div>

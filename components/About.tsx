@@ -58,24 +58,24 @@ export default function About() {
               Mon parcours académique et mes projets m'ont permis d'explorer un large éventail de technologies, 
               du bas niveau&nbsp;
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
-                  <img src="/images/c.png" alt="C" className="w-4 h-4" />
+                  <img src="/images/c.png" alt="C" loading="lazy" decoding="async" className="w-4 h-4" />
                   <span>C</span>
                   </span>,
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
-                  <img src="/images/ocaml.svg" alt="OCaml" className="w-4 h-4" />
+                  <img src="/images/ocaml.svg" alt="OCaml" loading="lazy" decoding="async" className="w-4 h-4" />
                   <span>OCaml</span>
                 </span>
                 &nbsp;au développement full-stack moderne&nbsp;
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
-                  <img src="/images/react.png" alt="React" className="w-4 h-4" />
+                  <img src="/images/react.png" alt="React" loading="lazy" decoding="async" className="w-4 h-4" />
                   <span>React</span>
                 </span>,
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
-                  <img src="/images/nextjs.png" alt="Next.js" className="w-4 h-4" />
+                  <img src="/images/nextjs.png" alt="Next.js" loading="lazy" decoding="async" className="w-4 h-4" />
                   <span>Next.js</span>
                 </span>,
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-gray-700 rounded-full text-xs text-white">
-                  <img src="/images/typescript.png" alt="TypeScript" className="w-4 h-4" />
+                  <img src="/images/typescript.png" alt="TypeScript" loading="lazy" decoding="async" className="w-4 h-4" />
                   <span>TypeScript</span>
                 </span>.
             </p>
