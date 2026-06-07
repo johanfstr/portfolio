@@ -149,8 +149,8 @@ export function GlobePulse({
             height: 0,
             pointerEvents: "none" as const,
             opacity: `var(--cobe-visible-${m.id}, 0)`,
-            filter: `blur(calc((1 - var(--cobe-visible-${m.id}, 0)) * 8px))`,
-            transition: "opacity 0.4s, filter 0.4s",
+            transition: "opacity 0.4s ease",
+            willChange: "opacity",
           }}
         >
           {/* Le label LIVE décalé vers le haut */}

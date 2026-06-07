@@ -8,9 +8,10 @@
 
 @import "tailwindcss";
 
-/* Force cursor visibility globally */
-* { cursor: auto !important; }
-html, body { cursor: auto !important; }
+.font-syne {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+}
 
 /* Fallback ripple keyframes + utility in case Tailwind doesn't inject them yet */
 @keyframes ripple {
@@ -537,8 +538,8 @@ body::after {
 .boot-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--crt-amber), #ea17ea); border-radius: 1px; transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
 .boot-fill.go { width: 100%; }
 
-.site { opacity: 0; pointer-events: none; transition: opacity 0.35s ease; }
-.site.on { opacity: 1; pointer-events: auto; }
+.site { opacity: 1; pointer-events: auto; }
+.site.site--booting { pointer-events: none; }
 
 @keyframes dropFromTop { 0% { transform: translateY(-100%); opacity: 0; } 60% { transform: translateY(6px); opacity: 1; } 100% { transform: translateY(0); opacity: 1; } }
 @keyframes slideFromLeft { 0% { transform: translateX(-80px) rotate(-2deg); opacity: 0; } 70% { transform: translateX(4px) rotate(0.3deg); opacity: 1; } 100% { transform: translateX(0) rotate(0); opacity: 1; } }
@@ -546,15 +547,66 @@ body::after {
 @keyframes riseUp { 0% { transform: translateY(40px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
 @keyframes slideFromRight { 0% { transform: translateX(60px) scale(0.92); opacity: 0; } 70% { transform: translateX(-3px) scale(1.01); opacity: 1; } 100% { transform: translateX(0) scale(1); opacity: 1; } }
 
-.hero-anim { opacity: 0; animation-fill-mode: both; }
-.site.on .anim-h1-1 { animation: slideFromLeft 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s both; }
-.site.on .anim-h1-2 { animation: slideFromLeft 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.24s both; }
-.site.on .anim-h1-3 { animation: springScale 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.38s both; }
-.site.on .anim-sub { animation: riseUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.52s both; }
-.site.on .anim-btns { animation: riseUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both; }
-.site.on .anim-card { animation: springScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s both; }
+.hero-content--waiting,
+.hero-content--waiting .hero-anim {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  animation: none !important;
+  pointer-events: none;
+}
 
-.scramble-word { color: rgb(215, 12, 255); position: relative; display: inline-block; text-shadow: 0 0 80px rgba(215, 12, 255, 0.5); font-weight: 800; }
+.hero-anim { opacity: 0; visibility: hidden; animation-fill-mode: both; }
+.hero-content.site--animated .hero-anim { visibility: visible; }
+.hero-content.site--animated .anim-h1-1 { animation: slideFromLeft 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s both; }
+.hero-content.site--animated .anim-h1-2 { animation: slideFromLeft 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.24s both; }
+.hero-content.site--animated .anim-h1-3 { animation: springScale 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.38s both; }
+.hero-content.site--animated .anim-sub { animation: riseUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.52s both; }
+.hero-content.site--animated .anim-btns { animation: riseUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both; }
+.hero-content.site--animated .anim-card { animation: springScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s both; }
+
+.scramble-word {
+  color: rgb(215, 12, 255);
+  position: relative;
+  display: inline-block;
+  min-width: 7ch;
+  text-shadow: 0 0 80px rgba(215, 12, 255, 0.5);
+  font-weight: 800;
+}
+
+.hero-wrapper {
+  --pill-bg-1: color-mix(in oklch, var(--foreground) 3%, transparent);
+  --pill-bg-2: color-mix(in oklch, var(--foreground) 1%, transparent);
+  --pill-shadow: color-mix(in oklch, var(--background) 50%, transparent);
+  --pill-highlight: color-mix(in oklch, var(--foreground) 10%, transparent);
+  --pill-inset-shadow: color-mix(in oklch, var(--background) 80%, transparent);
+  --pill-border: color-mix(in oklch, var(--foreground) 8%, transparent);
+  --pill-bg-1-hover: color-mix(in oklch, var(--foreground) 8%, transparent);
+  --pill-bg-2-hover: color-mix(in oklch, var(--foreground) 2%, transparent);
+  --pill-border-hover: color-mix(in oklch, var(--foreground) 20%, transparent);
+  --pill-shadow-hover: color-mix(in oklch, var(--background) 70%, transparent);
+  --pill-highlight-hover: color-mix(in oklch, var(--foreground) 20%, transparent);
+}
+
+.hero-glass-pill {
+  background: linear-gradient(145deg, var(--pill-bg-1) 0%, var(--pill-bg-2) 100%);
+  box-shadow:
+    0 10px 30px -10px var(--pill-shadow),
+    inset 0 1px 1px var(--pill-highlight),
+    inset 0 -1px 2px var(--pill-inset-shadow);
+  border: 1px solid var(--pill-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-glass-pill:hover {
+  background: linear-gradient(145deg, var(--pill-bg-1-hover) 0%, var(--pill-bg-2-hover) 100%);
+  border-color: var(--pill-border-hover);
+  box-shadow:
+    0 20px 40px -10px var(--pill-shadow-hover),
+    inset 0 1px 1px var(--pill-highlight-hover);
+  color: var(--foreground);
+}
 
 .btn-term { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border-radius: 6px; font-size: 20px; font-weight: 500; font-family: ui-monospace, monospace; color: rgb(186, 26, 186); border: 1px solid rgba(240, 0, 216, 0.25); background: transparent; cursor: pointer; transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1); position: relative; overflow: hidden; }
 .btn-term:hover { border-color: rgba(210, 35, 181, 0.522); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(210, 35, 181, 0.522); }
@@ -569,7 +621,8 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   .boot { display: none !important; }
   .site { opacity: 1 !important; pointer-events: auto !important; }
-  .hero-anim { opacity: 1 !important; animation: none !important; }
+  .hero-content--waiting { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+  .hero-anim { opacity: 1 !important; visibility: visible !important; animation: none !important; }
 }
 
 /* Minimal parallax background styles (keeps it behind the hero content) */

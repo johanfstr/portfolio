@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import InteractiveNeuralVortex from "@/components/ui/NeuralVortex";
 
 interface Skill {
   id: string

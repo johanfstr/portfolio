@@ -1,6 +1,6 @@
 ﻿"use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useLayoutEffect, useRef, useState } from "react"
 
 type BootPart = string | { cls?: string; text: string; cursor?: boolean }
 type Line =
@@ -20,6 +20,7 @@ const LINES: Line[] = [
 ]
 
 export default function Intro({ onFinish, onStart, force }: { onFinish?: () => void; onStart?: () => void; force?: boolean }) {
+  const [mounted, setMounted] = useState(false)
   const [visible, setVisible] = useState(true)
   const [idx, setIdx] = useState(0)
   const [barOn, setBarOn] = useState(false)
@@ -28,25 +29,27 @@ export default function Intro({ onFinish, onStart, force }: { onFinish?: () => v
   const [replayVisible, setReplayVisible] = useState(false)
   const timers = useRef<number[]>([])
 
-  useEffect(() => {
-    // If user already saw the boot and `force` is not set, skip it and show site immediately
-    const seen = typeof window !== 'undefined' && window.localStorage.getItem(STORAGE_KEY)
+  useLayoutEffect(() => {
+    setMounted(true);
+
+    const seen = window.localStorage.getItem(STORAGE_KEY);
     if (!force && seen) {
-      setVisible(false)
-      setReplayVisible(true)
-      const t = window.setTimeout(() => onFinish?.(), 900)
-      return () => clearTimeout(t)
+      setVisible(false);
+      setReplayVisible(true);
+      onFinish?.();
+      return;
     }
 
-    runBootSequence()
+    runBootSequence();
 
     return () => {
-      // clear timeouts
-      timers.current.forEach(t => clearTimeout(t))
-      timers.current = []
-    }
+      timers.current.forEach((t) => clearTimeout(t));
+      timers.current = [];
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [force])
+  }, [force]);
+
+  if (!mounted) return null;
 
   function clearTimers() {
     timers.current.forEach(t => clearTimeout(t))

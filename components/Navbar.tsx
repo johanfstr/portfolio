@@ -13,10 +13,11 @@ export default function Navbar() {
         {/* ===== Left: Logo ===== */}
         <a href="#hero" className="transition-transform hover:scale-105">
           <img
-            src="/logo.webp"
+            src="/logo-64.webp"
             alt="Logo"
             width={32}
             height={32}
+            decoding="async"
             fetchPriority="high"
             className="h-8 w-8 object-contain"
           />

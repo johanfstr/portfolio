@@ -1,9 +1,16 @@
 "use client";
 
-import React from "react";
-import { GlobePulse } from "./ui/Globe";
-import { PerspectiveMarquee } from "./ui/PerspectiveMarquee";
-import TopoBackground from "./ui/TopoBackground";
+import dynamic from "next/dynamic";
+
+const TopoBackground = dynamic(() => import("./ui/TopoBackground"), { ssr: false });
+const GlobePulse = dynamic(
+  () => import("./ui/Globe").then((mod) => mod.GlobePulse),
+  { ssr: false, loading: () => <div className="w-full h-full" aria-hidden /> }
+);
+const PerspectiveMarquee = dynamic(
+  () => import("./ui/PerspectiveMarquee").then((mod) => mod.PerspectiveMarquee),
+  { ssr: false, loading: () => <div className="w-full h-full" aria-hidden /> }
+);
 
 function PerspectiveMarqueeScene() {
   return (
@@ -48,7 +55,6 @@ export default function About({ ready = false }: { ready?: boolean }) {
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-12">
-          {/* Text Content */}
           <div className="flex-1 max-w-2xl text-lg text-slate-300 leading-relaxed space-y-6">
             <p>
               Je m'appelle <strong className="text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>Johan Forestier</strong>, 
@@ -89,16 +95,13 @@ export default function About({ ready = false }: { ready?: boolean }) {
             </p>
           </div>
 
-          {/* Globe Container */}
           <div className="flex-1 w-full max-w-md aspect-square relative flex items-center justify-center">
-            {/* Soft glow behind the globe */}
             <div className="absolute inset-0 bg-purple-500/20 rounded-full blur-[80px] pointer-events-none"></div>
             <GlobePulse speed={0.005} />
           </div>
         </div>
       </div>
 
-      {/* Marquee */}
       <div className="w-full h-[250px] md:h-[350px] mt-16 relative overflow-hidden pointer-events-none opacity-80">
         <PerspectiveMarqueeScene />
       </div>

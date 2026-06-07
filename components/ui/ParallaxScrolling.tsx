@@ -1,10 +1,28 @@
 'use client';
 import React, { useEffect, useRef } from 'react';
 
-export function ParallaxComponent() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+type ParallaxComponentProps = {
+  onReady?: () => void;
+};
+
+export function ParallaxComponent({ onReady }: ParallaxComponentProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const rafRef = useRef<number | null>(null);
+  const readyCalled = useRef(false);
+  const loadedCount = useRef(0);
+  const totalLayers = 4;
+
+  const notifyReady = () => {
+    loadedCount.current += 1;
+    if (!readyCalled.current && loadedCount.current >= totalLayers) {
+      readyCalled.current = true;
+      onReady?.();
+    }
+  };
+
+  const handleImageRef = (img: HTMLImageElement | null) => {
+    if (img?.complete && img.naturalWidth > 0) notifyReady();
+  };
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -44,36 +62,44 @@ export function ParallaxComponent() {
   }, []);
 
   return (
-    <div ref={containerRef} className="parallax w-full h-full relative overflow-hidden">
+    <div className="parallax w-full h-full relative overflow-hidden">
       <section ref={sectionRef} className="relative w-full h-full flex items-center justify-center">
-        <div className="absolute inset-0 pointer-events-none">
-          {/* Above-the-fold: eager loading, no lazy */}
+        <div className="absolute inset-0 pointer-events-none bg-[#050710]">
           <img
+            ref={handleImageRef}
             data-layer="stars"
             src="/images/parallax-stars.webp"
-            alt="stars"
+            alt=""
             decoding="async"
+            fetchPriority="high"
+            onLoad={notifyReady}
             className="absolute top-0 left-0 w-full h-full object-cover z-0"
           />
           <img
+            ref={handleImageRef}
             data-layer="moon"
             src="/images/parallax-moon.webp"
-            alt="moon"
+            alt=""
             decoding="async"
+            onLoad={notifyReady}
             className="absolute top-0 left-0 w-full h-full object-cover mix-blend-screen z-10"
           />
           <img
+            ref={handleImageRef}
             data-layer="behind"
             src="/images/parallax-mountains-behind.webp"
-            alt="mountains behind"
+            alt=""
             decoding="async"
+            onLoad={notifyReady}
             className="absolute top-0 left-0 w-full h-full object-cover z-20"
           />
           <img
+            ref={handleImageRef}
             data-layer="front"
             src="/images/parallax-mountains-front.webp"
-            alt="mountains front"
+            alt=""
             decoding="async"
+            onLoad={notifyReady}
             className="absolute top-0 left-0 w-full h-full object-cover z-30"
           />
         </div>

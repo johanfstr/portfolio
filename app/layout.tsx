@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Fira_Code, Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import CustomCursor from "../components/CustomCursor";
-import ScrollEffects from "../components/ScrollEffects";
-// SpaceGrid temporarily removed for clarity
+import DeferredEffects from "../components/DeferredEffects";
 
 const firaCode = Fira_Code({
   variable: "--font-fira-code",
@@ -14,20 +12,21 @@ const firaCode = Fira_Code({
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "900"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "600", "700"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Johan Forestier - Portfolio",
-  description: "Johan Forestier, étudiant en informatique à l'EFREI campus de Bordeaux, cherche une alternance en développement full-stack pour septembre 2026. Découvrez mes projets, compétences et expériences dans le développement web.",
+  description:
+    "Johan Forestier, étudiant en informatique à l'EFREI campus de Bordeaux, cherche une alternance en développement full-stack pour septembre 2026. Découvrez mes projets, compétences et expériences dans le développement web.",
 };
 
 export default function RootLayout({
@@ -36,11 +35,31 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <html lang="en" suppressHydrationWarning>
-        <body className={`${firaCode.variable} ${playfair.variable} ${plusJakarta.variable} antialiased`}>
-        <CustomCursor />
+    <html lang="fr" suppressHydrationWarning>
+      <head>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `.hero-content--waiting,.hero-content--waiting .hero-anim{opacity:0!important;visibility:hidden!important;animation:none!important}`,
+          }}
+        />
+        <link
+          rel="preload"
+          href="/logo-64.webp"
+          as="image"
+          type="image/webp"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          href="/fonts/syne.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
+      <body className={`${firaCode.variable} ${playfair.variable} ${plusJakarta.variable} antialiased`}>
         {children}
-        <ScrollEffects />
+        <DeferredEffects />
       </body>
     </html>
   );

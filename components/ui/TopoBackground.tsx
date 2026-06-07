@@ -98,19 +98,27 @@ export default function TopoBackground({ ready = false }: { ready?: boolean }) {
     // Render une seule fois, pas de boucle
     renderer.render(scene, camera);
 
-    function onResize() {
-      const rw = container.offsetWidth;
-      const rh = container.offsetHeight;
+function onResize() {
+      // Add a safety check here to satisfy TypeScript
+      if (!containerRef.current) return;
+      
+      const rw = containerRef.current.offsetWidth;
+      const rh = containerRef.current.offsetHeight;
+      
       camera.aspect = rw / rh;
       camera.updateProjectionMatrix();
       renderer.setSize(rw, rh);
       renderer.render(scene, camera);
     }
+    
     window.addEventListener("resize", onResize);
 
     return () => {
       window.removeEventListener("resize", onResize);
-      if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
+      // 'container' is still safely captured for cleanup here
+      if (container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
+      }
       renderer.dispose();
     };
   }, [ready]);
