@@ -46,6 +46,13 @@ export default function About({ ready = false }: { ready?: boolean }) {
       <TopoBackground ready={ready} />
       <div className="absolute top-0 left-0 right-0 h-80 pointer-events-none z-10" style={{ 
        background: "linear-gradient(180deg,rgb(28, 5, 34) 0%,rgb(28, 5, 34) 30%, rgba(28, 5, 34, 0.6) 60%, rgba(28, 5, 34, 0.2) 85%, rgba(28, 5, 34, 0) 100%)" }} />
+<div
+  className="absolute bottom-0 left-0 right-0 pointer-events-none z-10"
+  style={{
+    height: '500px',
+    background: 'linear-gradient(0deg, #0b0a0d 0%, rgba(11,10,13,0.9) 25%, rgba(11,10,13,0.5) 55%, rgba(11,10,13,0.1) 80%, rgba(11,10,13,0) 100%)'
+  }}
+/>
       <div className="w-full max-w-7xl mx-auto px-6 relative z-10 flex-1 flex flex-col justify-center">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-extrabold font-playfair text-white tracking-tight mb-4 drop-shadow-md">

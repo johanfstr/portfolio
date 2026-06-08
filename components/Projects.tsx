@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils"
 import { gsap } from "gsap";
+import { NoiseTexture } from "@/components/ui/noise-texture"
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react"
 
@@ -60,7 +61,7 @@ const projects: Project[] = [
     id: "3",
     title: "OCrackml",
     image: "/images/ocrackml.jpg",
-    description: "Analyse et exploitation de fuites de données issues de différentes applications web.",
+    description: "Analyse et exploitation de fuites de données issues de différentes applications",
     accent: "",
     ctaUrl: "https://github.com/johanfstr/OCrackml",
     technologies: [
@@ -228,84 +229,109 @@ export default function Projects() {
     return () => obs.disconnect()
   }, [filtered])
 
-  return (
-    <section id="projects" className="py-20 px-6 bg-[#1c0522] min-h-screen flex items-center" data-scroll data-scroll-section>
-      <style dangerouslySetInnerHTML={{ __html: HERO_STYLES }} />
-      <div className="w-full max-w-7xl mx-auto grid gap-12 lg:grid-cols-[minmax(280px,360px)_1fr] items-start">
+return (
+<section
+  id="projects"
+  className="relative overflow-hidden py-20 px-6 bg-[#0b0a0d] min-h-screen"
+  data-scroll
+  data-scroll-section
+>
+  {/* Dégradé de transition avec la section précédente */}
+<div
+  className="absolute top-0 left-0 right-0 pointer-events-none z-10"
+  style={{
+    height: '200px',
+    background: 'linear-gradient(to bottom, #0b0a0d 30%, rgb(11, 10, 13,0.6) 60%, transparent 100%)'
+  }}
+/>
+    {/* Noise texture overlay */}
+    <NoiseTexture
+      className={cn(
+        "absolute inset-0 z-0",
+        ""
+      )}
+    />
 
-        {/* Left sticky column */}
-        <div className="space-y-8">
-          <div className="sticky top-32 " >
-            <span className="text-sm uppercase tracking-[0.3em] text-purple-300">— Projets</span>
-            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Mes réalisations</h2>
-            <p className="mt-6 text-white/70 text-lg leading-8">
-              Découvrez une sélection de projets sur lesquels j'ai travaillé, mettant en avant mes compétences en développement.
-            </p>
+    <style dangerouslySetInnerHTML={{ __html: HERO_STYLES }} />
 
-            {/* Filters */}
-            <div className="flex flex-wrap gap-2 mt-8">
-              {FILTERS.map((f) => (
-                <button
-                  key={f}
-                  onClick={() => setActiveFilter(f)}
-                  className={cn(
-                    "px-4 py-1.5 rounded-full text-sm font-mono border transition-all duration-200",
-                    activeFilter === f
-                      ? "bg-purple-600 border-purple-600 text-white"
-                      : "border-purple-500/40 text-purple-300 hover:border-purple-400 hover:text-white"
-                  )}
-                >
-                  {f}
-                </button>
-              ))}
-            </div>
+    <div className="relative z-10 w-full max-w-7xl mx-auto space-y-12">
+      {/* Top row : présentation à gauche, filtres + github à droite */}
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
 
-            <div className="mt-8">
-              <a
-                href="https://github.com/johanfstr"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3 border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white rounded-full font-playfair shadow-lg transition-all transform hover:scale-105 inline-block"
-              >
-                Voir plus sur mon github
-              </a>
-            </div>
-          </div>
+        {/* Gauche : label + titre + description */}
+        <div className="max-w-xl">
+          <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>— Projets</span>
+          <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Mes réalisations</h2>
+          <p className="mt-6 text-white/70 text-lg leading-8">
+            Découvrez une sélection de projets sur lesquels j'ai travaillé, mettant en avant mes compétences en développement.
+          </p>
         </div>
 
-        {/* Cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start">
-          {filtered.map((p, idx) => (
-            <div
-              key={p.id}
-              data-idx={idx}
-              ref={(el) => { cardsRef.current[idx] = el }}
-              onClick={() => setSelectedProject(projects.findIndex(pr => pr.id === p.id))}
-              className={cn(
-                "rounded-xl border border-white/10 p-6 cursor-pointer text-left backdrop-blur-sm transition-all duration-300",
-                "bg-white/5 hover:bg-white/10 hover:border-indigo-500/30 hover:-translate-y-1",
-                "hover:shadow-[0_8px_32px_rgba(99,102,241,0.15)]",
-                visible[idx] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
-                "duration-700 ease-out"
-              )}
-            >
-              {/* Image */}
-              {p.image && (
-                <div className="h-36 rounded-lg overflow-hidden mb-4 -mx-1">
-                  <img src={p.image} alt={p.title} loading="lazy" decoding="async" width={640} height={360} className="w-full h-full object-cover" />
-                </div>
-              )}
+        {/* Droite : filtres + bouton github */}
+        <div className="flex flex-col items-start lg:items-end gap-4 shrink-0">
+          <a
+            href="https://github.com/johanfstr"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3 border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white rounded-full font-playfair shadow-lg transition-all transform hover:scale-105 inline-block"
+          >
+            Voir plus sur mon github
+          </a>
+          <div className="flex flex-wrap gap-2">
+            {FILTERS.map((f) => (
+              <button
+                key={f}
+                onClick={() => setActiveFilter(f)}
+                className={cn(
+                  "px-4 py-1.5 rounded-full text-sm font-mono border transition-all duration-200",
+                  activeFilter === f
+                    ? "bg-purple-600 border-purple-600 text-white"
+                    : "border-purple-500/40 text-purple-300 hover:border-purple-400 hover:text-white"
+                )}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-              {/* Tags badges 
-              <div className="flex gap-1 flex-wrap mb-3">
-                {p.tags.map((tag) => (
-                  <span key={tag} className="inline-block px-2 py-0.5 text-xs font-semibold uppercase tracking-wide rounded bg-purple-500/20 text-purple-300">{tag}</span>
-                ))}
+      {/* Cards grid — pleine largeur, 3 colonnes */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filtered.map((p, idx) => (
+          <div
+            key={p.id}
+            data-idx={idx}
+            ref={(el) => { cardsRef.current[idx] = el }}
+            onClick={() => setSelectedProject(projects.findIndex(pr => pr.id === p.id))}
+            className={cn(
+              "group rounded-xl border border-white/10 cursor-pointer text-left backdrop-blur-sm overflow-hidden",
+              "bg-white/5 hover:bg-white/10 hover:border-indigo-500/30",
+              "transition-all duration-500 ease-in-out hover:-translate-y-2",
+              "hover:shadow-[0_8px_32px_rgba(99,102,241,0.2)]",
+              visible[idx] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            )}
+          >
+            {/* Image */}
+            {p.image && (
+              <div className="aspect-video overflow-hidden">
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  loading="lazy"
+                  decoding="async"
+                  width={640}
+                  height={360}
+                  className="h-full w-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-110"
+                />
               </div>
-              */}
+            )}
 
-              <h3 className="text-base font-semibold text-white mb-2">{p.title}</h3>
-              <p className="text-sm text-white/50 leading-relaxed mb-4">{p.description}</p>
+            <div className="p-6 flex flex-col flex-1">
+              <h3 className="text-base font-semibold text-white transition-colors duration-300 group-hover:text-indigo-400 mb-2">
+                {p.title}
+              </h3>
+              <p className="text-sm text-white/50 leading-relaxed mb-4 line-clamp-3">{p.description}</p>
 
               {/* Tech chips */}
               <div className="flex flex-wrap gap-1.5 mb-4">
@@ -317,16 +343,21 @@ export default function Projects() {
                 ))}
               </div>
 
-              {/* Actions */}
-              <div className="flex gap-2 flex-wrap">
-                <button className="px-3 py-1.5 text-sm rounded-lg font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 hover:scale-[1.02] transition-all">
-                  Détails & démo
-                </button>
-              </div>
+              {/* Bouton */}
+              <button
+                className="mt-auto w-fit px-3 py-1.5 text-sm rounded-lg font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 hover:scale-[1.02] transition-all"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedProject(projects.findIndex(pr => pr.id === p.id));
+                }}
+              >
+                Détails & démo
+              </button>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
+    </div>
 
       {/* Modal */}
       {selectedProject !== null && (

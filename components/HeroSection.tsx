@@ -38,29 +38,23 @@ export default function HeroSection({ children }: HeroSectionProps) {
     if (params.get("boot") === "1") setForceBoot(true);
   }, []);
 
-  useEffect(() => {
-    if (animTimer.current !== null) {
-      window.clearTimeout(animTimer.current);
-      animTimer.current = null;
-    }
-
-    if (!introDone || !backgroundReady) {
-      setHeroAnimated(false);
-      return;
-    }
-
-    animTimer.current = window.setTimeout(() => {
-      setHeroAnimated(true);
-      animTimer.current = null;
-    }, HERO_ANIM_DELAY_MS);
-
-    return () => {
-      if (animTimer.current !== null) {
-        window.clearTimeout(animTimer.current);
-        animTimer.current = null;
-      }
-    };
-  }, [introDone, backgroundReady]);
+useEffect(() => {
+  if (animTimer.current !== null) {
+    window.clearTimeout(animTimer.current);
+    animTimer.current = null;
+  }
+  if (!introDone) {
+    setHeroAnimated(false);
+    return;
+  }
+  animTimer.current = window.setTimeout(() => {
+    setHeroAnimated(true);
+    animTimer.current = null;
+  }, HERO_ANIM_DELAY_MS);
+  return () => {
+    if (animTimer.current !== null) window.clearTimeout(animTimer.current);
+  };
+}, [introDone]); // ← on retire backgroundReady
 
   return (
     <div className="hero-wrapper">

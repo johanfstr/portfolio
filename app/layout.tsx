@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import { Fira_Code, Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
+import { Fira_Code, Playfair_Display, Plus_Jakarta_Sans, Geist } from "next/font/google";
 import "./globals.css";
 import DeferredEffects from "../components/DeferredEffects";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const firaCode = Fira_Code({
   variable: "--font-fira-code",
@@ -35,13 +38,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" suppressHydrationWarning>
+    <html lang="fr" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
       <head>
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `.hero-content--waiting,.hero-content--waiting .hero-anim{opacity:0!important;visibility:hidden!important;animation:none!important}`,
-          }}
-        />
+<style dangerouslySetInnerHTML={{ __html: 
+  `.hero-content--waiting,.hero-content--waiting .hero-anim{opacity:0!important;animation:none!important;pointer-events:none}` 
+}} />
         <link
           rel="preload"
           href="/logo-64.webp"

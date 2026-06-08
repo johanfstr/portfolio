@@ -285,7 +285,7 @@ export default function CinematicFooter() {
           </div>
 
           {/* Diagonal Sleek Marquee (Top of footer) */}
-          <div className="absolute top-20 left-0 w-full overflow-hidden border-y border-border/50 bg-background/60 backdrop-blur-md py-4 z-10 -rotate-2 scale-110 shadow-2xl">
+          <div className="absolute top-25 left-0 w-full overflow-hidden border-y border-border/50 bg-background/60 backdrop-blur-md py-4 z-10 scale-110 shadow-2xl">
             <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.3em] text-muted-foreground uppercase">
               <MarqueeItem />
               <MarqueeItem />
@@ -371,7 +371,7 @@ export default function CinematicFooter() {
           </div>
 
           {/* Bottom Bar / Credits */}
-          <div className="relative z-20 w-full pb-1 md:pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="relative z-20 w-full pb-1 md:pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-2 md:gap-6">
             
             {/* Copyright */}
             <div className="text-muted-foreground text-[10px] md:text-xs font-semibold tracking-widest uppercase order-2 md:order-1">
@@ -379,7 +379,7 @@ export default function CinematicFooter() {
             </div>
 
             {/* Made with Love Badge */}
-            <div className="footer-glass-pill px-2 py-1 md:px-6 md:py-3 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default border-border/50">
+            <div className="footer-glass-pill px-2 py-1 md:px-6 md:py-3 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default md:border-border/50">
                  <span className="text-white/80 text-xs font-bold uppercase tracking-widest">Construit avec</span>
                  <span className="animate-footer-heartbeat text-lg text-red-500">❤️</span>
                  <span className="text-white/80 text-xs font-bold uppercase tracking-widest">avec</span>

@@ -29,15 +29,16 @@ export default function Home() {
         <p id="text2" className="hero-sub hero-anim anim-sub mt-1 font-medium text-white/90 max-w-md">
           Étudiant à l&apos;
           <span className="items-center font-bold inline-flex rounded bg-purple-900/50 border border-purple-400 relative top-2">
-            <img
-              src="/images/efrei.webp"
-              alt="EFREI Bordeaux"
-              width={115}
-              height={35}
-              loading="lazy"
-              decoding="async"
-              className="h-10 w-auto"
-            />
+<img
+  src="/images/efrei.webp"
+  alt="EFREI Bordeaux"
+  width={230}           // taille d'affichage réelle × devicePixelRatio
+  height={70}
+  loading="eager"
+  fetchPriority="high"
+  decoding="async"
+  className="h-10 w-auto"
+/>
             &nbsp;Bordeaux&nbsp;
           </span>
           <br />
