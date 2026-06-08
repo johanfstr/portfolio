@@ -29,7 +29,7 @@ export default function DeferredEffects() {
     return (
     <>
       <CustomCursor />
-      {/* <ScrollEffects /> --- IGNORE --- */}
+      <ScrollEffects />
     </>
   );
 }
