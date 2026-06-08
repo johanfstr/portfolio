@@ -1,11 +1,12 @@
+"use client";
 import { TextReveal } from "@/components/ui/text-reveal";
 
 export default function TextRevealSection() {
   return (
-    <main className="min-h-svh">
+    <div style={{ background: "#0b0a0d" }}>
       <TextReveal>
-        Magic UI will change the way you design and build your next website.
+        Découvrez mes projets — des applications web, des jeux et des outils pensés pour résoudre de vrais problèmes.
       </TextReveal>
-    </main>
+    </div>
   );
 }

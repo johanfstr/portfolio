@@ -1,13 +1,6 @@
 "use client"
 
-import {
-  useRef,
-  type ComponentPropsWithoutRef,
-  type FC,
-  type ReactNode,
-} from "react"
-import { motion, MotionValue, useScroll, useTransform } from "motion/react"
-
+import { useRef, useEffect, type ComponentPropsWithoutRef, type FC } from "react"
 import { cn } from "@/lib/utils"
 
 export interface TextRevealProps extends ComponentPropsWithoutRef<"div"> {
@@ -16,60 +9,71 @@ export interface TextRevealProps extends ComponentPropsWithoutRef<"div"> {
 
 export const TextReveal: FC<TextRevealProps> = ({ children, className }) => {
   const sectionRef = useRef<HTMLDivElement | null>(null)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-  })
-
-  if (typeof children !== "string") {
-    throw new Error("TextReveal: children must be a string")
-  }
-
+  const textRef = useRef<HTMLDivElement | null>(null)
+  const wordsRef = useRef<HTMLSpanElement[]>([])
   const words = children.split(" ")
 
+  useEffect(() => {
+    const section = sectionRef.current
+    const text = textRef.current
+    if (!section || !text) return
+
+    const handleScroll = () => {
+      const rect = section.getBoundingClientRect()
+      const scrolled = -rect.top
+      const total = section.offsetHeight - window.innerHeight
+      const progress = Math.max(0, Math.min(1, scrolled / total))
+
+      // Fixed pendant l'animation, libéré avant/après
+      if (scrolled <= 0) {
+        text.style.position = "absolute"
+        text.style.top = "0"
+        text.style.bottom = "auto"
+      } else if (progress >= 1) {
+        text.style.position = "absolute"
+        text.style.top = "auto"
+        text.style.bottom = "0"
+      } else {
+        text.style.position = "fixed"
+        text.style.top = "0"
+        text.style.bottom = "auto"
+      }
+
+      wordsRef.current.forEach((span, i) => {
+        if (!span) return
+        const start = i / words.length
+        const end = start + 1 / words.length
+        span.style.opacity = String(Math.max(0, Math.min(1, (progress - start) / (end - start))))
+      })
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [words.length])
+
   return (
-    <div ref={sectionRef} className={cn("relative z-0 h-[200vh]", className)}>
+    <div ref={sectionRef} className={cn("relative h-[250vh]", className)}>
       <div
-        className={
-          "sticky top-0 mx-auto flex h-[50%] max-w-4xl items-center bg-transparent px-4 py-20"
-        }
+        ref={textRef}
+        className="left-0 right-0 h-screen flex items-center justify-center"
+        style={{ position: "absolute", top: 0 }}
       >
-        <span
-          className={
-            "flex flex-wrap p-5 text-2xl font-bold text-black/20 md:p-8 md:text-3xl lg:p-10 lg:text-4xl xl:text-5xl dark:text-white/20"
-          }
-        >
-          {words.map((word, i) => {
-            const start = i / words.length
-            const end = start + 1 / words.length
-            return (
-              <Word key={i} progress={scrollYProgress} range={[start, end]}>
+        <span className="flex flex-wrap max-w-4xl px-8 text-2xl font-bold md:text-3xl lg:text-4xl xl:text-5xl">
+          {words.map((word, i) => (
+            <span key={i} className="relative mx-1 lg:mx-1.5">
+              <span className="text-white/20">{word}</span>
+              <span
+                ref={(el) => { if (el) wordsRef.current[i] = el }}
+                style={{ opacity: 0 }}
+                className="absolute inset-0 text-white"
+              >
                 {word}
-              </Word>
-            )
-          })}
+              </span>
+            </span>
+          ))}
         </span>
       </div>
     </div>
-  )
-}
-
-interface WordProps {
-  children: ReactNode
-  progress: MotionValue<number>
-  range: [number, number]
-}
-
-const Word: FC<WordProps> = ({ children, progress, range }) => {
-  const opacity = useTransform(progress, range, [0, 1])
-  return (
-    <span className="xl:lg-3 relative mx-1 lg:mx-1.5">
-      <span className="absolute opacity-30">{children}</span>
-      <motion.span
-        style={{ opacity: opacity }}
-        className={"text-black dark:text-white"}
-      >
-        {children}
-      </motion.span>
-    </span>
   )
 }
