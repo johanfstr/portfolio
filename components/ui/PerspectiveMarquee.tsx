@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 export interface PerspectiveMarqueeProps {
   items?: string[];
@@ -19,17 +19,8 @@ const FONT_FAMILY =
   "var(--font-fira-code), -apple-system, BlinkMacSystemFont, sans-serif";
 
 const DEFAULT_ITEMS = [
-  "React",
-  "Next.js",
-  "Tailwind",
-  "TypeScript",
-  "C",
-  "Java",
-  "C#",
-  "OCaml",
-  "Node.js",
-  "Git",
-  "SQL",
+  "React", "Next.js", "Tailwind", "TypeScript",
+  "C", "Java", "C#", "OCaml", "Node.js", "Git", "SQL",
 ];
 
 export function PerspectiveMarquee({
@@ -46,46 +37,49 @@ export function PerspectiveMarquee({
   speed = 1,
   className,
 }: PerspectiveMarqueeProps) {
-  const [frame, setFrame] = useState(0);
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-    const observer = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        // Assume the base design width was 1280px
-        const width = entry.contentRect.width;
-        setScale(Math.min(1, width / 1280));
-      }
-    });
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    let animationFrameId: number;
-    let startTime = performance.now();
-
-    const renderLoop = (time: number) => {
-      // 30 fps equivalent: elapsed ms / ~33.3ms per frame
-      const elapsed = time - startTime;
-      setFrame((elapsed / (1000 / 30)) * speed);
-      animationFrameId = requestAnimationFrame(renderLoop);
-    };
-    animationFrameId = requestAnimationFrame(renderLoop);
-
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [speed]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const scaleRef = useRef(1);
+  const offsetRef = useRef(0);
+  const rafRef = useRef<number>(0);
 
   const itemPadding = fontSize * 0.9;
   const approxItemWidth = items.reduce(
     (acc, item) => acc + item.length * fontSize * 0.6 + itemPadding,
-    0,
+    0
   );
 
-  const offset = -((frame * pixelsPerFrame) % approxItemWidth);
   const rendered = [...items, ...items, ...items];
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const ro = new ResizeObserver((entries) => {
+      const width = entries[0]?.contentRect.width ?? 0;
+      scaleRef.current = Math.min(1, width / 1280);
+    });
+    ro.observe(container);
+    return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const step = () => {
+      offsetRef.current -= pixelsPerFrame * speed;
+      // loop
+      if (Math.abs(offsetRef.current) >= approxItemWidth) {
+        offsetRef.current = 0;
+      }
+      track.style.transform = `translateX(${offsetRef.current}px)`;
+      rafRef.current = requestAnimationFrame(step);
+    };
+
+    rafRef.current = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [pixelsPerFrame, speed, approxItemWidth]);
 
   return (
     <div
@@ -108,46 +102,27 @@ export function PerspectiveMarquee({
           display: "flex",
           alignItems: "center",
           justifyContent: "flex-start",
-          transform: `scale(${scale}) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+          transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
           transformStyle: "preserve-3d",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            whiteSpace: "nowrap",
-            transform: `translateX(${offset}px)`,
-          }}
-        >
-          {rendered.map((item, i) => {
-            const itemCenter =
-              i * (approxItemWidth / items.length) +
-              approxItemWidth / items.length / 2 +
-              offset;
-            const norm = (itemCenter - 640) / 640;
-            const distance = Math.min(1, Math.abs(norm));
-            const blurPx = distance * 6;
-            const opacity = 1 - distance * 0.4;
-
-            return (
-              <span
-                key={i}
-                style={{
-                  display: "inline-block",
-                  fontFamily: FONT_FAMILY,
-                  fontSize,
-                  fontWeight,
-                  color,
-                  letterSpacing: "-0.03em",
-                  paddingRight: itemPadding,
-                  filter: `blur(${blurPx}px)`,
-                  opacity,
-                }}
-              >
-                {item}
-              </span>
-            );
-          })}
+        <div ref={trackRef} style={{ display: "flex", whiteSpace: "nowrap" }}>
+          {rendered.map((item, i) => (
+            <span
+              key={i}
+              style={{
+                display: "inline-block",
+                fontFamily: FONT_FAMILY,
+                fontSize,
+                fontWeight,
+                color,
+                letterSpacing: "-0.03em",
+                paddingRight: itemPadding,
+              }}
+            >
+              {item}
+            </span>
+          ))}
         </div>
       </div>
 

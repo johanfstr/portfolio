@@ -42,7 +42,7 @@ function PerspectiveMarqueeScene() {
 
 export default function About({ ready = false }: { ready?: boolean }) {
   return (
-    <section id="about" className="relative min-h-screen py-24 z-20 bg-[#1c0522] flex flex-col justify-center" data-scroll-section>
+    <section id="about" className="relative min-h-screen py-24 z-20 bg-[#1c0522] flex flex-col justify-center">
       <TopoBackground ready={ready} />
       <div className="absolute top-0 left-0 right-0 h-80 pointer-events-none z-10" style={{ 
        background: "linear-gradient(180deg,rgb(28, 5, 34) 0%,rgb(28, 5, 34) 30%, rgba(28, 5, 34, 0.6) 60%, rgba(28, 5, 34, 0.2) 85%, rgba(28, 5, 34, 0) 100%)" }} />

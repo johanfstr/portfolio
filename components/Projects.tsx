@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { cn } from "@/lib/utils"
 import { gsap } from "gsap";
@@ -114,9 +114,9 @@ const projects: Project[] = [
 
 const FILTERS = ["Tous", "C", "C#", "OCaml", "Web"]
 
-// ────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------
 // GLASS PILL STYLES
-// ────────────────────────────────────────────────────────────────
+// ----------------------------------------------------------------
 const HERO_STYLES = `
 .hero-wrapper {
   --pill-bg-1: color-mix(in oklch, var(--foreground) 3%, transparent);
@@ -233,8 +233,6 @@ return (
 <section
   id="projects"
   className="relative overflow-hidden py-20 px-6 bg-[#0b0a0d] min-h-screen"
-  data-scroll
-  data-scroll-section
 >
   {/* Dégradé de transition avec la section précédente */}
 <div
@@ -305,7 +303,7 @@ return (
             ref={(el) => { cardsRef.current[idx] = el }}
             onClick={() => setSelectedProject(projects.findIndex(pr => pr.id === p.id))}
             className={cn(
-              "group rounded-xl border border-white/10 cursor-pointer text-left backdrop-blur-sm overflow-hidden",
+              "group rounded-xl border border-white/10 cursor-pointer text-left overflow-hidden",
               "bg-white/5 hover:bg-white/10 hover:border-indigo-500/30",
               "transition-all duration-500 ease-in-out hover:-translate-y-2",
               "hover:shadow-[0_8px_32px_rgba(99,102,241,0.2)]",

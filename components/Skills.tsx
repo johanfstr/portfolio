@@ -1,139 +1,149 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { OrbitingCircles } from "@/components/ui/orbiting-circles"
+import { NoiseTexture } from "@/components/ui/noise-texture"
+import { cn } from "@/lib/utils"
 
-interface Skill {
-  id: string
-  name: string
-  level: number
-  description: string
-}
-
-const skills: Skill[] = [
+const skillCategories = [
   {
-    id: "1",
-    name: "React & Next.js",
-    level: 85,
-    description: "Framework modern pour construire des interfaces web dynamiques et performantes avec TypeScript.",
+    label: "Frontend",
+    skills: [
+      { name: "Next.js", pct: 85 },
+      { name: "React", pct: 88 },
+      { name: "TypeScript", pct: 80 },
+      { name: "Tailwind CSS", pct: 90 },
+    ],
   },
   {
-    id: "2",
-    name: "JavaScript & TypeScript",
-    level: 80,
-    description: "Langage typé superset de JavaScript pour améliorer la qualité du code et réduire les erreurs.",
+    label: "Backend",
+    skills: [
+      { name: "Node.js", pct: 70 },
+      { name: "REST APIs", pct: 75 },
+      { name: "SQL", pct: 65 },
+    ],
   },
   {
-    id: "3",
-    name: "C & C#",
-    level: 75,
-    description: "Langages de programmation pour le développement d'applications système et logicielles.",
+    label: "Langages",
+    skills: [
+      { name: "C", pct: 75 },
+      { name: "Java", pct: 65 },
+      { name: "C#", pct: 60 },
+      { name: "OCaml", pct: 55 },
+    ],
   },
   {
-    id: "4",
-    name: "OCaml",
-    level: 75,
-    description: "Langage fonctionnel pour l'algorithmique avancée et l'analyse de données.",
-  },
-  {
-    id: "5",
-    name: "Python",
-    level: 70,
-    description: "Langage de haut niveau pour l'analyse de données et l'intelligence artificielle.",
-  },
-  {
-    id: "6",
-    name: "Java",
-    level: 65,
-    description: "Langage orienté objet pour le développement d'applications enterprise.",
+    label: "Outils",
+    skills: [
+      { name: "Git", pct: 85 },
+      { name: "GitHub", pct: 70 },
+      { name: "VS Code", pct: 95 },
+    ],
   },
 ]
 
+const stats = [
+  { value: "5+", label: "années de code" },
+  { value: "10+", label: "projets réalisés" },
+  { value: "6", label: "langages maîtrisés" },
+]
+
+const TechIcon = ({ label, char }: { label: string; char: string }) => (
+  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white font-bold text-sm" title={label}>
+    {char}
+  </div>
+)
+
 export default function Skills() {
-  const [visible, setVisible] = useState<boolean[]>(() => skills.map(() => false))
-  const cardsRef = useRef<Array<HTMLDivElement | null>>([])
-
-  useEffect(() => {
-    if (typeof IntersectionObserver === "undefined") {
-      setVisible(skills.map(() => true))
-      return
-    }
-
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const idx = Number(entry.target.getAttribute("data-idx"))
-          if (entry.isIntersecting) {
-            setVisible((v) => {
-              const next = [...v]
-              next[idx] = true
-              return next
-            })
-            obs.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.2 }
-    )
-
-    cardsRef.current.forEach((el) => el && obs.observe(el))
-
-    return () => obs.disconnect()
-  }, [])
-
   return (
-    <section id="skills" className="relative overflow-hidden py-20 px-6 bg-[#1c0522] min-h-screen flex items-center" data-scroll data-scroll-section>
-      {/*<InteractiveNeuralVortex /> */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto grid gap-12 lg:grid-cols-[minmax(280px,360px)_1fr] items-start">
-        <div className="space-y-8">
-          <div className="sticky top-32">
-            <span className="text-sm uppercase tracking-[0.3em] text-purple-300">Compétences</span>
-            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Mes skills</h2>
-            <p className="mt-6 text-white/70 text-lg leading-8">
-              Découvrez les technologies et langages que je maîtrise, avec mon niveau de compétence pour chacun.
-            </p>
-          </div>
+    <section id="skills" className="relative py-24 bg-[#0b0a0d]">
+          {/* Noise texture overlay */}
+          <NoiseTexture
+            className={cn(
+              "absolute inset-0 z-0",
+              ""
+            )}
+          />
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <div className="mb-14">
+          <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
+            — Compétences
+          </span>
+          <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">
+            Mon stack technique
+          </h2>
+          <p className="mt-4 text-slate-400 max-w-xl">
+            Les technologies et outils que j'utilise au quotidien pour concevoir et développer des projets.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start" data-scroll data-scroll-speed="0.08">
-          {skills.map((skill, idx) => {
-            return (
-              <div
-                key={skill.id}
-                data-idx={idx}
-                ref={(el) => {
-                  cardsRef.current[idx] = el
-                }}
-                className={`rounded-2xl overflow-hidden border border-gray-700 bg-gradient-to-b from-gray-900 to-gray-850 shadow-xl transform transition-all duration-700 ease-out hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-2 ${
-                  visible[idx]
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                }`}
-                data-scroll
-                data-scroll-speed="0.08"
-              >
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white mb-2">{skill.name}</h3>
-                  <p className="text-sm text-white/70 mb-6">{skill.description}</p>
+        {/* Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-auto">
 
-                  {/* Skill Progress Bar */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-white/80">Niveau</span>
-                      <span className="text-sm font-semibold text-purple-400">{skill.level}%</span>
-                    </div>
-                    <div className="relative h-2 bg-gray-700 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-purple-500 to-purple-600 rounded-full transform transition-all duration-1000 ease-out"
-                        style={{
-                          width: visible[idx] ? `${skill.level}%` : "0%",
-                        }}
-                      />
-                    </div>
+          {/* Card 1 — Skill bars (col-span-2) */}
+          <div className="md:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-8">
+            <h3 className="text-white font-semibold text-lg mb-6">Niveaux</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
+              {skillCategories.map((cat) => (
+                <div key={cat.label}>
+                  <p className="text-purple-400 text-xs uppercase tracking-widest font-bold mb-3">{cat.label}</p>
+                  <div className="space-y-3">
+                    {cat.skills.map((s) => (
+                      <div key={s.name}>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span className="text-slate-300">{s.name}</span>
+                          <span className="text-slate-500">{s.pct}%</span>
+                        </div>
+                        <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-purple-500 to-purple-300 rounded-full"
+                            style={{ width: `${s.pct}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Card 2 — Orbiting circles */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex items-center justify-center min-h-[340px] relative overflow-hidden">
+            <div className="relative flex items-center justify-center w-full h-full" style={{ minHeight: 280 }}>
+              {/* Center */}
+              <div className="z-10 w-14 h-14 rounded-2xl bg-purple-600/30 border border-purple-500/40 flex items-center justify-center">
+                <span className="text-purple-300 font-bold text-xs text-center leading-tight">&lt;/&gt;</span>
               </div>
-            )
-          })}
+              {/* Outer orbit */}
+              <OrbitingCircles iconSize={36} radius={110} speed={0.6}>
+                <TechIcon label="Next.js" char="N" />
+                <TechIcon label="React" char="R" />
+                <TechIcon label="TypeScript" char="TS" />
+                <TechIcon label="Node.js" char="No" />
+                <TechIcon label="Git" char="G" />
+              </OrbitingCircles>
+              {/* Inner orbit */}
+              <OrbitingCircles iconSize={28} radius={58} reverse speed={1}>
+                <TechIcon label="C" char="C" />
+                <TechIcon label="Java" char="J" />
+                <TechIcon label="OCaml" char="O" />
+              </OrbitingCircles>
+            </div>
+          </div>
+
+          {/* Card 3 — Stats (col-span-3) */}
+          <div className="md:col-span-3 bg-white/5 border border-white/10 rounded-2xl p-8">
+            <div className="grid grid-cols-3 gap-4">
+              {stats.map((s) => (
+                <div key={s.label} className="flex flex-col items-center justify-center py-4 rounded-xl bg-white/5 border border-white/10 gap-1">
+                  <span className="text-3xl font-extrabold text-white" style={{ fontFamily: "'Syne', sans-serif" }}>{s.value}</span>
+                  <span className="text-slate-400 text-sm text-center">{s.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </div>
     </section>

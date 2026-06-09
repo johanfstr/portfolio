@@ -745,3 +745,12 @@ body::after {
   will-change: backdrop-filter;
   animation: none;
 }
+
+@keyframes orbitForward {
+  0%   { transform: rotate(var(--start)) translateX(var(--radius)) rotate(calc(var(--start) * -1)); }
+  100% { transform: rotate(calc(var(--start) + 360deg)) translateX(var(--radius)) rotate(calc((var(--start) + 360deg) * -1)); }
+}
+@keyframes orbitReverse {
+  0%   { transform: rotate(var(--start)) translateX(var(--radius)) rotate(calc(var(--start) * -1)); }
+  100% { transform: rotate(calc(var(--start) - 360deg)) translateX(var(--radius)) rotate(calc((var(--start) - 360deg) * -1)); }
+}

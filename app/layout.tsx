@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fira_Code, Playfair_Display, Plus_Jakarta_Sans, Geist } from "next/font/google";
 import "./globals.css";
 import DeferredEffects from "../components/DeferredEffects";
+import FpsOverlay from "../components/FpsOverlay";
 import { cn } from "@/lib/utils";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
@@ -61,6 +62,7 @@ export default function RootLayout({
       <body className={`${firaCode.variable} ${playfair.variable} ${plusJakarta.variable} antialiased`}>
         {children}
         <DeferredEffects />
+        <FpsOverlay />
       </body>
     </html>
   );

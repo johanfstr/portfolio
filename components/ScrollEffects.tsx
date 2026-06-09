@@ -4,39 +4,26 @@ import { useEffect } from 'react';
 
 export default function ScrollEffects() {
   useEffect(() => {
-    let scroll: any = null;
+    let lenis: any = null;
+    let rafId: number;
 
-    const initScroll = async () => {
+    const init = async () => {
       try {
-        const LocomotiveScroll = (await import('locomotive-scroll')).default;
+        const Lenis = (await import('@studio-freight/lenis')).default;
+        lenis = new Lenis({ lerp: 0.1, duration: 1.2, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 2 });
 
-        scroll = new (LocomotiveScroll as any)({
-          // Locomotive Scroll v5 uses Lenis internally —
-          // no separate Lenis instance needed anywhere else.
-          lenisOptions: {
-            lerp: 0.1,
-            duration: 1.2,
-            smoothWheel: true,
-            wheelMultiplier: 1,
-            touchMultiplier: 2,
-          },
-        });
-
-        console.log('✓ Locomotive Scroll v5 initialized');
-      } catch (error) {
-        console.warn('Could not load Locomotive Scroll:', error);
+        const raf = (time: number) => {
+          lenis.raf(time);
+          rafId = requestAnimationFrame(raf);
+        };
+        rafId = requestAnimationFrame(raf);
+      } catch (e) {
+        console.warn('Could not load Lenis:', e);
       }
     };
 
-    // Small delay to let the DOM stabilize after hydration
-    const timer = setTimeout(initScroll, 100);
-
-    return () => {
-      clearTimeout(timer);
-      if (scroll) {
-        try { scroll.destroy(); } catch (_) { /* silent */ }
-      }
-    };
+    const timer = setTimeout(init, 100);
+    return () => { clearTimeout(timer); cancelAnimationFrame(rafId); lenis?.destroy(); };
   }, []);
 
   return null;
