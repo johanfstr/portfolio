@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { cn } from "@/lib/utils"
 import { gsap } from "gsap";
@@ -193,9 +193,19 @@ export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<number | null>(null)
   const [visible, setVisible] = useState<boolean[]>(() => projects.map(() => false))
   const cardsRef = useRef<Array<HTMLDivElement | null>>([])
+  const headerRef = useRef<HTMLDivElement>(null)
+  const [headerVisible, setHeaderVisible] = useState(false)
 
   const modalBoxRef = useRef<HTMLDivElement>(null)
   const [modalContent, setModalContent] = useState<string>("")
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setHeaderVisible(true); obs.disconnect(); } }, { threshold: 0.2 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [])
 
   useEffect(() => {
     if (selectedProject === null) { setModalContent(""); return }
@@ -257,7 +267,7 @@ return (
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
 
         {/* Gauche : label + titre + description */}
-        <div className="max-w-xl">
+        <div ref={headerRef} className={`max-w-xl transition-all duration-700 ease-out ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>— Projets</span>
           <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Mes réalisations</h2>
           <p className="mt-6 text-white/70 text-lg leading-8">
@@ -304,7 +314,7 @@ return (
             onClick={() => setSelectedProject(projects.findIndex(pr => pr.id === p.id))}
             className={cn(
               "group rounded-xl border border-white/10 cursor-pointer text-left overflow-hidden",
-              "bg-white/5 hover:bg-white/10 hover:border-indigo-500/30",
+              "bg-white/[0.02] backdrop-blur-sm hover:border-indigo-500/30",
               "transition-all duration-500 ease-in-out hover:-translate-y-2",
               "hover:shadow-[0_8px_32px_rgba(99,102,241,0.2)]",
               visible[idx] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"

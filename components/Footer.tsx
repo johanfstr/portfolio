@@ -65,8 +65,8 @@ const STYLES = `
  .footer-bg-grid {
    background-size: 60px 60px;
    background-image: 
-     linear-gradient(to right, rgba(168, 85, 247, 0.1) 1px, transparent 1px),
-     linear-gradient(to bottom, rgba(168, 85, 247, 0.1) 1px, transparent 1px);
+     linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+     linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
    mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
    -webkit-mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
  }
@@ -75,8 +75,8 @@ const STYLES = `
  .footer-aurora {
    background: radial-gradient(
      circle at 50% 50%, 
-     rgba(168, 85, 247, 0.15) 0%, 
-     rgba(147, 51, 234, 0.15) 40%, 
+     rgba(255, 255, 255, 0.15) 0%, 
+     rgba(255, 255, 255, 0.15) 40%, 
      transparent 70%
    );
  }
@@ -270,7 +270,7 @@ export default function CinematicFooter() {
         style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
       >
         {/* Fixed Footer */}
-        <footer className="fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-[#1c0522] text-foreground cinematic-footer-wrapper">
+        <footer className="fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-[#0b0a0d] text-foreground cinematic-footer-wrapper">
           
           {/* Ambient Light & Grid Background */}
           <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[80px] pointer-events-none z-0" />

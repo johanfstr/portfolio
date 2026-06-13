@@ -52,12 +52,12 @@ export default function Navbar() {
               <span>Compétences</span>
             </a>
 
-            <a href="#experiences" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:text-white hover:bg-white/5 transition-all">
+            <a href="#parcours" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:text-white hover:bg-white/5 transition-all">
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
                 <rect x="3" y="7" width="18" height="13" rx="2" stroke="currentColor" strokeWidth="1.6"/>
                 <path d="M16 3H8v4h8V3z" stroke="currentColor" strokeWidth="1.6"/>
               </svg>
-              <span>Expériences</span>
+              <span>Parcours</span>
             </a>
 
           </div>
@@ -104,12 +104,12 @@ export default function Navbar() {
             </svg>
             Compétences
           </a>
-          <a href="#experiences" className="flex items-center gap-2 p-2 rounded-xl hover:bg-white/5" onClick={() => setMenuOpen(false)}>
+          <a href="#parcours" className="flex items-center gap-2 p-2 rounded-xl hover:bg-white/5" onClick={() => setMenuOpen(false)}>
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
                 <rect x="3" y="7" width="18" height="13" rx="2" stroke="currentColor" strokeWidth="1.6"/>
                 <path d="M16 3H8v4h8V3z" stroke="currentColor" strokeWidth="1.6"/>
               </svg>
-            Expériences
+            Parcours
           </a>
           <a href="#contact" className="flex items-center gap-2 p-2 rounded-xl hover:bg-white/5" onClick={() => setMenuOpen(false)}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

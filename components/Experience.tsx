@@ -1,263 +1,290 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-
-interface SoftSkill {
-  name: string
-}
+import { NoiseTexture } from "@/components/ui/noise-texture"
+import { cn } from "@/lib/utils"
 
 interface Experience {
-  id: string
   title: string
   company: string
-  description: string
-  fullDescription: string
+  type: string
   dateStart: string
   dateEnd: string
-  softSkills: SoftSkill[]
+  duration: string
+  bullets: string[]
+  color: string
+  initials: string
+  current?: boolean
+}
+
+interface Education {
+  school: string
+  degree: string
+  type: string
+  dateStart: string
+  dateEnd: string
+  duration: string
+  bullets: string[]
+  color: string
+  initials: string
+  current?: boolean
 }
 
 const experiences: Experience[] = [
   {
-    id: "1",
-    title: "Préparateur de commandes - intérim",
-    company: "Malvaux (Saint-Gelais, 79)",
-    description: "Préparation de commandes et gestion de l'inventaire dans un environnement d'entrepôt dynamique",
-    fullDescription: "Préparation de ~40 commandes par jour avec chariot élevateur (CACES 1a) et un terminal PDA. (scan des produits, saisies des quantités, vérification de la conformité). Travail en équipe pour assurer une logistique fluide et efficace, respect des délais et des normes de sécurité lors de cadences soutenues. Suivi des stocks et gestion d'inventaire via le système de gestion d'entrepôt (WMS).",
-    dateStart: "Aout 2025",
+    title: "Préparateur de commandes",
+    company: "MALVAUX",
+    type: "Intérim",
+    dateStart: "Juillet 2025",
     dateEnd: "Fin Aout 2025",
-    softSkills: [
-      { name: "Communication" },
-      { name: "Travail d'équipe" },
-      { name: "Endurance" },
-      { name: "Organisation" },
+    duration: "2 mois",
+    color: "#7c3aed",
+    initials: "M",
+    bullets: [
+      "Préparation de ~40 commandes par jour avec chariot élevateur (CACES 1a) et terminal PDA",
+      "Vérification de la conformité des produits et saisie des quantités",
+      "Suivi des stocks et gestion d'inventaire via le système WMS",
     ],
   },
   {
-    id: "2",
-    title: "Travaux de magasinage, approvisionnement machine - intérim",
-    company: "La Poste (Chauray, 79)",
-    description: "Chargé de l'approvisionnement des machines de tri et du magasinage dans un centre de distribution postal",
-    fullDescription: "Tri et magasinage de ~150 colis par heure dans un centre de distribution postal. Approvisionnement en continu des machines de tri automatisées pour assurer un flux de travail ininterrompu. Respect strict des normes de sécurité et des procédures opérationnelles dans un environnement à rythme rapide.",
+    title: "Approvisionnement machine & magasinage",
+    company: "MEDIAPOSTE",
+    type: "Intérim",
     dateStart: "Juillet 2024",
     dateEnd: "Fin Aout 2024",
-    softSkills: [
-      { name: "Rigueur" },
-      { name: "Précision" },
-      { name: "Autonomie" },
-      { name: "Gestion du temps" },
+    duration: "2 mois",
+    color: "#f59e0b",
+    initials: "MP",
+    bullets: [
+      "Tri et magasinage de ~150 colis par heure dans un centre de distribution postal",
+      "Approvisionnement en continu des machines de tri automatisées",
+      "Respect strict des normes de sécurité dans un environnement à rythme rapide",
     ],
   },
   {
-    id: "3",
-    title: "Agent de quai et manutentionnaire - intérim",
-    company: "FedEx (La Crèche, 79)",
-    description: "Chargé de la manutention et du chargement/déchargement des palettes de livraison dans un centre de tri express",
-    fullDescription: "Manutention de palettes de colis dans un centre de tri express. Chargement et déchargement de camions avec utilisation d'équipements de levage (transpalette, chariot élévateur). Travail en équipe pour assurer une logistique fluide et efficace, respect des délais et des normes de sécurité lors de cadences soutenues.",
+    title: "Agent de quai & manutentionnaire",
+    company: "FedEx",
+    type: "Intérim",
     dateStart: "Avril 2024",
     dateEnd: "Mai 2024",
-    softSkills: [
-      { name: "Endurance" },
-      { name: "Travail d'équipe" },
-      { name: "Autonomie" },
-      { name: "Adaptabilité" },
+    duration: "2 mois",
+    color: "#6366f1",
+    initials: "F",
+    bullets: [
+      "Manutention de palettes de colis dans un centre de tri express",
+      "Chargement et déchargement de camions avec transpalette et chariot élévateur",
+      "Travail en équipe pour assurer une logistique fluide dans des cadences soutenues",
     ],
   },
   {
-    id: "4",
-    title: "Préparateur de commandes - intérim",
-    company: "Kuehne + Nagel (Prahecq, 79)",
-    description: "Préparation de commandes et mise à quai des marchandises dans un entrepôt dynamique ",
-    fullDescription: "Préparation de commandes avec chariot élevateur (CACES 1a) et système de Voice picking. (diction de code de controles à l'aide d'un casque audio qui nous communique, vérification de la conformité). Respect des délais et des normes de sécurité lors de cadences soutenues.",
+    title: "Préparateur de commandes",
+    company: "Kuehne + Nagel",
+    type: "Intérim",
     dateStart: "Juillet 2023",
     dateEnd: "Fin Aout 2023",
-    softSkills: [
-      { name: "Endurance" },
-      { name: "Autonomie" },
-      { name: "Gestion du temps" },
-      { name: "Efficacité" },
+    duration: "2 mois",
+    color: "#10b981",
+    initials: "K+N",
+    bullets: [
+      "Préparation de commandes avec chariot (CACES 1a) et système Voice picking",
+      "Diction de codes de contrôle via casque audio, vérification de la conformité",
+      "Respect des délais et des normes de sécurité lors de cadences soutenues",
     ],
   },
 ]
 
+const educations: Education[] = [
+  {
+    school: "EFREI Bordeaux",
+    degree: "Cycle Ingénieur, Majeure Logiciels et Systèmes d'Information",
+    type: "ING1",
+    dateStart: "Sept 2026",
+    dateEnd: "Aout 2029",
+    duration: "3 ans",
+    color: "#e11d48",
+    initials: "E",
+    current: true,
+    bullets: [],
+  },
+  {
+    school: "Université de Poitiers",
+    degree: "Licence Informatique",
+    type: "2ème année de licence",
+    dateStart: "2023",
+    dateEnd: "2026",
+    duration: "3 ans",
+    color: "#0ea5e9",
+    initials: "UP",
+    bullets: [],
+  },
+  {
+    school: "Lycée Saint-André, Niort",
+    degree: "Spécialité Mathématiques, Physique-Chimie, SVT",
+    type: "Baccalauréat",
+    dateStart: "2019",
+    dateEnd: "2022",
+    duration: "3 ans",
+    color: "#f97316",
+    initials: "SA",
+    bullets: [],
+  },
+]
+
+function TimelineCard({ label, count, subtitle, items, fit }: {
+  label: string
+  count: string
+  subtitle: string
+  fit?: boolean
+  items: Array<{
+    title: string
+    sub: string
+    type: string
+    dateStart: string
+    dateEnd: string
+    duration: string
+    bullets: string[]
+    color: string
+    initials: string
+    current?: boolean
+  }>
+}) {
+  return (
+    <div className={`relative border border-white/[0.08] rounded-2xl bg-white/[0.02] backdrop-blur-sm p-6 md:p-8 flex flex-col gap-6 ${fit ? "h-fit" : "h-full"}`}>
+      <div className="flex items-center justify-between">
+        <h3 className="text-white font-semibold text-base">{label}</h3>
+        <span className="text-white/40 text-xs">{count}</span>
+      </div>
+      <p className="text-white/40 text-xs -mt-4">{subtitle}</p>
+
+      {/* Vertical line */}
+      <div className="relative">
+        <div className="absolute left-5 top-0 bottom-0 w-px bg-white/10" />
+        <div className="space-y-8">
+          {items.map((item, idx) => (
+            <div key={idx} className="flex gap-5 items-start">
+              <div
+                className="relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-lg"
+                style={{ backgroundColor: item.color }}
+              >
+                {item.initials}
+              </div>
+              <div className="flex-1 min-w-0 pb-2">
+                <div className="flex flex-wrap items-center gap-2 mb-0.5">
+                  <h4 className="text-white font-semibold text-sm">{item.title}</h4>
+                  {item.current && (
+                    <span className="text-xs px-2 py-0.5 rounded-full border border-white/20 text-white/70">
+                      À venir
+                    </span>
+                  )}
+                </div>
+                <p className="text-white/50 text-xs mb-1">{item.sub} · {item.type}</p>
+                <p className="text-white/35 text-xs mb-3">
+                  {item.dateStart} — {item.dateEnd}{item.duration ? ` · ${item.duration}` : ""}
+                </p>
+                {item.bullets.length > 0 && (
+                  <ul className="space-y-2">
+                    {item.bullets.map((bullet, bIdx) => (
+                      <li key={bIdx} className={cn("flex gap-2 text-xs", "text-white/55")}>
+                        <span className="mt-1.5 w-1 h-1 rounded-full bg-white/30 shrink-0" />
+                        {bullet}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Experience() {
-  const [visible, setVisible] = useState<boolean[]>(() => experiences.map(() => false))
-  const [selectedExperience, setSelectedExperience] = useState<number | null>(null)
-  const cardsRef = useRef<Array<HTMLDivElement | null>>([])
+  const headerRef = useRef<HTMLDivElement>(null)
+  const card1Ref = useRef<HTMLDivElement>(null)
+  const card2Ref = useRef<HTMLDivElement>(null)
+  const [headerVisible, setHeaderVisible] = useState(false)
+  const [card1Visible, setCard1Visible] = useState(false)
+  const [card2Visible, setCard2Visible] = useState(false)
 
   useEffect(() => {
-    if (typeof IntersectionObserver === "undefined") {
-      setVisible(experiences.map(() => true))
-      return
-    }
-
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const idx = Number(entry.target.getAttribute("data-idx"))
-          if (entry.isIntersecting) {
-            setVisible((v) => {
-              const next = [...v]
-              next[idx] = true
-              return next
-            })
-            obs.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.2 }
-    )
-
-    cardsRef.current.forEach((el) => el && obs.observe(el))
-
-    return () => obs.disconnect()
+    const pairs: [React.RefObject<HTMLDivElement | null>, React.Dispatch<React.SetStateAction<boolean>>][] = [
+      [headerRef, setHeaderVisible],
+      [card1Ref, setCard1Visible],
+      [card2Ref, setCard2Visible],
+    ]
+    const observers = pairs.map(([ref, setter]) => {
+      const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setter(true); obs.disconnect(); } }, { threshold: 0.1 })
+      if (ref.current) obs.observe(ref.current)
+      return obs
+    })
+    return () => observers.forEach(o => o.disconnect())
   }, [])
 
   return (
-    <section id="experiences" className="py-20 px-6 bg-[#1c0522] min-h-screen flex items-center" data-scroll data-scroll-section>
-      <div className="w-full max-w-7xl mx-auto grid gap-12 lg:grid-cols-[minmax(280px,360px)_1fr] items-start">
-        <div className="space-y-8">
-          <div className="sticky top-32">
-            <span className="text-sm uppercase tracking-[0.3em] text-purple-300">Expériences</span>
-            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Mes expériences</h2>
+    <section
+      id="parcours"
+      className="relative overflow-hidden py-20 px-6 bg-[#0b0a0d] min-h-screen"
+    >
+      <NoiseTexture className="absolute inset-0 z-0" />
+
+      <div className="relative z-10 w-full max-w-7xl mx-auto space-y-12">
+        {/* Header */}
+        <div ref={headerRef} className={`flex flex-col lg:flex-row lg:items-end justify-between gap-8 transition-all duration-700 ease-out ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+          <div className="max-w-xl">
+            <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>— Parcours</span>
+            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Expériences & Formations</h2>
             <p className="mt-6 text-white/70 text-lg leading-8">
-              Découvrez mon parcours professionnel et les expériences qui ont façonné mon approche du développement.
+              Mon parcours professionnel et académique qui a façonné ma rigueur et mes compétences.
             </p>
           </div>
+          <p className="text-white/40 text-sm shrink-0">{experiences.length} rôles · {educations.length} formations</p>
         </div>
 
-        {/* Timeline */}
-        <div className="relative" data-scroll data-scroll-speed="0.08">
-          {/* Vertical line */}
-          <div className="absolute left-6 md:left-12 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500 via-purple-400 to-purple-600"></div>
-
-          {/* Experience cards */}
-          <div className="space-y-4 md:space-y-4">
-            {experiences.map((exp, idx) => (
-              <div
-                key={exp.id}
-                data-idx={idx}
-                ref={(el) => {
-                  cardsRef.current[idx] = el
-                }}
-                className="relative"
-              >
-                {/* Timeline dot */}
-                <div className="absolute left-0 md:left-6 top-0 w-14 h-14 md:w-12 md:h-12 flex items-center justify-center z-10">
-                  <div className={`w-6 h-6 md:w-5 md:h-5 rounded-full border-4 border-gray-900 bg-gradient-to-r from-purple-500 to-purple-600 shadow-lg transform transition-all duration-500 ${
-                    visible[idx] ? "scale-100" : "scale-0"
-                  }`}></div>
-                </div>
-
-                {/* Card */}
-                <div
-                  className={`ml-20 md:ml-32 rounded-2xl overflow-hidden border border-gray-700 bg-gradient-to-b from-gray-900 to-gray-850 shadow-xl transform transition-all duration-700 ease-out hover:shadow-2xl hover:shadow-purple-500/50 hover:-translate-y-2 ${
-                    visible[idx]
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-8"
-                  }`}
-                  data-scroll
-                  data-scroll-speed="0.08"
-                >
-                  <div className="p-6 text-white">
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h3 className="text-xl font-semibold text-white">{exp.title}</h3>
-                        <p className="text-purple-400 text-sm font-medium">{exp.company}</p>
-                      </div>
-                      <span className="text-xs md:text-sm bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full font-semibold whitespace-nowrap ml-2">
-                        {exp.dateStart} - {exp.dateEnd}
-                      </span>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-sm text-white/80 mb-4">{exp.description}</p>
-
-                    {/* Soft Skills */}
-                    {exp.softSkills && exp.softSkills.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {exp.softSkills.map((skill, skillIdx) => (
-                          <div
-                            key={skillIdx}
-                            className="px-3 py-1 bg-gray-700/60 hover:bg-gray-700 rounded-full text-xs text-white/80 transition-colors"
-                          >
-                            {skill.name}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Button */}
-                    <button
-                      onClick={() => setSelectedExperience(idx)}
-                      className="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-purple-600 text-white text-sm font-semibold shadow-lg hover:scale-105 transition-transform"
-                    >
-                      Détails
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+        {/* Bento Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div ref={card1Ref} className={`transition-all duration-700 ease-out delay-100 ${card1Visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            <TimelineCard
+              label="Expériences professionnelles"
+              count={`${experiences.length} rôles`}
+              subtitle="Missions en logistique & supply chain"
+              items={experiences.map((e) => ({
+                title: e.title,
+                sub: e.company,
+                type: e.type,
+                dateStart: e.dateStart,
+                dateEnd: e.dateEnd,
+                duration: e.duration,
+                bullets: e.bullets,
+                color: e.color,
+                initials: e.initials,
+                current: e.current,
+              }))}
+            />
+          </div>
+          <div ref={card2Ref} className={`transition-all duration-700 ease-out delay-200 ${card2Visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            <TimelineCard
+              label="Formations"
+              count={`${educations.length} établissements`}
+              subtitle="Parcours académique"
+              fit
+              items={educations.map((e) => ({
+                title: e.school,
+                sub: e.degree,
+                type: e.type,
+                dateStart: e.dateStart,
+                dateEnd: e.dateEnd,
+                duration: e.duration,
+                bullets: e.bullets,
+                color: e.color,
+                initials: e.initials,
+                current: e.current,
+              }))}
+            />
           </div>
         </div>
       </div>
-
-      {/* Modal */}
-      {selectedExperience !== null && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              {/* Header */}
-              <div className="flex justify-between items-start mb-6">
-                <div>
-                  <h2 className="text-2xl font-bold text-white">{experiences[selectedExperience].title}</h2>
-                  <p className="text-purple-400 font-medium text-lg mt-1">{experiences[selectedExperience].company}</p>
-                  <p className="text-white/60 text-sm mt-2">
-                    {experiences[selectedExperience].dateStart} - {experiences[selectedExperience].dateEnd}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setSelectedExperience(null)}
-                  className="text-white/70 hover:text-white text-2xl font-semibold"
-                >
-                  ×
-                </button>
-              </div>
-
-              {/* Full Description */}
-              <p className="text-white/80 mb-6 leading-relaxed">
-                {experiences[selectedExperience].fullDescription}
-              </p>
-
-              {/* Soft Skills */}
-              {experiences[selectedExperience].softSkills && experiences[selectedExperience].softSkills.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-white mb-3">Compétences transversales :</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {experiences[selectedExperience].softSkills.map((skill, skillIdx) => (
-                      <div
-                        key={skillIdx}
-                        className="px-4 py-2 bg-purple-500/20 text-purple-300 rounded-full text-sm font-medium border border-purple-500/30"
-                      >
-                        {skill.name}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Close Button */}
-              <button
-                onClick={() => setSelectedExperience(null)}
-                className="w-full px-6 py-3 border border-gray-600 text-white rounded-full font-semibold hover:bg-gray-700 transition-colors"
-              >
-                Fermer
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   )
 }

@@ -111,12 +111,22 @@ const TechIcon = ({ label, src }: { label: string; src: string }) => (
 
 export default function Skills() {
   const gridRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [headerVisible, setHeaderVisible] = useState(false);
 
   useEffect(() => {
     const el = gridRef.current;
     if (!el) return;
     const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold: 0.1 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setHeaderVisible(true); obs.disconnect(); } }, { threshold: 0.2 });
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
@@ -131,7 +141,7 @@ export default function Skills() {
           />
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         {/* Header */}
-        <div className="mb-14">
+        <div ref={headerRef} className={`mb-14 transition-all duration-700 ease-out ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
             — Compétences
           </span>
@@ -147,7 +157,7 @@ export default function Skills() {
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-auto">
 
           {/* Card 1 — Chips + hover circle */}
-          <div className="md:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-8"
+          <div className="md:col-span-2 bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-8"
             style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "0ms" }}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8">
               {skillCategories.map((cat) => (
@@ -164,7 +174,7 @@ export default function Skills() {
           </div>
 
           {/* Card 2 — Orbiting circles */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex items-center justify-center min-h-[340px] relative overflow-hidden"
+          <div className="bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-8 flex items-center justify-center min-h-[340px] relative overflow-hidden"
             style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "220ms" }}>
             <div className="relative flex items-center justify-center w-full h-full" style={{ minHeight: 280 }}>
               {/* Center */}
@@ -199,7 +209,7 @@ export default function Skills() {
           </div>
 
           {/* Card 3 — Stats (col-span-3) */}
-          <div className="md:col-span-3 bg-white/5 border border-white/10 rounded-2xl p-8"
+          <div className="md:col-span-3 bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-8"
             style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "340ms" }}>
             <div className="grid grid-cols-3 gap-4">
               {stats.map((s) => (

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import emailjs from '@emailjs/browser'
+import { NoiseTexture } from "@/components/ui/noise-texture"
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -54,8 +55,12 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-20 px-6 bg-[#1c0522] min-h-screen flex items-center" data-scroll data-scroll-section>
-      <div className="w-full max-w-7xl mx-auto grid gap-12 lg:grid-cols-[minmax(280px,360px)_1fr] items-start">
+    <section 
+      id="contact"       
+      className="relative overflow-hidden py-20 px-6 bg-[#0b0a0d] min-h-screen"
+    >
+      <NoiseTexture className="absolute inset-0 z-0" />
+      <div className="relative w-full max-w-7xl mx-auto grid gap-12 lg:grid-cols-[minmax(280px,360px)_1fr]">
         <div className="space-y-8">
           <div className="sticky top-32">
             <span className="text-sm uppercase tracking-[0.3em] text-purple-300">Contact</span>
@@ -74,7 +79,7 @@ export default function Contact() {
           </div>
         </div>
 
-        <div className="bg-gray-800 rounded-2xl p-8 shadow-xl" data-scroll data-scroll-speed="0.08">
+        <div className="relative border border-white/[0.08] rounded-2xl bg-white/[0.02] backdrop-blur-sm p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-white mb-2">
@@ -87,7 +92,7 @@ export default function Contact() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 placeholder="Votre nom"
               />
             </div>
@@ -103,7 +108,7 @@ export default function Contact() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 placeholder="votre.email@example.com"
               />
             </div>
@@ -119,7 +124,7 @@ export default function Contact() {
                 value={formData.subject}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 placeholder="Sujet de votre message"
               />
             </div>
@@ -135,7 +140,7 @@ export default function Contact() {
                 onChange={handleChange}
                 required
                 rows={6}
-                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
                 placeholder="Votre message..."
               />
             </div>
