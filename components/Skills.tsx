@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { OrbitingCircles } from "@/components/ui/orbiting-circles"
 import { NoiseTexture } from "@/components/ui/noise-texture"
 import { cn } from "@/lib/utils"
@@ -110,6 +110,16 @@ const TechIcon = ({ label, src }: { label: string; src: string }) => (
 )
 
 export default function Skills() {
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold: 0.1 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
   return (
     <section id="skills" className="relative py-24 bg-[#0b0a0d]">
           {/* Noise texture overlay */}
@@ -134,10 +144,11 @@ export default function Skills() {
         </div>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-auto">
+        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-auto">
 
           {/* Card 1 — Chips + hover circle */}
-          <div className="md:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-8">
+          <div className="md:col-span-2 bg-white/5 border border-white/10 rounded-2xl p-8"
+            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "0ms" }}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8">
               {skillCategories.map((cat) => (
                 <div key={cat.label}>
@@ -153,7 +164,8 @@ export default function Skills() {
           </div>
 
           {/* Card 2 — Orbiting circles */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex items-center justify-center min-h-[340px] relative overflow-hidden">
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex items-center justify-center min-h-[340px] relative overflow-hidden"
+            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "220ms" }}>
             <div className="relative flex items-center justify-center w-full h-full" style={{ minHeight: 280 }}>
               {/* Center */}
               <div className="z-10 w-14 h-14 rounded-full bg-purple-600/30 border border-purple-500/40 flex items-center justify-center">
@@ -187,7 +199,8 @@ export default function Skills() {
           </div>
 
           {/* Card 3 — Stats (col-span-3) */}
-          <div className="md:col-span-3 bg-white/5 border border-white/10 rounded-2xl p-8">
+          <div className="md:col-span-3 bg-white/5 border border-white/10 rounded-2xl p-8"
+            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "340ms" }}>
             <div className="grid grid-cols-3 gap-4">
               {stats.map((s) => (
                 <div key={s.label} className="flex flex-col items-center justify-center py-4 rounded-xl bg-white/5 border border-white/10 gap-1">
