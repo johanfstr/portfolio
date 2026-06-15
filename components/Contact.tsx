@@ -3,7 +3,7 @@
 import { useState } from "react"
 import emailjs from '@emailjs/browser'
 import { NoiseTexture } from "@/components/ui/noise-texture"
-import { TextAnimate } from "@/components/ui/text-animate"
+import SplitText from "@/components/ui/SplitText"
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -65,7 +65,7 @@ export default function Contact() {
         <div className="space-y-8">
           <div className="sticky top-32">
             <span className="text-sm uppercase tracking-[0.3em] text-purple-300">Contact</span>
-            <TextAnimate as="h2" animation="blurInUp" by="word" duration={0.6} className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Entrons en contact</TextAnimate>
+            <SplitText text="Entrons en contact" tag="h2" className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair" textAlign="left" delay={60} duration={0.8} splitType="chars" from={{ opacity: 0, y: 30 }} to={{ opacity: 1, y: 0 }} rootMargin="-50px" />
             <p className="mt-6 text-white/70 text-lg leading-8">
               Vous avez un projet en tête ou souhaitez discuter de collaboration ? N'hésitez pas à me contacter via ce formulaire.
             </p>

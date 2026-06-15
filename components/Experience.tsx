@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { NoiseTexture } from "@/components/ui/noise-texture"
 import { cn } from "@/lib/utils"
 import { ParticleCard, GlobalSpotlight, useMobileDetection } from "@/components/ui/MagicBento"
-import { TextAnimate } from "@/components/ui/text-animate"
+import SplitText from "@/components/ui/SplitText"
 
 interface Experience {
   title: string
@@ -238,7 +238,7 @@ export default function Experience() {
         <div ref={headerRef} className={`flex flex-col lg:flex-row lg:items-end justify-between gap-8 transition-all duration-700 ease-out ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <div className="max-w-xl">
             <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>— Parcours</span>
-            <TextAnimate as="h2" animation="blurInUp" by="word" duration={0.6} className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Expériences & Formations</TextAnimate>
+            <SplitText text="Expériences & Formations" tag="h2" className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair" textAlign="left" delay={60} duration={0.8} splitType="chars" from={{ opacity: 0, y: 30 }} to={{ opacity: 1, y: 0 }} rootMargin="-50px" />
             <p className="mt-6 text-white/70 text-lg leading-8">
               Mon parcours professionnel et académique qui a façonné ma rigueur et mes compétences.
             </p>

@@ -5,7 +5,7 @@ import { OrbitingCircles } from "@/components/ui/orbiting-circles"
 import { NoiseTexture } from "@/components/ui/noise-texture"
 import { cn } from "@/lib/utils"
 import { ParticleCard, GlobalSpotlight, useMobileDetection } from "@/components/ui/MagicBento"
-import { TextAnimate } from "@/components/ui/text-animate"
+import SplitText from "@/components/ui/SplitText"
 
 const R = 28; // rayon du cercle SVG
 const C = 2 * Math.PI * R; // circonférence
@@ -148,9 +148,7 @@ export default function Skills() {
           <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
             — Compétences
           </span>
-          <TextAnimate as="h2" animation="blurInUp" by="word" duration={0.6} className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">
-            Mon stack technique
-          </TextAnimate>
+          <SplitText text="Mon stack technique" tag="h2" className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair" textAlign="left" delay={60} duration={0.8} splitType="chars" from={{ opacity: 0, y: 30 }} to={{ opacity: 1, y: 0 }} rootMargin="-50px" />
           <p className="mt-4 text-slate-400 max-w-xl">
             Les technologies et outils que j'utilise au quotidien pour concevoir et développer des projets.
           </p>
