@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { NoiseTexture } from "@/components/ui/noise-texture"
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react"
+import { TextAnimate } from "@/components/ui/text-animate"
 
 const ProjectMarkdown = dynamic(() => import("./ProjectMarkdown"), { ssr: false });
 
@@ -269,7 +270,7 @@ return (
         {/* Gauche : label + titre + description */}
         <div ref={headerRef} className={`max-w-xl transition-all duration-700 ease-out ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>— Projets</span>
-          <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Mes réalisations</h2>
+          <TextAnimate as="h2" animation="blurInUp" by="word" duration={0.6} className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Mes réalisations</TextAnimate>
           <p className="mt-6 text-white/70 text-lg leading-8">
             Découvrez une sélection de projets sur lesquels j'ai travaillé, mettant en avant mes compétences en développement.
           </p>

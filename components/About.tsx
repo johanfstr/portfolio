@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { TextAnimate } from "@/components/ui/text-animate";
 
 const TopoBackground = dynamic(() => import("./ui/TopoBackground"), { ssr: false });
 const GlobePulse = dynamic(
@@ -56,7 +57,8 @@ export default function About({ ready = false }: { ready?: boolean }) {
       <div className="w-full max-w-7xl mx-auto px-6 relative z-10 flex-1 flex flex-col justify-center">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-extrabold font-playfair text-white tracking-tight mb-4 drop-shadow-md">
-            À propos de <span className="text-purple-400">moi</span>
+            <TextAnimate as="span" animation="blurInUp" by="word" duration={0.6} className="text-white">À propos de</TextAnimate>{" "}
+            <TextAnimate as="span" animation="blurInUp" by="word" duration={0.6} className="text-purple-400">moi</TextAnimate>
           </h2>
           <div className="w-24 h-1 bg-purple-500 mx-auto rounded-full"></div>
         </div>

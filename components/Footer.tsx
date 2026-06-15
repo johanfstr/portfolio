@@ -61,7 +61,7 @@ const STYLES = `
   animation: footer-heartbeat 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
 }
 
- /* Theme-adaptive Grid Background */
+ /* Theme-adaptive Grid Background
  .footer-bg-grid {
    background-size: 60px 60px;
    background-image: 
@@ -70,6 +70,7 @@ const STYLES = `
    mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
    -webkit-mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
  }
+    */
  
  /* Theme-adaptive Aurora Glow */
  .footer-aurora {
@@ -284,19 +285,21 @@ export default function CinematicFooter() {
             JOHAN F
           </div>
 
-          {/* Diagonal Sleek Marquee (Top of footer) */}
+          {/* Diagonal Sleek Marquee (Top of footer) 
           <div className="absolute top-25 left-0 w-full overflow-hidden border-y border-border/50 bg-background/60 backdrop-blur-md py-4 z-10 scale-110 shadow-2xl">
             <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.3em] text-muted-foreground uppercase">
               <MarqueeItem />
               <MarqueeItem />
             </div>
           </div>
+          */}
 
           {/* Main Center Content */}
           <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-20 w-full max-w-5xl mx-auto">
             <h2
               ref={headingRef}
-              className="text-6xl md:text-8xl font-black footer-text-glow tracking-tighter mb-3 md:mb-12 text-center pt-16 md:pt-0"
+              className="text-6xl md:text-8xl footer-text-glow tracking-tighter mb-3 md:mb-12 text-center pt-16 md:pt-0"
+              style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}
             >
               Portfolio
             </h2>

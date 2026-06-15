@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react"
 import { OrbitingCircles } from "@/components/ui/orbiting-circles"
 import { NoiseTexture } from "@/components/ui/noise-texture"
 import { cn } from "@/lib/utils"
+import { ParticleCard, GlobalSpotlight, useMobileDetection } from "@/components/ui/MagicBento"
+import { TextAnimate } from "@/components/ui/text-animate"
 
 const R = 28; // rayon du cercle SVG
 const C = 2 * Math.PI * R; // circonférence
@@ -114,6 +116,7 @@ export default function Skills() {
   const headerRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [headerVisible, setHeaderVisible] = useState(false);
+  const isMobile = useMobileDetection();
 
   useEffect(() => {
     const el = gridRef.current;
@@ -145,20 +148,24 @@ export default function Skills() {
           <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
             — Compétences
           </span>
-          <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">
+          <TextAnimate as="h2" animation="blurInUp" by="word" duration={0.6} className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">
             Mon stack technique
-          </h2>
+          </TextAnimate>
           <p className="mt-4 text-slate-400 max-w-xl">
             Les technologies et outils que j'utilise au quotidien pour concevoir et développer des projets.
           </p>
         </div>
 
         {/* Bento Grid */}
-        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-auto">
+        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-auto bento-section">
+          <GlobalSpotlight gridRef={gridRef} disableAnimations={isMobile} />
 
           {/* Card 1 — Chips + hover circle */}
-          <div className="md:col-span-2 bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-8"
-            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "0ms" }}>
+          <ParticleCard
+            className="md:col-span-2 magic-bento-card magic-bento-card--border-glow bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-8"
+            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "0ms" }}
+            disableAnimations={isMobile} glowColor="132, 0, 255" clickEffect enableMagnetism={false} overflowVisible
+          >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8">
               {skillCategories.map((cat) => (
                 <div key={cat.label}>
@@ -171,17 +178,18 @@ export default function Skills() {
                 </div>
               ))}
             </div>
-          </div>
+          </ParticleCard>
 
           {/* Card 2 — Orbiting circles */}
-          <div className="bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-8 flex items-center justify-center min-h-[340px] relative overflow-hidden"
-            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "220ms" }}>
+          <ParticleCard
+            className="magic-bento-card magic-bento-card--border-glow bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-8 flex items-center justify-center min-h-[340px] relative overflow-hidden"
+            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "220ms" }}
+            disableAnimations={isMobile} glowColor="132, 0, 255" clickEffect enableMagnetism={false}
+          >
             <div className="relative flex items-center justify-center w-full h-full" style={{ minHeight: 280 }}>
-              {/* Center */}
               <div className="z-10 w-14 h-14 rounded-full bg-purple-600/30 border border-purple-500/40 flex items-center justify-center">
                 <span className="w-6 h-6 flex items-center justify-center rounded-full bg-purple-300 text-purple-900 font-bold text-xs">&lt;/&gt;</span>
               </div>
-              {/* Outer orbit */}
               <OrbitingCircles iconSize={36} radius={110} speed={0.6}>
                 <TechIcon label="Next.js" src="/images/nextjs.png" />
                 <TechIcon label="React" src="/images/react.png" />
@@ -195,7 +203,6 @@ export default function Skills() {
                 <TechIcon label="PHP" src="/images/php.svg" />
                 <TechIcon label="Tailwind CSS" src="/images/tailwind.png" />
               </OrbitingCircles>
-              {/* Inner orbit */}
               <OrbitingCircles iconSize={28} radius={58} reverse speed={1}>
                 <TechIcon label="C" src="/images/c.png" />
                 <TechIcon label="C#" src="/images/csharp.png" />
@@ -206,11 +213,14 @@ export default function Skills() {
                 <TechIcon label="Python" src="/images/python.svg" />
               </OrbitingCircles>
             </div>
-          </div>
+          </ParticleCard>
 
-          {/* Card 3 — Stats (col-span-3) */}
-          <div className="md:col-span-3 bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-8"
-            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "340ms" }}>
+          {/* Card 3 — Stats */}
+          <ParticleCard
+            className="md:col-span-3 magic-bento-card magic-bento-card--border-glow bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-8"
+            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "340ms" }}
+            disableAnimations={isMobile} glowColor="132, 0, 255" clickEffect enableMagnetism={false}
+          >
             <div className="grid grid-cols-3 gap-4">
               {stats.map((s) => (
                 <div key={s.label} className="flex flex-col items-center justify-center py-4 rounded-xl bg-white/5 border border-white/10 gap-1">
@@ -219,7 +229,7 @@ export default function Skills() {
                 </div>
               ))}
             </div>
-          </div>
+          </ParticleCard>
 
         </div>
       </div>

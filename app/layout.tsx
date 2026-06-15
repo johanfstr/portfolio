@@ -3,6 +3,7 @@ import { Fira_Code, Playfair_Display, Plus_Jakarta_Sans, Geist } from "next/font
 import "./globals.css";
 import DeferredEffects from "../components/DeferredEffects";
 import FpsOverlay from "../components/FpsOverlay";
+import GradualBlur from "../components/ui/GradualBlur";
 import { cn } from "@/lib/utils";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
@@ -63,6 +64,7 @@ export default function RootLayout({
         {children}
         <DeferredEffects />
         <FpsOverlay />
+        <GradualBlur target="page" position="bottom" height="4rem" strength={1} divCount={3} curve="bezier" exponential />
       </body>
     </html>
   );

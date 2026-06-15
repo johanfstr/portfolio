@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react"
 import { NoiseTexture } from "@/components/ui/noise-texture"
 import { cn } from "@/lib/utils"
+import { ParticleCard, GlobalSpotlight, useMobileDetection } from "@/components/ui/MagicBento"
+import { TextAnimate } from "@/components/ui/text-animate"
 
 interface Experience {
   title: string
@@ -204,9 +206,11 @@ export default function Experience() {
   const headerRef = useRef<HTMLDivElement>(null)
   const card1Ref = useRef<HTMLDivElement>(null)
   const card2Ref = useRef<HTMLDivElement>(null)
+  const bentoGridRef = useRef<HTMLDivElement>(null)
   const [headerVisible, setHeaderVisible] = useState(false)
   const [card1Visible, setCard1Visible] = useState(false)
   const [card2Visible, setCard2Visible] = useState(false)
+  const isMobile = useMobileDetection()
 
   useEffect(() => {
     const pairs: [React.RefObject<HTMLDivElement | null>, React.Dispatch<React.SetStateAction<boolean>>][] = [
@@ -234,7 +238,7 @@ export default function Experience() {
         <div ref={headerRef} className={`flex flex-col lg:flex-row lg:items-end justify-between gap-8 transition-all duration-700 ease-out ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <div className="max-w-xl">
             <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>— Parcours</span>
-            <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Expériences & Formations</h2>
+            <TextAnimate as="h2" animation="blurInUp" by="word" duration={0.6} className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair">Expériences & Formations</TextAnimate>
             <p className="mt-6 text-white/70 text-lg leading-8">
               Mon parcours professionnel et académique qui a façonné ma rigueur et mes compétences.
             </p>
@@ -243,45 +247,29 @@ export default function Experience() {
         </div>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div ref={bentoGridRef} className="grid grid-cols-1 lg:grid-cols-2 gap-4 bento-section">
+          <GlobalSpotlight gridRef={bentoGridRef} disableAnimations={isMobile} />
+
           <div ref={card1Ref} className={`transition-all duration-700 ease-out delay-100 ${card1Visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-            <TimelineCard
-              label="Expériences professionnelles"
-              count={`${experiences.length} rôles`}
-              subtitle="Missions en logistique & supply chain"
-              items={experiences.map((e) => ({
-                title: e.title,
-                sub: e.company,
-                type: e.type,
-                dateStart: e.dateStart,
-                dateEnd: e.dateEnd,
-                duration: e.duration,
-                bullets: e.bullets,
-                color: e.color,
-                initials: e.initials,
-                current: e.current,
-              }))}
-            />
+            <ParticleCard className="magic-bento-card magic-bento-card--border-glow h-full rounded-2xl" disableAnimations={isMobile} glowColor="132, 0, 255" clickEffect enableMagnetism={false}>
+              <TimelineCard
+                label="Expériences professionnelles"
+                count={`${experiences.length} rôles`}
+                subtitle="Missions en logistique & supply chain"
+                items={experiences.map((e) => ({ title: e.title, sub: e.company, type: e.type, dateStart: e.dateStart, dateEnd: e.dateEnd, duration: e.duration, bullets: e.bullets, color: e.color, initials: e.initials, current: e.current }))}
+              />
+            </ParticleCard>
           </div>
           <div ref={card2Ref} className={`transition-all duration-700 ease-out delay-200 ${card2Visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-            <TimelineCard
-              label="Formations"
-              count={`${educations.length} établissements`}
-              subtitle="Parcours académique"
-              fit
-              items={educations.map((e) => ({
-                title: e.school,
-                sub: e.degree,
-                type: e.type,
-                dateStart: e.dateStart,
-                dateEnd: e.dateEnd,
-                duration: e.duration,
-                bullets: e.bullets,
-                color: e.color,
-                initials: e.initials,
-                current: e.current,
-              }))}
-            />
+            <ParticleCard className="magic-bento-card magic-bento-card--border-glow rounded-2xl" disableAnimations={isMobile} glowColor="132, 0, 255" clickEffect enableMagnetism={false}>
+              <TimelineCard
+                label="Formations"
+                count={`${educations.length} établissements`}
+                subtitle="Parcours académique"
+                fit
+                items={educations.map((e) => ({ title: e.school, sub: e.degree, type: e.type, dateStart: e.dateStart, dateEnd: e.dateEnd, duration: e.duration, bullets: e.bullets, color: e.color, initials: e.initials, current: e.current }))}
+              />
+            </ParticleCard>
           </div>
         </div>
       </div>
