@@ -219,7 +219,7 @@ export default function Experience() {
       [card2Ref, setCard2Visible],
     ]
     const observers = pairs.map(([ref, setter]) => {
-      const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setter(true); obs.disconnect(); } }, { threshold: 0.1 })
+      const obs = new IntersectionObserver(([e]) => { setter(e.isIntersecting); }, { threshold: 0.1 })
       if (ref.current) obs.observe(ref.current)
       return obs
     })
@@ -250,7 +250,7 @@ export default function Experience() {
         <div ref={bentoGridRef} className="grid grid-cols-1 lg:grid-cols-2 gap-4 bento-section">
           <GlobalSpotlight gridRef={bentoGridRef} disableAnimations={isMobile} />
 
-          <div ref={card1Ref} className={`transition-all duration-700 ease-out delay-100 ${card1Visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+          <div ref={card1Ref} className={`transition-all duration-700 ease-out ${card1Visible ? "delay-100 opacity-100 translate-y-0" : "opacity-0 translate-y-8 delay-0"}`}>
             <ParticleCard className="magic-bento-card magic-bento-card--border-glow h-full rounded-2xl" disableAnimations={isMobile} glowColor="132, 0, 255" clickEffect enableMagnetism={false}>
               <TimelineCard
                 label="Expériences professionnelles"
@@ -260,7 +260,7 @@ export default function Experience() {
               />
             </ParticleCard>
           </div>
-          <div ref={card2Ref} className={`transition-all duration-700 ease-out delay-200 ${card2Visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+          <div ref={card2Ref} className={`transition-all duration-700 ease-out ${card2Visible ? "delay-200 opacity-100 translate-y-0" : "opacity-0 translate-y-8 delay-0"}`}>
             <ParticleCard className="magic-bento-card magic-bento-card--border-glow rounded-2xl" disableAnimations={isMobile} glowColor="132, 0, 255" clickEffect enableMagnetism={false}>
               <TimelineCard
                 label="Formations"

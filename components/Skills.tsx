@@ -6,6 +6,7 @@ import { NoiseTexture } from "@/components/ui/noise-texture"
 import { cn } from "@/lib/utils"
 import { ParticleCard, GlobalSpotlight, useMobileDetection } from "@/components/ui/MagicBento"
 import SplitText from "@/components/ui/SplitText"
+import { NumberTicker } from "@/components/ui/number-ticker"
 
 const R = 28; // rayon du cercle SVG
 const C = 2 * Math.PI * R; // circonférence
@@ -100,9 +101,9 @@ const skillCategories = [
 ]
 
 const stats = [
-  { value: "5+", label: "années de code" },
-  { value: "10+", label: "projets réalisés" },
-  { value: "6", label: "langages maîtrisés" },
+  { value: 5, suffix: "+", label: "années de code" },
+  { value: 10, suffix: "+", label: "projets réalisés" },
+  { value: 6, suffix: "", label: "langages maîtrisés" },
 ]
 
 const TechIcon = ({ label, src }: { label: string; src: string }) => (
@@ -121,7 +122,7 @@ export default function Skills() {
   useEffect(() => {
     const el = gridRef.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold: 0.1 });
+    const obs = new IntersectionObserver(([e]) => { setVisible(e.isIntersecting); }, { threshold: 0.1 });
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
@@ -129,7 +130,7 @@ export default function Skills() {
   useEffect(() => {
     const el = headerRef.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setHeaderVisible(true); obs.disconnect(); } }, { threshold: 0.2 });
+    const obs = new IntersectionObserver(([e]) => { setHeaderVisible(e.isIntersecting); }, { threshold: 0.2 });
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
@@ -181,7 +182,7 @@ export default function Skills() {
           {/* Card 2 — Orbiting circles */}
           <ParticleCard
             className="magic-bento-card magic-bento-card--border-glow bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-8 flex items-center justify-center min-h-[340px] relative overflow-hidden"
-            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "220ms" }}
+            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: visible ? "220ms" : "0ms" }}
             disableAnimations={isMobile} glowColor="132, 0, 255" clickEffect enableMagnetism={false}
           >
             <div className="relative flex items-center justify-center w-full h-full" style={{ minHeight: 280 }}>
@@ -216,13 +217,25 @@ export default function Skills() {
           {/* Card 3 — Stats */}
           <ParticleCard
             className="md:col-span-3 magic-bento-card magic-bento-card--border-glow bg-white/[0.02] backdrop-blur-sm border border-white/10 rounded-2xl p-8"
-            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: "340ms" }}
+            style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.5s ease, transform 0.5s ease", transitionDelay: visible ? "340ms" : "0ms" }}
             disableAnimations={isMobile} glowColor="132, 0, 255" clickEffect enableMagnetism={false}
           >
             <div className="grid grid-cols-3 gap-4">
-              {stats.map((s) => (
-                <div key={s.label} className="flex flex-col items-center justify-center py-4 rounded-xl bg-white/5 border border-white/10 gap-1">
-                  <span className="text-3xl font-extrabold text-white" style={{ fontFamily: "'Syne', sans-serif" }}>{s.value}</span>
+              {stats.map((s, index) => (
+                <div 
+                  key={s.label} 
+                  className="flex flex-col items-center justify-center py-4 rounded-xl bg-white/5 border border-white/10 gap-1"
+                  style={{ 
+                    opacity: visible ? 1 : 0, 
+                    transform: visible ? "translateY(0)" : "translateY(30px)", 
+                    transition: "opacity 0.8s ease-out, transform 0.8s ease-out", 
+                    transitionDelay: visible ? `${800 + index * 1700}ms` : "0ms" 
+                  }}
+                >
+                  <span className="text-3xl font-extrabold text-white flex items-center" style={{ fontFamily: "'Syne', sans-serif" }}>
+                    <NumberTicker value={s.value} delay={0.8 + index * 1.7} className="text-white dark:text-white" />
+                    {s.suffix}
+                  </span>
                   <span className="text-slate-400 text-sm text-center">{s.label}</span>
                 </div>
               ))}

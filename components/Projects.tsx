@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 
 import { cn } from "@/lib/utils"
 import { gsap } from "gsap";
@@ -203,7 +203,7 @@ export default function Projects() {
   useEffect(() => {
     const el = headerRef.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setHeaderVisible(true); obs.disconnect(); } }, { threshold: 0.2 });
+    const obs = new IntersectionObserver(([e]) => { setHeaderVisible(e.isIntersecting); }, { threshold: 0.2 });
     obs.observe(el);
     return () => obs.disconnect();
   }, [])
@@ -228,10 +228,7 @@ export default function Projects() {
       (entries) => {
         entries.forEach((entry) => {
           const idx = Number(entry.target.getAttribute("data-idx"))
-          if (entry.isIntersecting) {
-            setVisible((v) => { const next = [...v]; next[idx] = true; return next })
-            obs.unobserve(entry.target)
-          }
+          setVisible((v) => { const next = [...v]; next[idx] = entry.isIntersecting; return next })
         })
       },
       { threshold: 0.15 }
@@ -320,6 +317,7 @@ return (
               "hover:shadow-[0_8px_32px_rgba(99,102,241,0.2)]",
               visible[idx] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             )}
+            style={{ transitionDelay: visible[idx] ? `${(idx % 3) * 150}ms` : "0ms" }}
           >
             {/* Image */}
             {p.image && (
