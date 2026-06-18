@@ -111,8 +111,6 @@ export default function About({ ready = false }: { ready?: boolean }) {
                 </span>.
             </p>
             <p className={`transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0 delay-300" : "opacity-0 translate-y-6 delay-0"}`}>
-              Je suis activement à la recherche d'une <strong className="text-purple-400 font-semibold">alternance en développement full-stack</strong> à partir de septembre 2026. Curieux et autonome, j'aime relever de nouveaux défis techniques et apporter 
-              de la valeur aux projets sur lesquels je travaille.
             </p>
           </div>
 

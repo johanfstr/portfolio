@@ -120,7 +120,7 @@ export function GlobePulse({
   }, [markers, speed])
 
   return (
-    <div className={`relative aspect-square select-none ${className}`}>
+    <div className={`relative w-full aspect-square select-none ${className}`}>
       <style>{`
         @keyframes pulse-expand {
           0% { transform: scaleX(0.3) scaleY(0.3); opacity: 0.8; }

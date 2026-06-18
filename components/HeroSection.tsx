@@ -81,7 +81,7 @@ useEffect(() => {
         >
           <div className="flex flex-col md:flex-row items-center justify-between gap-12 min-h-screen py-28 overflow-visible">
             <div
-              className={`flex-1 max-w-2xl pt-32 md:pt-0 hero-content${heroAnimated ? " site--animated" : " hero-content--waiting"}`}
+              className={`flex-1 max-w-2xl pt-16 md:pt-0 hero-content${heroAnimated ? " site--animated" : " hero-content--waiting"}`}
               aria-hidden={!heroAnimated}
             >
               {children}

@@ -5,6 +5,7 @@ import { NoiseTexture } from "@/components/ui/noise-texture"
 import { cn } from "@/lib/utils"
 import { ParticleCard, GlobalSpotlight, useMobileDetection } from "@/components/ui/MagicBento"
 import SplitText from "@/components/ui/SplitText"
+import { ChevronDown } from "lucide-react"
 
 interface Experience {
   title: string
@@ -106,7 +107,9 @@ const educations: Education[] = [
     color: "#e11d48",
     initials: "E",
     current: true,
-    bullets: [],
+    bullets: [
+      "à venir",
+    ],
   },
   {
     school: "Université de Poitiers",
@@ -117,7 +120,9 @@ const educations: Education[] = [
     duration: "3 ans",
     color: "#0ea5e9",
     initials: "UP",
-    bullets: [],
+    bullets: [
+      "à venir",
+    ],
   },
   {
     school: "Lycée Saint-André, Niort",
@@ -128,9 +133,66 @@ const educations: Education[] = [
     duration: "3 ans",
     color: "#f97316",
     initials: "SA",
-    bullets: [],
+    bullets: [
+      "à venir",
+    ],
   },
 ]
+
+function TimelineItem({ item }: { item: any }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  return (
+    <div className="flex gap-5 items-start">
+      <div
+        className="relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-lg"
+        style={{ backgroundColor: item.color }}
+      >
+        {item.initials}
+      </div>
+      <div className="flex-1 min-w-0 pb-2">
+        <div className="flex flex-wrap items-center gap-2 mb-0.5">
+          <h4 className="text-white font-semibold text-sm">{item.title}</h4>
+          {item.current && (
+            <span className="text-xs px-2 py-0.5 rounded-full border border-white/20 text-white/70">
+              À venir
+            </span>
+          )}
+        </div>
+        <p className="text-white/50 text-xs mb-1">{item.sub} · {item.type}</p>
+        <p className="text-white/35 text-xs mb-3">
+          {item.dateStart} — {item.dateEnd}{item.duration ? ` · ${item.duration}` : ""}
+        </p>
+        {item.bullets && item.bullets.length > 0 && (
+          <div className="mt-2">
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="group flex items-center gap-1.5 text-xs font-medium text-purple-400 hover:text-purple-300 transition-colors"
+            >
+              <span>{isExpanded ? "Masquer les détails" : "Voir les détails"}</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`} />
+            </button>
+            <div
+              className={`grid transition-all duration-300 ease-in-out ${
+                isExpanded ? "grid-rows-[1fr] opacity-100 mt-3" : "grid-rows-[0fr] opacity-0"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <ul className="space-y-2 pb-1">
+                  {item.bullets.map((bullet: string, bIdx: number) => (
+                    <li key={bIdx} className={cn("flex gap-2 text-xs", "text-white/55")}>
+                      <span className="mt-1.5 w-1 h-1 rounded-full bg-purple-500/50 shrink-0" />
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 function TimelineCard({ label, count, subtitle, items, fit }: {
   label: string
@@ -163,38 +225,7 @@ function TimelineCard({ label, count, subtitle, items, fit }: {
         <div className="absolute left-5 top-0 bottom-0 w-px bg-white/10" />
         <div className="space-y-8">
           {items.map((item, idx) => (
-            <div key={idx} className="flex gap-5 items-start">
-              <div
-                className="relative z-10 w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-lg"
-                style={{ backgroundColor: item.color }}
-              >
-                {item.initials}
-              </div>
-              <div className="flex-1 min-w-0 pb-2">
-                <div className="flex flex-wrap items-center gap-2 mb-0.5">
-                  <h4 className="text-white font-semibold text-sm">{item.title}</h4>
-                  {item.current && (
-                    <span className="text-xs px-2 py-0.5 rounded-full border border-white/20 text-white/70">
-                      À venir
-                    </span>
-                  )}
-                </div>
-                <p className="text-white/50 text-xs mb-1">{item.sub} · {item.type}</p>
-                <p className="text-white/35 text-xs mb-3">
-                  {item.dateStart} — {item.dateEnd}{item.duration ? ` · ${item.duration}` : ""}
-                </p>
-                {item.bullets.length > 0 && (
-                  <ul className="space-y-2">
-                    {item.bullets.map((bullet, bIdx) => (
-                      <li key={bIdx} className={cn("flex gap-2 text-xs", "text-white/55")}>
-                        <span className="mt-1.5 w-1 h-1 rounded-full bg-white/30 shrink-0" />
-                        {bullet}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </div>
+            <TimelineItem key={idx} item={item} />
           ))}
         </div>
       </div>

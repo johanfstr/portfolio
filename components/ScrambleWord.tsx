@@ -47,9 +47,6 @@ export default function ScrambleWord({ initial = "cool", className }: ScrambleWo
   }
 
   useEffect(() => {
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion) return;
-
     let intervalId: number | undefined;
     const startTimer = window.setTimeout(() => {
       active.current = true;

@@ -42,8 +42,8 @@ export default function Home() {
             &nbsp;Bordeaux&nbsp;
           </span>
           <br />
-          Je cherche une <span className="text-white-900 font-bold">alternance</span> en développement{" "}
-          <span className="text-purple-100 font-bold">full-stack</span> pour septembre 2026.
+Je suis développeur <span className="text-white-900 font-bold">full-stack</span>{" "}
+passionné par la création d'applications <span className="text-purple-100 font-bold">modernes</span> et performantes.
         </p>
 
         <div id="btn" className="hero-btns hero-anim anim-btns mt-8 flex gap-4 flex-wrap">
