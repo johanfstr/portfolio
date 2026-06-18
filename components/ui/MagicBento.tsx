@@ -87,7 +87,7 @@ export const ParticleCard = ({
     timeoutsRef.current = [];
     magnetismAnimationRef.current?.kill();
     particlesRef.current.forEach(p => {
-      gsap.to(p, { scale: 0, opacity: 0, duration: 0.3, ease: 'back.in(1.7)', onComplete: () => p.parentNode?.removeChild(p) });
+      gsap.to(p, { scale: 0, opacity: 0, duration: 0.3, ease: 'back.in(1.7)', onComplete: () => { p.parentNode?.removeChild(p); } });
     });
     particlesRef.current = [];
   }, []);

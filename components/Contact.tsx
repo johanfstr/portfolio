@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import emailjs from '@emailjs/browser'
 import { NoiseTexture } from "@/components/ui/noise-texture"
 import SplitText from "@/components/ui/SplitText"
@@ -14,6 +14,16 @@ export default function Contact() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitMessage, setSubmitMessage] = useState('')
+  const [headerVisible, setHeaderVisible] = useState(false);
+  const headerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { setHeaderVisible(e.isIntersecting); }, { threshold: 0.2 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -63,10 +73,12 @@ export default function Contact() {
       <NoiseTexture className="absolute inset-0 z-0" />
       <div className="relative w-full max-w-7xl mx-auto grid gap-12 lg:grid-cols-[minmax(280px,360px)_1fr]">
         <div className="space-y-8">
-          <div className="sticky top-32">
-            <span className="text-sm uppercase tracking-[0.3em] text-purple-300">Contact</span>
+          <div ref={headerRef} className="sticky top-32">
+            <div className={`transition-all duration-700 ease-out ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 delay-0"}`}>
+              <span className="text-sm uppercase tracking-[0.3em] text-purple-300">Contact</span>
+            </div>
             <SplitText text="Entrons en contact" tag="h2" className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair" textAlign="left" delay={60} duration={0.8} splitType="chars" from={{ opacity: 0, y: 30 }} to={{ opacity: 1, y: 0 }} rootMargin="-50px" />
-            <p className="mt-6 text-white/70 text-lg leading-8">
+            <p className={`mt-6 text-white/70 text-lg leading-8 transition-all duration-700 ease-out ${headerVisible ? "delay-200 opacity-100 translate-y-0" : "opacity-0 translate-y-6 delay-0"}`}>
               Vous avez un projet en tête ou souhaitez discuter de collaboration ? N'hésitez pas à me contacter via ce formulaire.
             </p>
             <br />

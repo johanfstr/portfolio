@@ -116,7 +116,7 @@ const SplitText = ({
     }
   );
 
-  const Tag = (tag || 'p') as keyof JSX.IntrinsicElements;
+  const Tag = (tag || 'p') as React.ElementType;
   return (
     <Tag
       ref={ref as React.RefObject<HTMLElement & HTMLHeadingElement & HTMLParagraphElement>}

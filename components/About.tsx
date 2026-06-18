@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { TextAnimate } from "@/components/ui/text-animate";
 import SplitText from "@/components/ui/SplitText";
@@ -43,6 +44,17 @@ function PerspectiveMarqueeScene() {
 }
 
 export default function About({ ready = false }: { ready?: boolean }) {
+  const [visible, setVisible] = useState(false);
+  const textRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = textRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { setVisible(e.isIntersecting); }, { threshold: 0.2 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <section id="about" className="relative min-h-screen py-24 z-20 bg-[#1c0522] flex flex-col justify-center">
       <TopoBackground ready={ready} />
@@ -64,15 +76,15 @@ export default function About({ ready = false }: { ready?: boolean }) {
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-12">
-          <div className="flex-1 max-w-2xl text-lg text-slate-300 leading-relaxed space-y-6">
-            <p>
+          <div ref={textRef} className="flex-1 max-w-2xl text-lg text-slate-300 leading-relaxed space-y-6">
+            <p className={`transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0 delay-100" : "opacity-0 translate-y-6 delay-0"}`}>
               Je m'appelle <strong className="text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>Johan Forestier</strong>, 
               j'habite à <strong className="text-white">Bordeaux</strong>. Je suis actuellement étudiant 
               à l'<strong className="text-purple-400 font-semibold px-1 py-0.5 rounded bg-purple-900/30 border border-purple-500/30">EFREI Bordeaux</strong> 
               &nbsp;où j'entre en 1ère année de cycle ingénieur en majeure <strong className="text-white">LSI</strong> 
               &nbsp;(<strong className="text-white">L</strong>ogiciels et <strong className="text-white">S</strong>ystèmes d'<strong className="text-white">I</strong>nformation).
             </p>
-            <p>
+            <p className={`transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0 delay-200" : "opacity-0 translate-y-6 delay-0"}`}>
               Passionné par le développement, je construis des solutions web modernes et des applications performantes. 
               Mon parcours académique et mes projets m'ont permis d'explorer un large éventail de technologies, 
               du bas niveau&nbsp;
@@ -98,7 +110,7 @@ export default function About({ ready = false }: { ready?: boolean }) {
                   <span>TypeScript</span>
                 </span>.
             </p>
-            <p>
+            <p className={`transition-all duration-700 ease-out ${visible ? "opacity-100 translate-y-0 delay-300" : "opacity-0 translate-y-6 delay-0"}`}>
               Je suis activement à la recherche d'une <strong className="text-purple-400 font-semibold">alternance en développement full-stack</strong> à partir de septembre 2026. Curieux et autonome, j'aime relever de nouveaux défis techniques et apporter 
               de la valeur aux projets sur lesquels je travaille.
             </p>

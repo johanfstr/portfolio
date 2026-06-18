@@ -234,16 +234,19 @@ export default function Experience() {
       <NoiseTexture className="absolute inset-0 z-0" />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto space-y-12">
-        {/* Header */}
-        <div ref={headerRef} className={`flex flex-col lg:flex-row lg:items-end justify-between gap-8 transition-all duration-700 ease-out ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+        <div ref={headerRef} className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
           <div className="max-w-xl">
-            <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>— Parcours</span>
+            <div className={`transition-all duration-700 ease-out ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 delay-0"}`}>
+              <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>— Parcours</span>
+            </div>
             <SplitText text="Expériences & Formations" tag="h2" className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair" textAlign="left" delay={60} duration={0.8} splitType="chars" from={{ opacity: 0, y: 30 }} to={{ opacity: 1, y: 0 }} rootMargin="-50px" />
-            <p className="mt-6 text-white/70 text-lg leading-8">
+            <p className={`mt-6 text-white/70 text-lg leading-8 transition-all duration-700 ease-out ${headerVisible ? "delay-200 opacity-100 translate-y-0" : "opacity-0 translate-y-6 delay-0"}`}>
               Mon parcours professionnel et académique qui a façonné ma rigueur et mes compétences.
             </p>
           </div>
-          <p className="text-white/40 text-sm shrink-0">{experiences.length} rôles · {educations.length} formations</p>
+          <p className={`text-white/40 text-sm shrink-0 transition-all duration-700 ease-out ${headerVisible ? "delay-300 opacity-100 translate-y-0" : "opacity-0 translate-y-6 delay-0"}`}>
+            {experiences.length} rôles · {educations.length} formations
+          </p>
         </div>
 
         {/* Bento Grid */}

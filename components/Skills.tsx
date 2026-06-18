@@ -144,13 +144,14 @@ export default function Skills() {
             )}
           />
       <div className="relative z-10 max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div ref={headerRef} className={`mb-14 transition-all duration-700 ease-out ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-          <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
-            — Compétences
-          </span>
+        <div ref={headerRef} className="mb-14">
+          <div className={`transition-all duration-700 ease-out ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 delay-0"}`}>
+            <span className="text-sm uppercase tracking-[0.3em] text-purple-400 font-extrabold" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
+              — Compétences
+            </span>
+          </div>
           <SplitText text="Mon stack technique" tag="h2" className="mt-4 text-4xl md:text-5xl font-extrabold text-white font-playfair" textAlign="left" delay={60} duration={0.8} splitType="chars" from={{ opacity: 0, y: 30 }} to={{ opacity: 1, y: 0 }} rootMargin="-50px" />
-          <p className="mt-4 text-slate-400 max-w-xl">
+          <p className={`mt-4 text-slate-400 max-w-xl transition-all duration-700 ease-out ${headerVisible ? "delay-200 opacity-100 translate-y-0" : "opacity-0 translate-y-6 delay-0"}`}>
             Les technologies et outils que j'utilise au quotidien pour concevoir et développer des projets.
           </p>
         </div>

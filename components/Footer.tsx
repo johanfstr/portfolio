@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { cn } from "@/lib/utils"
@@ -209,6 +209,17 @@ export default function CinematicFooter() {
   const giantTextRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  
+  const pRef = useRef<HTMLParagraphElement>(null);
+  const [pVisible, setPVisible] = useState(false);
+
+  useEffect(() => {
+    const el = pRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { setPVisible(e.isIntersecting); }, { threshold: 0.1 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -307,7 +318,7 @@ export default function CinematicFooter() {
             <div ref={contentRef} className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-4xl">
               {/* Left Section */}
               <div>
-                <p className="text-white/70 max-w-xl leading-relaxed text-base">
+                <p ref={pRef} className={`text-white/70 max-w-xl leading-relaxed text-base transition-all duration-700 ease-out ${pVisible ? "delay-200 opacity-100 translate-y-0" : "opacity-0 translate-y-6 delay-0"}`}>
                   Passionné par le développement full-stack, j'aime créer des expériences numériques uniques. Ce portfolio présente mes projets et compétences. Merci de votre visite ! N'hésitez pas à me contacter pour toute question ou opportunité.
                 </p>
               </div>
