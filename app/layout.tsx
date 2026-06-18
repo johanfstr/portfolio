@@ -43,7 +43,8 @@ export default function RootLayout({
     <html lang="fr" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
       <head>
 <style dangerouslySetInnerHTML={{ __html: 
-  `.hero-content--waiting,.hero-content--waiting .hero-anim{opacity:0!important;animation:none!important;pointer-events:none}` 
+  `.hero-content--waiting,.hero-content--waiting .hero-anim{opacity:0!important;animation:none!important;pointer-events:none}
+  @media (max-width: 767px) { .gradual-blur { display: none !important; } }` 
 }} />
         <link
           rel="preload"
