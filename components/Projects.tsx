@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { cn } from "@/lib/utils"
 import { gsap } from "gsap";
@@ -6,6 +6,7 @@ import { NoiseTexture } from "@/components/ui/noise-texture"
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react"
 import SplitText from "@/components/ui/SplitText"
+const TopoBackground = dynamic(() => import("./ui/TopoBackground"), { ssr: false });
 
 const ProjectMarkdown = dynamic(() => import("./ProjectMarkdown"), { ssr: false });
 
@@ -189,7 +190,7 @@ const MagneticButton = ({ className, children, onClick, ...props }: MagneticButt
   );
 };
 
-export default function Projects() {
+export default function Projects({ ready = false }: { ready?: boolean }) {
   const [activeFilter, setActiveFilter] = useState("Tous")
   const [selectedProject, setSelectedProject] = useState<number | null>(null)
   const [visible, setVisible] = useState<boolean[]>(() => projects.map(() => false))
@@ -240,7 +241,7 @@ export default function Projects() {
 return (
 <section
   id="projects"
-  className="relative overflow-hidden py-20 px-6 bg-[#0b0a0d] min-h-screen"
+  className="relative py-20 px-6 bg-[#0b0a0d] min-h-screen"
 >
   {/* Dégradé de transition avec la section précédente */}
 <div
@@ -250,13 +251,15 @@ return (
     background: 'linear-gradient(to bottom, #0b0a0d 30%, rgb(11, 10, 13,0.6) 60%, transparent 100%)'
   }}
 />
-    {/* Noise texture overlay */}
+    {/* Noise texture overlay 
     <NoiseTexture
       className={cn(
         "absolute inset-0 z-0",
         ""
       )}
     />
+    */}
+    <TopoBackground ready={ready} />
 
     <style dangerouslySetInnerHTML={{ __html: HERO_STYLES }} />
 

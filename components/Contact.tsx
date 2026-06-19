@@ -4,8 +4,11 @@ import { useState, useRef, useEffect } from "react"
 import emailjs from '@emailjs/browser'
 import { NoiseTexture } from "@/components/ui/noise-texture"
 import SplitText from "@/components/ui/SplitText"
+import dynamic from "next/dynamic";
+const TopoBackground = dynamic(() => import("./ui/TopoBackground"), { ssr: false });
 
-export default function Contact() {
+
+export default function Contact({ ready = false }: { ready?: boolean }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -68,9 +71,10 @@ export default function Contact() {
   return (
     <section 
       id="contact"       
-      className="relative overflow-hidden py-20 px-6 bg-[#0b0a0d] min-h-screen"
-    >
-      <NoiseTexture className="absolute inset-0 z-0" />
+      className="relative py-20 px-6 bg-[#0b0a0d] min-h-screen"
+    > 
+      <TopoBackground ready={ready} />
+      {/* <NoiseTexture className="absolute inset-0 z-0" /> */}
       <div className="relative w-full max-w-7xl mx-auto grid gap-12 lg:grid-cols-[minmax(280px,360px)_1fr]">
         <div className="space-y-8">
           <div ref={headerRef} className="sticky top-32">

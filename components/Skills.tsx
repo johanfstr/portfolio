@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils"
 import { ParticleCard, GlobalSpotlight, useMobileDetection } from "@/components/ui/MagicBento"
 import SplitText from "@/components/ui/SplitText"
 import { NumberTicker } from "@/components/ui/number-ticker"
+import dynamic from "next/dynamic";
+const TopoBackground = dynamic(() => import("./ui/TopoBackground"), { ssr: false });
 
 const R = 28; // rayon du cercle SVG
 const C = 2 * Math.PI * R; // circonférence
@@ -112,7 +114,7 @@ const TechIcon = ({ label, src }: { label: string; src: string }) => (
   </div>
 )
 
-export default function Skills() {
+export default function Skills({ ready = false }: { ready?: boolean }) {
   const gridRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -135,14 +137,16 @@ export default function Skills() {
     return () => obs.disconnect();
   }, []);
   return (
-    <section id="skills" className="relative py-24 bg-[#0b0a0d]">
-          {/* Noise texture overlay */}
+    <section id="skills"  className="relative py-24 bg-[#0b0a0d]">
+      <TopoBackground ready={ready} />
+          {/* Noise texture overlay 
           <NoiseTexture
             className={cn(
               "absolute inset-0 z-0",
               ""
             )}
           />
+          */}
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         <div ref={headerRef} className="mb-14">
           <div className={`transition-all duration-700 ease-out ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6 delay-0"}`}>

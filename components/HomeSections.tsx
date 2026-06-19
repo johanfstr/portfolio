@@ -25,19 +25,19 @@ export default function HomeSections() {
         <TextRevealSection />
       </LazySection>
       <LazySection minHeight="100vh">
-        <Projects />
+        <Projects ready={introDone} />
       </LazySection>
       <LazySection minHeight="80vh">
-        <Skills />
+        <Skills ready={introDone}/>
       </LazySection>
       <LazySection minHeight="80vh">
-        <Experience />
+        <Experience ready={introDone} />
       </LazySection>
       <LazySection minHeight="60vh">
-        <Contact />
+        <Contact ready={introDone} />
       </LazySection>
       <LazySection minHeight="40vh">
-        <Footer />
+        <Footer ready={introDone} />
       </LazySection>
     </>
   );

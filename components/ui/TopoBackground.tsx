@@ -11,25 +11,37 @@ export default function TopoBackground({ ready = false }: { ready?: boolean }) {
     const container = containerRef.current;
     if (!container) return;
 
-    const scene = new THREE.Scene();
-    const w = container.offsetWidth;
-    const h = container.offsetHeight;
-    const camera = new THREE.PerspectiveCamera(40, w / h, 1, 100);
-    camera.position.z = 2;
+    let renderer: THREE.WebGLRenderer | null = null;
+    let scene: THREE.Scene | null = null;
+    let camera: THREE.PerspectiveCamera | null = null;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
-    renderer.setSize(w, h);
-    renderer.setClearColor(0x000000, 0);
-    Object.assign(renderer.domElement.style, {
-      position: "absolute",
-      top: "0", left: "0",
-      width: "100%", height: "100%",
-      pointerEvents: "none",
-      zIndex: "0",
-      opacity: "0.18",
-    });
-    container.appendChild(renderer.domElement);
+    // Initialise la scène une fois qu'on a une taille de container valide
+    // (peut être 0x0 au montage si la mise en page n'est pas encore stable,
+    // par ex. juste sous une section pinned GSAP/ScrollTrigger).
+    function init(w: number, h: number) {
+      if (renderer || w === 0 || h === 0) return;
 
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(40, w / h, 1, 100);
+      camera.position.z = 2;
+
+      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+      renderer.setSize(w, h);
+      renderer.setClearColor(0x000000, 0);
+      Object.assign(renderer.domElement.style, {
+        position: "absolute",
+        top: "0", left: "0",
+        width: "100%", height: "100%",
+        pointerEvents: "none",
+        zIndex: "0",
+        opacity: "0.18",
+      });
+      container!.appendChild(renderer.domElement);
+      buildMesh();
+      renderer.render(scene, camera!);
+    }
+
+    function buildMesh() {
     const geometry = new THREE.PlaneGeometry(6, 6, 200, 200);
     const material = new THREE.ShaderMaterial({
       side: THREE.DoubleSide,
@@ -90,36 +102,42 @@ export default function TopoBackground({ ready = false }: { ready?: boolean }) {
       `,
     });
 
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.y += 0.2;
-    mesh.rotation.x = -Math.PI / 4;
-    scene.add(mesh);
-
-    // Render une seule fois, pas de boucle
-    renderer.render(scene, camera);
-
-function onResize() {
-      // Add a safety check here to satisfy TypeScript
-      if (!containerRef.current) return;
-      
-      const rw = containerRef.current.offsetWidth;
-      const rh = containerRef.current.offsetHeight;
-      
-      camera.aspect = rw / rh;
-      camera.updateProjectionMatrix();
-      renderer.setSize(rw, rh);
-      renderer.render(scene, camera);
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.y += 0.2;
+      mesh.rotation.x = -Math.PI / 4;
+      scene!.add(mesh);
     }
-    
-    window.addEventListener("resize", onResize);
+
+    function onResize(w: number, h: number) {
+      if (w === 0 || h === 0) return;
+      if (!renderer) {
+        init(w, h);
+        return;
+      }
+      camera!.aspect = w / h;
+      camera!.updateProjectionMatrix();
+      renderer.setSize(w, h);
+      renderer.render(scene!, camera!);
+    }
+
+    // ResizeObserver gère à la fois la taille initiale (qui peut être 0x0
+    // si le layout n'est pas stabilisé au montage) et tout changement
+    // ultérieur (resize fenêtre, reflow déclenché par une autre section).
+    const ro = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      const { width, height } = entry.contentRect;
+      onResize(Math.round(width), Math.round(height));
+    });
+    ro.observe(container);
 
     return () => {
-      window.removeEventListener("resize", onResize);
-      // 'container' is still safely captured for cleanup here
-      if (container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
+      ro.disconnect();
+      if (renderer) {
+        if (container.contains(renderer.domElement)) {
+          container.removeChild(renderer.domElement);
+        }
+        renderer.dispose();
       }
-      renderer.dispose();
     };
   }, [ready]);
 

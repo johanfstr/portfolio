@@ -5,6 +5,8 @@ import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { cn } from "@/lib/utils"
 import { NoiseTexture } from "./ui/noise-texture"
+import dynamic from "next/dynamic";
+const TopoBackground = dynamic(() => import("./ui/TopoBackground"), { ssr: false });
 
 // Register ScrollTrigger plugin
 if (typeof window !== "undefined") {
@@ -205,7 +207,7 @@ const MarqueeItem = () => (
 // -------------------------------------------------------------------------
 // 4. MAIN COMPONENT
 // -------------------------------------------------------------------------
-export default function CinematicFooter() {
+export default function CinematicFooter({ ready = false }: { ready?: boolean }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const giantTextRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -285,7 +287,8 @@ export default function CinematicFooter() {
         {/* Fixed Footer */}
         <footer className="fixed bottom-0 left-0 flex h-[100dvh] w-full flex-col justify-between overflow-hidden bg-[#0b0a0d] text-foreground cinematic-footer-wrapper"
             >
-              <NoiseTexture className="absolute inset-0 z-0" />
+                <TopoBackground ready={ready} />
+              {/* <NoiseTexture className="absolute inset-0 z-0" /> */}
           
           {/* Ambient Light & Grid Background */}
           <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[80px] pointer-events-none z-0" />

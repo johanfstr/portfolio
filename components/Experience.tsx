@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils"
 import { ParticleCard, GlobalSpotlight, useMobileDetection } from "@/components/ui/MagicBento"
 import SplitText from "@/components/ui/SplitText"
 import { ChevronDown } from "lucide-react"
+import dynamic from "next/dynamic";
+const TopoBackground = dynamic(() => import("./ui/TopoBackground"), { ssr: false });
 
 interface Experience {
   title: string
@@ -233,7 +235,7 @@ function TimelineCard({ label, count, subtitle, items, fit }: {
   )
 }
 
-export default function Experience() {
+export default function Experience({ ready = false }: { ready?: boolean }) {
   const headerRef = useRef<HTMLDivElement>(null)
   const card1Ref = useRef<HTMLDivElement>(null)
   const card2Ref = useRef<HTMLDivElement>(null)
@@ -262,8 +264,10 @@ export default function Experience() {
       id="parcours"
       className="relative overflow-hidden py-20 px-6 bg-[#0b0a0d] min-h-screen"
     >
+      <TopoBackground ready={ready} />
+      {/* Noise texture overlay 
       <NoiseTexture className="absolute inset-0 z-0" />
-
+*/}
       <div className="relative z-10 w-full max-w-7xl mx-auto space-y-12">
         <div ref={headerRef} className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
           <div className="max-w-xl">
