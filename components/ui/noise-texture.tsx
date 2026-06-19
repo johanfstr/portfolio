@@ -11,7 +11,7 @@ export interface NoiseTextureProps extends ComponentProps<"div"> {
 export const NoiseTexture = ({ className, noiseOpacity = 0.6, ...props }: NoiseTextureProps) => (
   <div
     className={cn("pointer-events-none absolute inset-0 z-0 select-none", className)}
-    style={{ opacity: noiseOpacity * 100, backgroundImage: "url('/images/noise2.png')", backgroundRepeat: "repeat", backgroundSize: "256px 256px" }}
+    style={{ opacity: noiseOpacity * 100, backgroundImage: "url('/images/noise2.webp')", backgroundRepeat: "repeat", backgroundSize: "256px 256px" }}
     {...props}
   />
 )

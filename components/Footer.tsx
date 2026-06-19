@@ -312,7 +312,7 @@ export default function CinematicFooter() {
           <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 md:px-6 mt-8 md:mt-20 w-full max-w-5xl mx-auto">
             <h2
               ref={headingRef}
-              className="text-5xl md:text-8xl footer-text-glow tracking-tighter mb-4 md:mb-12 text-center pt-8 md:pt-0"
+              className="text-5xl md:text-8xl mb-4 md:mb-12 text-center pt-8 md:pt-0"
               style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}
             >
               Portfolio

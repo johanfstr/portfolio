@@ -538,8 +538,8 @@ body::after {
   transition: opacity 0.3s;
 }
 .boot-bar.on { opacity: 1; }
-.boot-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--crt-amber), #ea17ea); border-radius: 1px; transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
-.boot-fill.go { width: 100%; }
+.boot-fill { height: 100%; width: 100%; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, var(--crt-amber), #ea17ea); border-radius: 1px; transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.boot-fill.go { transform: scaleX(1); }
 
 .site { opacity: 1; pointer-events: auto; }
 .site.site--booting { pointer-events: none; }
@@ -753,4 +753,10 @@ body::after {
 @keyframes orbitReverse {
   0%   { transform: rotate(var(--start)) translateX(var(--radius)) rotate(calc(var(--start) * -1)); }
   100% { transform: rotate(calc(var(--start) - 360deg)) translateX(var(--radius)) rotate(calc((var(--start) - 360deg) * -1)); }
+}
+
+
+html.lenis,
+html.lenis body {
+  height: auto;
 }

@@ -9,8 +9,18 @@ export default function ScrollEffects() {
 
     const init = async () => {
       try {
-        const Lenis = (await import('@studio-freight/lenis')).default;
-        lenis = new Lenis({ lerp: 0.1, duration: 1.2, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 2 });
+        if ('scrollRestoration' in history) {
+          history.scrollRestoration = 'manual';
+        }
+        const { default: Lenis } = await import('lenis'); // ← changé
+        lenis = new Lenis({
+          lerp: 0.1,
+          duration: 1.2,
+          smoothWheel: true,
+          wheelMultiplier: 1,
+          touchMultiplier: 2,
+          autoResize: true, // par défaut déjà, explicite pour être sûr
+        });
 
         const raf = (time: number) => {
           lenis.raf(time);

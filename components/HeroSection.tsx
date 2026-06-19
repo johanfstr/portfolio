@@ -25,6 +25,15 @@ export default function HeroSection({ children }: HeroSectionProps) {
   const [heroAnimated, setHeroAnimated] = useState(false);
   const animTimer = useRef<number | null>(null);
 
+  const [isMobile, setIsMobile] = useState(true);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.matchMedia("(max-width: 768px)").matches);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   useEffect(() => {
     const onScroll = () => {
       if (window.scrollY > 80) setScrolled(true);
@@ -60,7 +69,7 @@ useEffect(() => {
     <div className="hero-wrapper">
       <main id="hero" className="relative min-h-screen flex items-center bg-transparent">
         <div className="absolute inset-0 z-0 pointer-events-none">
-          <ParallaxComponent onReady={() => setBackgroundReady(true)} />
+          <ParallaxComponent onReady={() => setBackgroundReady(true)} disableScroll={isMobile} />
         </div>
 
         <Intro

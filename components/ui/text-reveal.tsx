@@ -48,7 +48,7 @@ export const TextReveal: FC<TextRevealProps> = ({ children, className }) => {
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
-    handleScroll()
+    requestAnimationFrame(handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [words.length])
 

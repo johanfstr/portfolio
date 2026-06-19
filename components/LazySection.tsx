@@ -29,7 +29,8 @@ export default function LazySection({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        // Render if intersecting OR if the element is already scrolled past (above the viewport)
+        if (entry.isIntersecting || entry.boundingClientRect.top < window.innerHeight) {
           setVisible(true);
           observer.disconnect();
         }
@@ -42,7 +43,7 @@ export default function LazySection({
   }, [rootMargin]);
 
   return (
-    <div ref={ref} className={className} style={!visible ? { minHeight } : undefined}>
+    <div ref={ref} className={className} style={{ minHeight }}>
       {visible ? children : null}
     </div>
   );

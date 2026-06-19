@@ -32,10 +32,8 @@ export default function Home() {
 <img
   src="/images/efrei.webp"
   alt="EFREI Bordeaux"
-  width={230}           // taille d'affichage réelle × devicePixelRatio
+  width={230}
   height={70}
-  loading="eager"
-  fetchPriority="high"
   decoding="async"
   className="h-10 w-auto"
 />

@@ -21,7 +21,9 @@ export default function HomeSections() {
       <LazySection minHeight="100vh">
         <About ready={introDone} />
       </LazySection>
-      <TextRevealSection />
+      <LazySection minHeight="200vh">
+        <TextRevealSection />
+      </LazySection>
       <LazySection minHeight="100vh">
         <Projects />
       </LazySection>

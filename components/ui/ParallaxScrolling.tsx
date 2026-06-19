@@ -3,9 +3,10 @@ import React, { useEffect, useRef } from 'react';
 
 type ParallaxComponentProps = {
   onReady?: () => void;
+  disableScroll?: boolean;
 };
 
-export function ParallaxComponent({ onReady }: ParallaxComponentProps) {
+export function ParallaxComponent({ onReady, disableScroll }: ParallaxComponentProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const rafRef = useRef<number | null>(null);
   const readyCalled = useRef(false);
@@ -37,11 +38,15 @@ export function ParallaxComponent({ onReady }: ParallaxComponentProps) {
 
     const applyTransforms = () => {
       const value = window.scrollY;
-      layers.stars.forEach((el) => { el.style.left = `${value * 0.25}px`; });
-      layers.moon.forEach((el) => { el.style.top = `${value * 1.05}px`; });
-      layers.behind.forEach((el) => { el.style.top = `${value * 0.5}px`; });
-      layers.front.forEach((el) => { el.style.top = `${value * 0}px`; });
+      layers.stars.forEach((el) => { el.style.transform = `translate3d(${value * 0.25}px, 0, 0)`; });
+      layers.moon.forEach((el) => { el.style.transform = `translate3d(0, ${value * 1.05}px, 0)`; });
+      layers.behind.forEach((el) => { el.style.transform = `translate3d(0, ${value * 0.5}px, 0)`; });
+      layers.front.forEach((el) => { el.style.transform = `translate3d(0, ${value * 0}px, 0)`; });
     };
+
+    applyTransforms();
+
+    if (disableScroll) return;
 
     const onScroll = () => {
       if (!rafRef.current) {
@@ -53,13 +58,12 @@ export function ParallaxComponent({ onReady }: ParallaxComponentProps) {
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    applyTransforms();
 
     return () => {
       window.removeEventListener('scroll', onScroll);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [disableScroll]);
 
   return (
     <div className="parallax w-full h-full relative overflow-hidden">

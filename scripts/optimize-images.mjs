@@ -14,6 +14,12 @@ const jobs = [
   { input: "images/towerdefend.webp", output: "images/towerdefend.webp", width: 640 },
   { input: "images/captureportfolio.webp", output: "images/captureportfolio.webp", width: 640 },
   { input: "images/efrei.webp", output: "images/efrei.webp", width: 230 },
+  { input: "images/react.png", output: "images/react.png", width: 64 },
+  { input: "images/nodejs.png", output: "images/nodejs.png", width: 64 },
+  { input: "images/git.png", output: "images/git.png", width: 64 },
+  { input: "images/csharp.png", output: "images/csharp.png", width: 64 },
+  { input: "images/java.png", output: "images/java.png", width: 64 },
+  { input: "images/noise2.png", output: "images/noise2.webp", width: 512 },
 ];
 
 let hadError = false;
@@ -39,7 +45,7 @@ for (const job of jobs) {
     if (exists(outputPath)) unlinkSync(outputPath);
     renameSync(tempPath, outputPath);
   } catch {
-    copyFileSync(tempPath, outputPath);
+    try { copyFileSync(tempPath, outputPath); } catch (e) { console.error("Error copying file:", e); }
     try { unlinkSync(tempPath); } catch { /* ignore */ }
   }
   console.log(`optimized: ${job.output}`);
