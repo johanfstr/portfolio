@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react"
 import emailjs from '@emailjs/browser'
-import { NoiseTexture } from "@/components/ui/noise-texture"
 import SplitText from "@/components/ui/SplitText"
 import dynamic from "next/dynamic";
 const TopoBackground = dynamic(() => import("./ui/TopoBackground"), { ssr: false });

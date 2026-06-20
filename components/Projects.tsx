@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils"
 import { gsap } from "gsap";
-import { NoiseTexture } from "@/components/ui/noise-texture"
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react"
 import SplitText from "@/components/ui/SplitText"

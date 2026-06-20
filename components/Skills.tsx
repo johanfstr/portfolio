@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react"
 import { OrbitingCircles } from "@/components/ui/orbiting-circles"
-import { NoiseTexture } from "@/components/ui/noise-texture"
 import { cn } from "@/lib/utils"
 import { ParticleCard, GlobalSpotlight, useMobileDetection } from "@/components/ui/MagicBento"
 import SplitText from "@/components/ui/SplitText"

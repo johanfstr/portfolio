@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { cn } from "@/lib/utils"
-import { NoiseTexture } from "./ui/noise-texture"
 import dynamic from "next/dynamic";
 const TopoBackground = dynamic(() => import("./ui/TopoBackground"), { ssr: false });
 
@@ -216,13 +215,18 @@ export default function CinematicFooter({ ready = false }: { ready?: boolean }) 
   const pRef = useRef<HTMLParagraphElement>(null);
   const [pVisible, setPVisible] = useState(false);
 
-  useEffect(() => {
-    const el = pRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { setPVisible(e.isIntersecting); }, { threshold: 0.1 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
+useEffect(() => {
+  const el = pRef.current;
+  if (!el) return;
+  const obs = new IntersectionObserver(([e]) => {
+    if (e.isIntersecting) {
+      setPVisible(true);
+      obs.unobserve(el);
+    }
+  }, { threshold: 0.1 });
+  obs.observe(el);
+  return () => obs.disconnect();
+}, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;

@@ -92,7 +92,13 @@ const SplitText = ({
           return gsap.fromTo(targets, { ...from }, {
             ...to, duration, ease,
             stagger: delay / 1000,
-            scrollTrigger: { trigger: el, start, toggleActions: 'play none none reset', fastScrollEnd: true, anticipatePin: 0.4 },
+            scrollTrigger: { 
+  trigger: el, 
+  start, 
+  once: true,           // ← remplace toggleActions
+  fastScrollEnd: true, 
+  anticipatePin: 0.4 
+},
             onComplete: () => {
               onCompleteRef.current?.();
             },

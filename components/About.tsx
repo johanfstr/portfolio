@@ -2,7 +2,6 @@
 
 import { useRef, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { TextAnimate } from "@/components/ui/text-animate";
 import SplitText from "@/components/ui/SplitText";
 
 const TopoBackground = dynamic(() => import("./ui/TopoBackground"), { ssr: false });
@@ -47,13 +46,21 @@ export default function About({ ready = false }: { ready?: boolean }) {
   const [visible, setVisible] = useState(false);
   const textRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const el = textRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { setVisible(e.isIntersecting); }, { threshold: 0.2 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
+useEffect(() => {
+  const el = textRef.current;
+  if (!el) return;
+  const obs = new IntersectionObserver(
+    ([e]) => {
+      if (e.isIntersecting) {
+        setVisible(true);
+        obs.unobserve(el); // on arrête d'observer une fois déclenché
+      }
+    },
+    { threshold: 0.2 }
+  );
+  obs.observe(el);
+  return () => obs.disconnect();
+}, []);
 
   return (
     <section id="about" className="relative min-h-screen py-24 z-20 bg-[#1c0522] flex flex-col justify-center">
